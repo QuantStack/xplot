@@ -21,6 +21,13 @@
 
 namespace xpl
 {
+    inline const std::vector<color_type>& category10()
+    {
+        static const std::vector<color_type> category = {"#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"};
+        return category;
+    }
+
+
     /*********************
      * xmark declaration *
      *********************/
@@ -57,7 +64,7 @@ namespace xpl
         XPROPERTY(selected_type, derived_type, selected);
         XPROPERTY(tooltip_type, derived_type, tooltip);
         XPROPERTY(::xeus::xjson, derived_type, tooltip_style);
-        XPROPERTY(bool, derived_type, enable_hoover);
+        XPROPERTY(bool, derived_type, enable_hover, true);
         XPROPERTY(::xeus::xjson, derived_type, interactions);
         XPROPERTY(X_CASELESS_STR_ENUM(mouse, center), derived_type, tooltip_location, "mouse");
 
@@ -77,7 +84,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
-        using data_type = std::vector<double>;
+        using data_type = xeus::xjson;// std::vector<double>;
         using colors_type = std::vector<color_type>;
         using opacities_type = std::vector<double>;
         using curves_subset_type = std::vector<int>;
@@ -86,12 +93,12 @@ namespace xpl
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
-        XPROPERTY(data_type, derived_type, x);
-        XPROPERTY(data_type, derived_type, y);
+        XPROPERTY(data_type, derived_type, x, xeus::xjson::object());
+        XPROPERTY(data_type, derived_type, y, xeus::xjson::object());
         XPROPERTY(colors_type, derived_type, color);
-        XPROPERTY(colors_type, derived_type, colors, {"CATEGORY10"});
+        XPROPERTY(colors_type, derived_type, colors, category10());
         XPROPERTY(colors_type, derived_type, fill_colors);
-        XPROPERTY(double, derived_type, stroke_width, true);
+        XPROPERTY(double, derived_type, stroke_width, 2.0);
         XPROPERTY(X_CASELESS_STR_ENUM(none, labels), derived_type, labels_visibility, "none");
         XPROPERTY(curves_subset_type, derived_type, curves_subset);
         XPROPERTY(X_CASELESS_STR_ENUM(solid, dashed, dotted, dash_dotted), derived_type, line_style, "solid");
@@ -217,7 +224,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(enable_hoover, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(enable_hover, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(interactions, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_location, patch);
     }
@@ -239,7 +246,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(enable_hoover, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(enable_hover, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(interactions, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_location, state);
 
@@ -321,6 +328,27 @@ namespace xpl
             { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
             { "color", {{ "dimension", "color" }}}
         };
+
+        linear_scale sx;
+        sx.min = 0.0;
+        sx.max = 1.0;
+        sx.allow_padding = false;
+
+        linear_scale sy;
+        sy.min = 0.0;
+        sy.max = 1.0;
+        sy.allow_padding = false;
+
+        xw::xholder<xscale> hx;
+        hx = std::move(sx);
+        xw::xholder<xscale> hy;
+        hy = std::move(sy);
+        this->scales().emplace("x", std::move(hx));
+        this->scales().emplace("y", std::move(hy));
+
+        // TODO: For some reason, the following version crashes cling.
+        //this->scales()["x"] = std::move(hx);
+        //this->scales()["y"] = std::move(hy);
     }
 
     /********************************
