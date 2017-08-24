@@ -220,7 +220,7 @@ namespace xpl
         void set_defaults();
     };
 
-    using ognomonic = xw::xmaterialize<xgnomonic>;
+    using gnomonic = xw::xmaterialize<xgnomonic>;
 
     /********************************
      * stereographic declaration    *
