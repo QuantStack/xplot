@@ -32,9 +32,9 @@ namespace xpl
 
         using base_type = xw::xwidget<D>;
         using derived_type = D;
-        using axes_type = std::vector<holder<xaxis>>;
-        using marks_type = std::vector<holder<xmarks>>;
-        using scales_type = std::vector<holder<xscales>>;
+        using axes_type = std::vector<xw::xholder<xaxis>>;
+        using marks_type = std::vector<xw::xholder<xmark>>;
+        using scales_type = xw::xholder<xscale>;
 
         xfigure();
         xeus::xjson get_state() const;
@@ -50,10 +50,12 @@ namespace xpl
         XPROPERTY(::xeus::xjson, derived_type, background_style);
         XPROPERTY(double, derived_type, min_aspect_ratio, 1.);
         XPROPERTY(double, derived_type, max_aspect_ratio, 6.);
-        XPROPERTY(::xeus::xjson, derived_type, fig_margin);
+        XPROPERTY(::xeus::xjson, derived_type, fig_margin, xeus::xjson({
+           {"top", 60}, {"bottom", 60}, {"left", 60}, {"right", 60}
+        }));
         XPROPERTY(double, derived_type, padding_x, 0.);
         XPROPERTY(double, derived_type, padding_y, 0.025);
-        XPROPERTY(X_CASELESS_STR_ENUM(top-right, top, top-left, left, bottom-left, bottom, bottom-right, right), derived, legend_location, "top-right");
+        XPROPERTY(X_CASELESS_STR_ENUM(top-right, top, top-left, left, bottom-left, bottom, bottom-right, right), derived_type, legend_location, "top-right");
         XPROPERTY(int, derived_type, animation);
 
     private:
@@ -61,7 +63,7 @@ namespace xpl
         void set_defaults();
     };
 
-    using figure = xw::materialize<xfigure>;
+    using figure = xw::xmaterialize<xfigure>;
 
     /**************************
      * xfigure implementation *
@@ -116,13 +118,30 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(padding_y, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(legend_location, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(animation, state);
+
+        return state;
     }
 
     template <class D>
-    inline void xplot<D>::set_defaults()
+    inline void xfigure<D>::set_defaults()
     {
         this->_model_name() = "FigureModel";
+        this->_model_module() = "bqplot";
         this->_view_name() = "Figure";
+        this->_view_module() = "bqplot";
+
+        linear_scale sx;
+        sx.min = 0.0;
+        sx.max = 1.0;
+        sx.allow_padding = false;
+
+        linear_scale sy;
+        sy.min = 0.0;
+        sy.max = 1.0;
+        sy.allow_padding = false;
+
+        this->scale_x() = std::move(sx);
+        this->scale_y() = std::move(sy);
     }
 }
 
