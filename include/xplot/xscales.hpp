@@ -69,14 +69,15 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+        using pair_type = std::pair<double, double>;
 
         xmercator();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 190);
-        XPROPERTY(std::pair<double, double>, derived_type, center, {0, 60});
-        XPROPERTY(std::pair<double, double>, derived_type, rotate, {0, 0});
+        XPROPERTY(pair_type, derived_type, center, pair_type(0, 60));
+        XPROPERTY(pair_type, derived_type, rotate, pair_type(0, 0));
         
     private:
 
@@ -96,15 +97,16 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+        using pair_type = std::pair<double, double>;
 
         xalbers();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 250);
-        XPROPERTY(std::pair<double, double>, derived_type, rotate, {96, 0});
-        XPROPERTY(std::pair<double, double>, derived_type, center, {0, 60});
-        XPROPERTY(std::pair<double, double>, derived_type, parallels, {29.5, 45.5});
+        XPROPERTY(pair_type, derived_type, rotate, pair_type(96, 0));
+        XPROPERTY(pair_type, derived_type, center, pair_type(0, 60));
+        XPROPERTY(pair_type, derived_type, parallels, pair_type(29.5, 45.5));
         XPROPERTY(double, derived_type, precision, 0.1);
         
     private:
@@ -150,13 +152,14 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+        using pair_type = std::pair<double, double>;
 
         xequi_rectangular();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 145);
-        XPROPERTY(std::pair<double, double>, derived_type, center, {0, 60});
+        XPROPERTY(pair_type, derived_type, center, pair_type(0, 60));
         
     private:
 
@@ -176,14 +179,15 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+        using pair_type = std::pair<double, double>;
 
         xorthographic();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 145);
-        XPROPERTY(std::pair<double, double>, derived_type, center, {0, 60});
-        XPROPERTY(std::pair<double, double>, derived_type, rotate, {0, 60});
+        XPROPERTY(pair_type, derived_type, center, pair_type(0, 60));
+        XPROPERTY(pair_type, derived_type, rotate, pair_type(0, 60));
         XPROPERTY(double, derived_type, clip_angle, 90);
         XPROPERTY(double, derived_type, precision, 0.1);
         
@@ -205,13 +209,14 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+        using pair_type = std::pair<double, double>;
 
         xgnomonic();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 145);
-        XPROPERTY(std::pair<double, double>, derived_type, center, {0, 60});
+        XPROPERTY(pair_type, derived_type, center, pair_type(0, 60));
         XPROPERTY(double, derived_type, precision, 0.1);
         XPROPERTY(double, derived_type, clip_angle, 89.999);
         
@@ -233,15 +238,16 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+        using pair_type = std::pair<double, double>;
 
         xstereographic();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 145);
-        XPROPERTY(std::pair<double, double>, derived_type, center, {0, 60});
+        XPROPERTY(pair_type, derived_type, center, pair_type(0, 60));
         XPROPERTY(double, derived_type, precision, 0.1);
-        XPROPERTY(std::pair<double, double>, derived_type, rotate, {96, 0});
+        XPROPERTY(pair_type, derived_type, rotate, pair_type(96, 0));
         XPROPERTY(double, derived_type, clip_angle, 179.9999);
         
     private:
