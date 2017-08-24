@@ -17,7 +17,7 @@
 #include "xwidgets/xwidget.hpp"
 
 #include "xplot.hpp"
-#include "xscale.hpp"
+#include "xscales.hpp"
 
 namespace xpl
 {
@@ -26,14 +26,14 @@ namespace xpl
      *********************/
 
     using xmark_scales_type = std::map<std::string, xw::xholder<xscale>>;
-    using xmark_tooltip_type = xw::holder<xwidget>;
+    using xmark_tooltip_type = xw::xholder<xw::xwidget>;
 
     template <class D>
-    class xmark : public xw::xplot<D>
+    class xmark : public xplot<D>
     {
     public:
 
-        using base_type = xw::xplot<D>;
+        using base_type = xplot<D>;
         using derived_type = D;
         using scales_type = xmark_scales_type;
         using preserve_domain_type = std::map<std::string, bool>;
@@ -171,10 +171,10 @@ namespace xpl
         XPROPERTY(data_type, derived_type, skew);
         XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse), derived_type, marker, "circle");
         XPROPERTY(colors_type, derived_type, colors, {"DeepSkyBlue"});
-        XPROPERTY(XOPTINOAL(color_type), derived_type, stroke_color);
+        XPROPERTY(XOPTIONAL(color_type), derived_type, stroke);
         XPROPERTY(double, derived_type, stroke_width, 1.5);
         XPROPERTY(double, derived_type, default_skew, 0.5);
-        XPROPERTY(int, derived_type, stroke_width, 64);
+        XPROPERTY(int, derived_type, default_size, 64);
         XPROPERTY(names_type, derived_type, names);
         XPROPERTY(bool, derived_type, display_names, true);
         XPROPERTY(bool, derived_type, fill, true);
@@ -316,9 +316,11 @@ namespace xpl
     {
         this->_model_name() = "LinesModel";
         this->_view_name() = "Lines";
-        this->scales_metadata() = { "x": { "orientation": "horizontal", "dimension": "x"},
-                                    "y": { "orientation": "vertical", "dimension": "y"},
-                                    "color": { "dimension": "color"}};
+        this->scales_metadata() = {
+            { "x", {{ "orientation", "horizontal" }, { "dimension", "x" }}},
+            { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
+            { "color", {{ "dimension", "color" }}}
+        };
     }
 
     /********************************
@@ -381,11 +383,13 @@ namespace xpl
     template <class D>
     inline void xscatter_base<D>::set_defaults()
     {
-        this->scales_metadata() = { "x": { "orientation": "horizontal", "dimension": "x"},
-                                    "y": { "orientation": "vertical", "dimension": "y"},
-                                    "color": { "dimension": "color"},
-                                    "size": { "dimension": "size"},
-                                    "opacity": { "dimension": "opacity"}};
+        this->scales_metadata() = { 
+            { "x", {{ "orientation", "horizontal" }, { "dimension", "x" }}},
+            { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
+            { "color", {{ "dimension", "color" }}},
+            { "size", {{ "dimension", "size" }}},
+            { "opacity", {{ "dimension", "opacity" }}}
+       };
     }
 
     /***************************

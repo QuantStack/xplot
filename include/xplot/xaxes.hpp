@@ -13,8 +13,9 @@
 #include <vector>
 
 #include "xwidgets/xholder_id.hpp"
+
 #include "xplot.hpp"
-#include "xscale.hpp"
+#include "xscales.hpp"
 
 namespace xpl
 {
@@ -30,7 +31,7 @@ namespace xpl
 
         using base_type = xplot<D>;
         using derived_type = D;
-        using scale_type = xw::holder<xscale>;
+        using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
         xaxis();
@@ -55,7 +56,7 @@ namespace xpl
 
     private:
 
-        set_defaults();
+        void set_defaults();
     };
 
     using axis = xw::xmaterialize<xaxis>;
@@ -65,7 +66,7 @@ namespace xpl
      ***********************/
 
     template <class D>
-    inline xaxis<D>::xaxis_scale()
+    inline xaxis<D>::xaxis()
         : base_type()
     {
         set_defaults();

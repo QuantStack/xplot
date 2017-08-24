@@ -57,7 +57,7 @@ namespace xpl
         XPROPERTY(XOPTIONAL(double), derived_type, max);
         XPROPERTY(bool, derived_type, stabilized, false);
         XPROPERTY(double, derived_type, mid_range, 0.8);
-        XPROPETRY(double, derived_type, min_range, 0.6);
+        XPROPERTY(double, derived_type, min_range, 0.6);
 
     private:
 
