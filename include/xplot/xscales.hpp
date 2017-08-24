@@ -126,7 +126,7 @@ namespace xpl
         using base_type = xgeo_scale<D>;
         using derived_type = D;
 
-        xalbers();
+        xalbers_usa();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
