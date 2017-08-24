@@ -104,6 +104,10 @@ set(XPLOT_DEPENDENCIES ${xeus_LIBRARY})
 include_directories(${XPLOT_INCLUDE_DIR}/xplot)
 
 set(XPLOT_HEADERS
+    ${XPLOT_INCLUDE_DIR}/xplot/xaxes.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xscales.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xmarks.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xplot.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp
 )
 
