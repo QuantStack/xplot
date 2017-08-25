@@ -479,6 +479,23 @@ namespace xpl
     {
         this->_model_name() = "ScatterModel";
         this->_view_name() = "Scatter";
+
+        linear_scale sx;
+        sx.min = 0.0;
+        sx.max = 1.0;
+        sx.allow_padding = false;
+
+        linear_scale sy;
+        sy.min = 0.0;
+        sy.max = 1.0;
+        sy.allow_padding = false;
+
+        xw::xholder<xscale> hx;
+        hx = std::move(sx);
+        xw::xholder<xscale> hy;
+        hy = std::move(sy);
+        this->scales().emplace("x", std::move(hx));
+        this->scales().emplace("y", std::move(hy));
     }
 
 }

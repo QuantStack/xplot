@@ -43,8 +43,8 @@ namespace xpl
         XPROPERTY(std::string, derived_type, label, "");
         XPROPERTY(XOPTIONAL(std::string), derived_type, tick_format, "");
         XPROPERTY(scale_type, derived_type, scale);
-        XPROPERTY(XOPTIONAL(int), derived_type, num_ticks);
-        XPROPERTY(XOPTIONAL(tick_values_type), derived_type, tick_values);
+        XPROPERTY(::xeus::xjson, derived_type, num_ticks);
+        XPROPERTY(::xeus::xjson, derived_type, tick_values);
         XPROPERTY(::xeus::xjson, derived_type, offset, ::xeus::xjson::object());
         XPROPERTY(X_CASELESS_STR_ENUM(middle, start, end), derived_type, label_location, "middle");
         XPROPERTY(XOPTIONAL(color_type), derived_type, label_color);
@@ -122,6 +122,15 @@ namespace xpl
     {
         this->_model_name() = "AxisModel";
         this->_view_name() = "Axis";
+
+        linear_scale s;
+        s.min = 0.0;
+        s.max = 1.0;
+        s.allow_padding = false;
+
+        xw::xholder<xscale> h;
+        h = std::move(s);
+        this->scale() = std::move(h);
     }
 }
 
