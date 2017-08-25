@@ -145,7 +145,7 @@ namespace xpl
         XPROPERTY(data_type, derived_type, default_opacities);
         XPROPERTY(::xeus::xjson, derived_type, hovered_style);
         XPROPERTY(::xeus::xjson, derived_type, unhovered_style);
-        XPROPERTY(XOPTIONAL(int), derived_type, hovered_point);
+        XPROPERTY(::xeus::xjson, derived_type, hovered_point);
         XPROPERTY(bool, derived_type, enable_move);
         XPROPERTY(bool, derived_type, enable_delete);
         XPROPERTY(bool, derived_type, restrict_x);
