@@ -64,6 +64,12 @@ namespace xpl
         template <class T>
         void add_mark(xmark<T>&& w);
 
+        template <class T>
+        void add_axis(const xaxis<T>& w);
+
+        template <class T>
+        void add_axis(xaxis<T>&& w);
+
     private:
 
         void set_defaults();
@@ -145,6 +151,26 @@ namespace xpl
         this->marks().emplace_back(make_owning_holder(std::move(w)));
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    template <class T>
+    inline void xfigure<D>::add_axis(const xaxis<T>& w)
+    {
+        this->axes().emplace_back(make_id_holder(w));
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    template <class T>
+    inline void xfigure<D>::add_axis(xaxis<T>&& w)
+    {
+        this->axes().emplace_back(make_owning_holder(std::move(w)));
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
         this->send_patch(std::move(state));
     }
 
