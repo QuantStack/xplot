@@ -16,6 +16,7 @@
 #include "xwidgets/xholder_id.hpp"
 #include "xwidgets/xwidget.hpp"
 
+#include "xboxed_container.hpp"
 #include "xplot.hpp"
 #include "xscales.hpp"
 
@@ -84,7 +85,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
-        using data_type = xeus::xjson;// std::vector<double>;
+        using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using opacities_type = std::vector<double>;
         using curves_subset_type = std::vector<int>;
@@ -93,8 +94,8 @@ namespace xpl
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
-        XPROPERTY(data_type, derived_type, x, xeus::xjson::object());
-        XPROPERTY(data_type, derived_type, y, xeus::xjson::object());
+        XPROPERTY(data_type, derived_type, x);
+        XPROPERTY(data_type, derived_type, y);
         XPROPERTY(colors_type, derived_type, color);
         XPROPERTY(colors_type, derived_type, colors, category10());
         XPROPERTY(colors_type, derived_type, fill_colors);
