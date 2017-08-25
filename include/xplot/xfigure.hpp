@@ -58,6 +58,12 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(top-right, top, top-left, left, bottom-left, bottom, bottom-right, right), derived_type, legend_location, "top-right");
         XPROPERTY(int, derived_type, animation);
 
+        template <class T>
+        void add_mark(const xmark<T>& w);
+
+        template <class T>
+        void add_mark(xmark<T>&& w);
+
     private:
 
         void set_defaults();
@@ -120,6 +126,26 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(animation, state);
 
         return state;
+    }
+
+    template <class D>
+    template <class T>
+    inline void xfigure<D>::add_mark(const xmark<T>& w)
+    {
+        this->marks().emplace_back(make_id_holder(w));
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    template <class T>
+    inline void xfigure<D>::add_mark(xmark<T>&& w)
+    {
+        this->marks().emplace_back(make_owning_holder(std::move(w)));
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
+        this->send_patch(std::move(state));
     }
 
     template <class D>
