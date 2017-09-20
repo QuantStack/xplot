@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "xtl/xoptional.hpp"
+
 #include "xwidgets/xholder_id.hpp"
 #include "xwidgets/xwidget.hpp"
 
@@ -46,8 +48,8 @@ namespace xpl
         using scales_type = xmark_scales_type;
         using preserve_domain_type = std::map<std::string, bool>;
         using labels_type = std::vector<std::string>;
-        using selected_type = std::vector<XOPTIONAL(int)>;
-        using tooltip_type = XOPTIONAL(xmark_tooltip_type);
+        using selected_type = std::vector<xtl::xoptional<int>>;
+        using tooltip_type = xtl::xoptional<xmark_tooltip_type>;
 
         xmark();
         xeus::xjson get_state() const;
@@ -106,7 +108,7 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(linear, basis, basis-open, basis-closed, bundle, cardinal, cardinal-open, cardinal-closed, monotone, step-before, step-after), derived_type, interpolation, "linear");
         XPROPERTY(bool, derived_type, close_path, false);
         XPROPERTY(X_CASELESS_STR_ENUM(none, bottom, top, inside), derived_type, fill, "none");
-        XPROPERTY(XOPTIONAL(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse)), derived_type, marker);
+        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse)>, derived_type, marker);
         XPROPERTY(int, derived_type, marker_size, 64);
         XPROPERTY(opacities_type, derived_type, opacities);
         XPROPERTY(opacities_type, derived_type, fill_opacities);
@@ -179,14 +181,14 @@ namespace xpl
         XPROPERTY(data_type, derived_type, skew);
         XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse), derived_type, marker, "circle");
         XPROPERTY(colors_type, derived_type, colors, {"DeepSkyBlue"});
-        XPROPERTY(XOPTIONAL(color_type), derived_type, stroke);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
         XPROPERTY(double, derived_type, stroke_width, 1.5);
         XPROPERTY(double, derived_type, default_skew, 0.5);
         XPROPERTY(int, derived_type, default_size, 64);
         XPROPERTY(names_type, derived_type, names);
         XPROPERTY(bool, derived_type, display_names, true);
         XPROPERTY(bool, derived_type, fill, true);
-        XPROPERTY(XOPTIONAL(color_type), derived_type, drag_color);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, drag_color);
         XPROPERTY(double, derived_type, drag_size, 5.);
         XPROPERTY(bool, derived_type, names_unique, true);
 

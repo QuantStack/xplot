@@ -10,7 +10,10 @@
 #define XPLOT_AXES_HPP
 
 #include <string>
+#include <utility>
 #include <vector>
+
+#include "xtl/xoptional.hpp"
 
 #include "xwidgets/xholder_id.hpp"
 
@@ -39,19 +42,19 @@ namespace xpl
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(X_CASELESS_STR_ENUM(horizontal, vertical), derived_type, orientation, "horizontal");
-        XPROPERTY(XOPTIONAL(X_CASELESS_STR_ENUM(bottom, top, left, right)), derived_type, side);
+        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(bottom, top, left, right)>, derived_type, side);
         XPROPERTY(std::string, derived_type, label, "");
-        XPROPERTY(XOPTIONAL(std::string), derived_type, tick_format, "");
+        XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format, "");
         XPROPERTY(scale_type, derived_type, scale);
         XPROPERTY(::xeus::xjson, derived_type, num_ticks);
         XPROPERTY(::xeus::xjson, derived_type, tick_values);
         XPROPERTY(::xeus::xjson, derived_type, offset, ::xeus::xjson::object());
         XPROPERTY(X_CASELESS_STR_ENUM(middle, start, end), derived_type, label_location, "middle");
-        XPROPERTY(XOPTIONAL(color_type), derived_type, label_color);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
         XPROPERTY(X_CASELESS_STR_ENUM(none, solid, dashed), derived_type, grid_lines, "solid");
-        XPROPERTY(XOPTIONAL(color_type), derived_type, grid_color);
-        XPROPERTY(XOPTIONAL(color_type), derived_type, color);
-        XPROPERTY(XOPTIONAL(std::string), derived_type, label_offset);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, grid_color);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, color);
+        XPROPERTY(xtl::xoptional<std::string>, derived_type, label_offset);
         XPROPERTY(bool, derived_type, visible, true);
 
     private:

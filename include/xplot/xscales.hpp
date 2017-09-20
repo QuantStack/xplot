@@ -9,6 +9,8 @@
 #ifndef XPLOT_SCALES_HPP
 #define XPLOT_SCALES_HPP
 
+#include "xtl/xoptional.hpp"
+
 #include "xplot.hpp"
 
 namespace xpl
@@ -53,8 +55,8 @@ namespace xpl
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
-        XPROPERTY(XOPTIONAL(double), derived_type, min);
-        XPROPERTY(XOPTIONAL(double), derived_type, max);
+        XPROPERTY(xtl::xoptional<double>, derived_type, min);
+        XPROPERTY(xtl::xoptional<double>, derived_type, max);
         XPROPERTY(bool, derived_type, stabilized, false);
         XPROPERTY(double, derived_type, mid_range, 0.8);
         XPROPERTY(double, derived_type, min_range, 0.6);
@@ -82,8 +84,8 @@ namespace xpl
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
-        XPROPERTY(XOPTIONAL(double), derived_type, min);
-        XPROPERTY(XOPTIONAL(double), derived_type, max);
+        XPROPERTY(xtl::xoptional<double>, derived_type, min);
+        XPROPERTY(xtl::xoptional<double>, derived_type, max);
 
     private:
 
