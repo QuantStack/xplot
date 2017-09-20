@@ -43,7 +43,7 @@ namespace xpl
         XPROPERTY(std::string, derived_type, title);
         XPROPERTY(axes_type, derived_type, axes);
         XPROPERTY(marks_type, derived_type, marks);
-        //XPROPERTY(::xeus::xjson, derived_type, interaction);
+        XPROPERTY(::xeus::xjson, derived_type, interaction);
         XPROPERTY(scales_type, derived_type, scale_x);
         XPROPERTY(scales_type, derived_type, scale_y);
         XPROPERTY(::xeus::xjson, derived_type, title_style);
@@ -96,7 +96,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(title, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(axes, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(marks, patch);
-        //XOBJECT_SET_PROPERTY_FROM_PATCH(interaction, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(interaction, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(scale_x, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(scale_y, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(title_style, patch);
@@ -118,7 +118,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(title, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
-        //XOBJECT_SET_PATCH_FROM_PROPERTY(interaction, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(interaction, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(scale_x, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(scale_y, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(title_style, state);

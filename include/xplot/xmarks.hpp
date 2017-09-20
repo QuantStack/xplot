@@ -92,7 +92,8 @@ namespace xpl
         using opacities_type = std::vector<double>;
         using curves_subset_type = std::vector<int>;
 
-        xlines();
+        template <class XS, class YS>
+        xlines(const xscale<XS>&, const xscale<YS>&);
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -174,7 +175,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using names_type = std::vector<std::string>;
 
-        xscatter();
+        template <class SX, class SY>
+        xscatter(const xscale<SX>& sx, const xscale<SY>& sy);
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -267,10 +269,22 @@ namespace xpl
      *************************/
 
     template <class D>
-    inline xlines<D>::xlines()
+    template <class SX, class SY>
+    inline xlines<D>::xlines(const xscale<SX>& sx, const xscale<SY>& sy)
         : base_type()
     {
         set_defaults();
+
+        xw::xholder<xscale> hx;
+        hx = std::move(sx);
+        xw::xholder<xscale> hy;
+        hy = std::move(sy);
+        this->scales().emplace("x", std::move(hx));
+        this->scales().emplace("y", std::move(hy));
+
+        // TODO: For some reason, the following version crashes cling.
+        //this->scales()["x"] = std::move(hx);
+        //this->scales()["y"] = std::move(hy);
     }
 
     template <class D>
@@ -363,6 +377,7 @@ namespace xpl
         : base_type()
     {
         set_defaults();
+
     }
 
     template <class D>
@@ -428,10 +443,21 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline xscatter<D>::xscatter()
+    template <class SX, class SY>
+    inline xscatter<D>::xscatter(const xscale<SX>& sx, const xscale<SY>& sy)
         : base_type()
     {
         set_defaults();
+
+        xw::xholder<xscale> hx;
+        hx = std::move(sx);
+        xw::xholder<xscale> hy;
+        hy = std::move(sy);
+        this->scales().emplace("x", std::move(hx));
+        this->scales().emplace("y", std::move(hy));
+
+        // TODO: For some reason, the following version crashes cling.
+        //this->scales()["x"] = std::move(hx);
     }
 
     template <class D>
@@ -481,23 +507,6 @@ namespace xpl
     {
         this->_model_name() = "ScatterModel";
         this->_view_name() = "Scatter";
-
-        linear_scale sx;
-        sx.min = 0.0;
-        sx.max = 1.0;
-        sx.allow_padding = false;
-
-        linear_scale sy;
-        sy.min = 0.0;
-        sy.max = 1.0;
-        sy.allow_padding = false;
-
-        xw::xholder<xscale> hx;
-        hx = std::move(sx);
-        xw::xholder<xscale> hy;
-        hy = std::move(sy);
-        this->scales().emplace("x", std::move(hx));
-        this->scales().emplace("y", std::move(hy));
     }
 
 }
