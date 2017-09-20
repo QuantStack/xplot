@@ -30,7 +30,6 @@ namespace xpl
         return category;
     }
 
-
     /*********************
      * xmark declaration *
      *********************/
@@ -276,9 +275,9 @@ namespace xpl
         set_defaults();
 
         xw::xholder<xscale> hx;
-        hx = std::move(sx);
+        hx = sx;
         xw::xholder<xscale> hy;
-        hy = std::move(sy);
+        hy = sy;
         this->scales().emplace("x", std::move(hx));
         this->scales().emplace("y", std::move(hy));
 
@@ -345,27 +344,6 @@ namespace xpl
             { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
             { "color", {{ "dimension", "color" }}}
         };
-
-        linear_scale sx;
-        sx.min = 0.0;
-        sx.max = 1.0;
-        sx.allow_padding = false;
-
-        linear_scale sy;
-        sy.min = 0.0;
-        sy.max = 1.0;
-        sy.allow_padding = false;
-
-        xw::xholder<xscale> hx;
-        hx = std::move(sx);
-        xw::xholder<xscale> hy;
-        hy = std::move(sy);
-        this->scales().emplace("x", std::move(hx));
-        this->scales().emplace("y", std::move(hy));
-
-        // TODO: For some reason, the following version crashes cling.
-        //this->scales()["x"] = std::move(hx);
-        //this->scales()["y"] = std::move(hy);
     }
 
     /********************************
@@ -450,14 +428,15 @@ namespace xpl
         set_defaults();
 
         xw::xholder<xscale> hx;
-        hx = std::move(sx);
+        hx = sx;
         xw::xholder<xscale> hy;
-        hy = std::move(sy);
+        hy = sy;
         this->scales().emplace("x", std::move(hx));
         this->scales().emplace("y", std::move(hy));
 
         // TODO: For some reason, the following version crashes cling.
         //this->scales()["x"] = std::move(hx);
+        //this->scales()["y"] = std::move(hy);
     }
 
     template <class D>
