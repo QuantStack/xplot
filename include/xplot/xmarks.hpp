@@ -26,7 +26,18 @@ namespace xpl
 {
     inline const std::vector<color_type>& category10()
     {
-        static const std::vector<color_type> category = {"#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"};
+        static const std::vector<color_type> category = {
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22",
+            "#17becf"
+        };
         return category;
     }
 
@@ -61,11 +72,11 @@ namespace xpl
         XPROPERTY(labels_type, derived_type, labels);
         XPROPERTY(bool, derived_type, apply_clip, true);
         XPROPERTY(bool, derived_type, visible, true);
-        XPROPERTY(::xeus::xjson, derived_type, selected_style);
-        XPROPERTY(::xeus::xjson, derived_type, unselected_style);
+        XPROPERTY(::xeus::xjson, derived_type, selected_style, ::xeus::xjson::object());
+        XPROPERTY(::xeus::xjson, derived_type, unselected_style, ::xeus::xjson::object());
         XPROPERTY(selected_type, derived_type, selected);
         XPROPERTY(tooltip_type, derived_type, tooltip);
-        XPROPERTY(::xeus::xjson, derived_type, tooltip_style);
+        XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::object());
         XPROPERTY(bool, derived_type, enable_hover, true);
         XPROPERTY(::xeus::xjson, derived_type, interactions);
         XPROPERTY(X_CASELESS_STR_ENUM(mouse, center), derived_type, tooltip_location, "mouse");
@@ -131,23 +142,24 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
-        using data_type = std::vector<double>;
-        using colors_type = std::vector<color_type>;
+        using data_type = xboxed_container<std::vector<double>>;
+        using colors_type = std::vector<xtl::xoptional<color_type>>;
 
-        xscatter_base();
+        template <class SX, class SY>
+        xscatter_base(const xscale<SX>& sx, const xscale<SY>& sy);
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
-        XPROPERTY(colors_type, derived_type, color);
+        XPROPERTY(data_type, derived_type, color);
         XPROPERTY(data_type, derived_type, opacity);
         XPROPERTY(data_type, derived_type, size);
         XPROPERTY(data_type, derived_type, rotation);
         XPROPERTY(data_type, derived_type, default_opacities);
         XPROPERTY(::xeus::xjson, derived_type, hovered_style);
         XPROPERTY(::xeus::xjson, derived_type, unhovered_style);
-        XPROPERTY(::xeus::xjson, derived_type, hovered_point);
+        XPROPERTY(xtl::xoptional<int>, derived_type, hovered_point);
         XPROPERTY(bool, derived_type, enable_move);
         XPROPERTY(bool, derived_type, enable_delete);
         XPROPERTY(bool, derived_type, restrict_x);
@@ -170,8 +182,8 @@ namespace xpl
 
         using base_type = xscatter_base<D>;
         using derived_type = D;
-        using data_type = std::vector<double>;
-        using colors_type = std::vector<color_type>;
+        using data_type = xboxed_container<std::vector<double>>;
+        using colors_type = std::vector<xtl::xoptional<color_type>>;
         using names_type = std::vector<std::string>;
 
         template <class SX, class SY>
@@ -351,11 +363,22 @@ namespace xpl
      ********************************/
 
     template <class D>
-    inline xscatter_base<D>::xscatter_base()
+    template <class SX, class SY>
+    inline xscatter_base<D>::xscatter_base(const xscale<SX>& sx, const xscale<SY>& sy)
         : base_type()
     {
         set_defaults();
 
+        xw::xholder<xscale> hx;
+        hx = sx;
+        xw::xholder<xscale> hy;
+        hy = sy;
+        this->scales().emplace("x", std::move(hx));
+        this->scales().emplace("y", std::move(hy));
+
+        // TODO: For some reason, the following version crashes cling.
+        //this->scales()["x"] = std::move(hx);
+        //this->scales()["y"] = std::move(hy);
     }
 
     template <class D>
@@ -412,7 +435,8 @@ namespace xpl
             { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
             { "color", {{ "dimension", "color" }}},
             { "size", {{ "dimension", "size" }}},
-            { "opacity", {{ "dimension", "opacity" }}}
+            { "opacity", {{ "dimension", "opacity" }}},
+            { "rotation", {{ "dimension", "rotation" }}}
        };
     }
 
@@ -423,20 +447,9 @@ namespace xpl
     template <class D>
     template <class SX, class SY>
     inline xscatter<D>::xscatter(const xscale<SX>& sx, const xscale<SY>& sy)
-        : base_type()
+        : base_type(sx, sy)
     {
         set_defaults();
-
-        xw::xholder<xscale> hx;
-        hx = sx;
-        xw::xholder<xscale> hy;
-        hy = sy;
-        this->scales().emplace("x", std::move(hx));
-        this->scales().emplace("y", std::move(hy));
-
-        // TODO: For some reason, the following version crashes cling.
-        //this->scales()["x"] = std::move(hx);
-        //this->scales()["y"] = std::move(hy);
     }
 
     template <class D>
