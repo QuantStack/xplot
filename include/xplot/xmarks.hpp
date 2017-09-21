@@ -103,7 +103,8 @@ namespace xpl
         using curves_subset_type = std::vector<int>;
 
         template <class XS, class YS>
-        xlines(const xscale<XS>&, const xscale<YS>&);
+        xlines(XS&&, YS&&);
+
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -146,7 +147,7 @@ namespace xpl
         using colors_type = std::vector<xtl::xoptional<color_type>>;
 
         template <class SX, class SY>
-        xscatter_base(const xscale<SX>& sx, const xscale<SY>& sy);
+        xscatter_base(SX&& sx, SY&& sy);
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -187,7 +188,7 @@ namespace xpl
         using names_type = std::vector<std::string>;
 
         template <class SX, class SY>
-        xscatter(const xscale<SX>& sx, const xscale<SY>& sy);
+        xscatter(SX&& sx, SY&& sy);
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -281,13 +282,13 @@ namespace xpl
 
     template <class D>
     template <class SX, class SY>
-    inline xlines<D>::xlines(const xscale<SX>& sx, const xscale<SY>& sy)
+    inline xlines<D>::xlines(SX&& sx, SY&& sy)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = sx;
-        this->scales()["y"] = sy;
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
     }
 
     template <class D>
@@ -356,13 +357,13 @@ namespace xpl
 
     template <class D>
     template <class SX, class SY>
-    inline xscatter_base<D>::xscatter_base(const xscale<SX>& sx, const xscale<SY>& sy)
+    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = sx;
-        this->scales()["y"] = sy;
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
     }
 
     template <class D>
@@ -430,8 +431,8 @@ namespace xpl
 
     template <class D>
     template <class SX, class SY>
-    inline xscatter<D>::xscatter(const xscale<SX>& sx, const xscale<SY>& sy)
-        : base_type(sx, sy)
+    inline xscatter<D>::xscatter(SX&& sx, SY&& sy)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
     {
         set_defaults();
     }
