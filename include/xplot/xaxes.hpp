@@ -37,21 +37,24 @@ namespace xpl
         using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
-        xaxis();
+        template <class S>
+        xaxis(const xscale<S>&);
+        template <class S>
+        xaxis(xscale<S>&&);
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(X_CASELESS_STR_ENUM(horizontal, vertical), derived_type, orientation, "horizontal");
         XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(bottom, top, left, right)>, derived_type, side);
         XPROPERTY(std::string, derived_type, label, "");
-        XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format, "");
+        XPROPERTY(X_CASELESS_STR_ENUM(none, solid, dashed), derived_type, grid_lines, "solid");
+        XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format);
         XPROPERTY(scale_type, derived_type, scale);
-        XPROPERTY(::xeus::xjson, derived_type, num_ticks);
-        XPROPERTY(::xeus::xjson, derived_type, tick_values);
+        XPROPERTY(xtl::xoptional<int>, derived_type, num_ticks);
+        XPROPERTY(::xeus::xjson, derived_type, tick_values, xeus::xjson::array());
         XPROPERTY(::xeus::xjson, derived_type, offset, ::xeus::xjson::object());
         XPROPERTY(X_CASELESS_STR_ENUM(middle, start, end), derived_type, label_location, "middle");
         XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
-        XPROPERTY(X_CASELESS_STR_ENUM(none, solid, dashed), derived_type, grid_lines, "solid");
         XPROPERTY(xtl::xoptional<color_type>, derived_type, grid_color);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, color);
         XPROPERTY(xtl::xoptional<std::string>, derived_type, label_offset);
@@ -69,10 +72,23 @@ namespace xpl
      ***********************/
 
     template <class D>
-    inline xaxis<D>::xaxis()
+    template <class S>
+    inline xaxis<D>::xaxis(const xscale<S>& s)
         : base_type()
     {
         set_defaults();
+
+        this->scale() = s;
+    }
+ 
+    template <class D>
+    template <class S>
+    inline xaxis<D>::xaxis(xscale<S>&& s)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scale() = std::move(s);
     }
     
     template <class D>
@@ -125,15 +141,6 @@ namespace xpl
     {
         this->_model_name() = "AxisModel";
         this->_view_name() = "Axis";
-
-        linear_scale s;
-        s.min = 0.0;
-        s.max = 1.0;
-        s.allow_padding = false;
-
-        xw::xholder<xscale> h;
-        h = std::move(s);
-        this->scale() = std::move(h);
     }
 }
 
