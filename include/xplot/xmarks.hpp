@@ -213,6 +213,47 @@ namespace xpl
 
     using scatter = xw::xmaterialize<xscatter>;
 
+    /*********************
+    * xbars declaration *
+    *********************/
+
+    template<class D>
+    class xbars: public xmark<D> 
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+        using data_type = xboxed_container<std::vector<double>>;
+        using colors_type = std::vector<color_type>;
+        using opacity_type = std::vector<double>;
+
+        template <class XS, class YS>
+        xbars(XS&&, YS&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(data_type, derived_type, x);
+        XPROPERTY(data_type, derived_type, y);
+        XPROPERTY(double, derived_type, padding, 0.05);
+        XPROPERTY(opacity_type, derived_type, opacities);
+        XPROPERTY(colors_type, derived_type, color);
+        XPROPERTY(colors_type, derived_type, colors, category10());
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
+        XPROPERTY(X_CASELESS_STR_ENUM(center, left, right), derived_type, align, "center");
+        XPROPERTY(X_CASELESS_STR_ENUM(auto, group, element), derived_type, color_mode, "auto");
+        XPROPERTY(X_CASELESS_STR_ENUM(vertical, horizontal), derived_type, orientation, "vertical");
+        XPROPERTY(X_CASELESS_STR_ENUM(stacked, grouped), derived_type, type, "stacked");
+
+    private:
+        
+        void set_defaults();
+    };
+
+    using bars = xw::xmaterialize<xbars>;
+
     /************************
      * xmark implementation *
      ************************/
@@ -485,6 +526,73 @@ namespace xpl
         this->_model_name() = "ScatterModel";
         this->_view_name() = "Scatter";
     }
+
+    /************************
+    * xbars implementation *
+    ************************/
+
+    template <class D>
+    template <class SX, class SY>
+    inline xbars<D>::xbars(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+    }
+
+
+    template <class D>
+    inline void xbars<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(align, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color_mode, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(orientation, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(padding, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(type, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xbars<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(align, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color_mode, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(orientation, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(padding, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(type, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xbars<D>::set_defaults()
+    {
+        this->_view_name() = "Bars";
+        this->_model_name() = "BarsModel";
+        this->scales_metadata() = {
+            { "x", {{ "orientation", "horizontal" }, { "dimension", "x" }}},
+            { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
+            { "color", {{ "dimension", "color" }}}
+        };        
+    }    
+
 
 }
 
