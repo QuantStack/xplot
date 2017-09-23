@@ -292,6 +292,43 @@ namespace xpl
 
     using bars = xw::xmaterialize<xbars>;
 
+    /*************************
+    * xheat_map declaration *
+    *************************/
+
+    template<class D>
+    class xheat_map: public xmark<D>
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+        using coord_type = xboxed_container<std::vector<double>>;
+        using array = std::vector<std::vector<double>>;
+        using data_type = xboxed_container<array>;
+
+        template <class XS, class YS, class CS>
+        xheat_map(std::vector<double>&,
+                  std::vector<double>&,
+                  std::vector<std::vector<double>>&,
+                  XS&&, YS&&, CS&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(xtl::xoptional<data_type>, derived_type, color);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<coord_type>, derived_type, x);
+        XPROPERTY(xtl::xoptional<coord_type>, derived_type, y);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using heat_map = xw::xmaterialize<xheat_map>;
+
     /************************
      * xmark implementation *
      ************************/
@@ -688,6 +725,64 @@ namespace xpl
             { "color", {{ "dimension", "color" }}}
         };        
     }    
+
+    /****************************
+    * xheat_map implementation *
+    ****************************/
+
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xheat_map<D>::xheat_map(std::vector<double>& x_,
+                                   std::vector<double>& y_,
+                                   std::vector<std::vector<double>>& color_,
+                                   SX&& sx, SY&& sy, SC&& sc)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["color"] = std::forward<SC>(sc);
+        color = color_;
+        x = x_;
+        y = y_;
+    }
+
+    template <class D>
+    inline void xheat_map<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(null_color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xheat_map<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(null_color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xheat_map<D>::set_defaults()
+    {
+        this->_view_name() = "HeatMap";
+        this->_model_name() = "HeatMapModel";
+        this->scales_metadata() = {
+            { "x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            { "y", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            { "color", {{"dimension", "color"}}}
+        };
+    }
 
 
 }

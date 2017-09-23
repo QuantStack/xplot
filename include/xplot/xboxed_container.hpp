@@ -120,6 +120,12 @@ namespace xpl
     {
         return "float";
     }
+
+    template<>
+    inline std::string type_to_string<std::vector<double>>() noexcept
+    {
+        return "float";
+    }
 }
 
 #endif
