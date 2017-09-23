@@ -37,6 +37,7 @@ namespace xpl
         using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
+        xaxis() = default;
         template <class S>
         xaxis(const xscale<S>&);
         template <class S>
@@ -67,6 +68,39 @@ namespace xpl
 
     using axis = xw::xmaterialize<xaxis>;
 
+    /***************************
+    * xcolor_axis declaration *
+    ***************************/
+
+    template<class D>
+    class xcolor_axis: public xaxis<D>
+    {
+    public:
+
+        using base_type = xaxis<D>;
+        using derived_type = D;
+        using scale_type = xw::xholder<xscale>;
+
+        template <class S>
+        xcolor_axis(const xscale<S>&);
+        template <class S>
+        xcolor_axis(xscale<S>&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(std::string, derived_type, label, "");
+        XPROPERTY(X_CASELESS_STR_ENUM(horizontal, vertical), derived_type, orientation, "horizontal");
+        XPROPERTY(scale_type, derived_type, scale);
+        XPROPERTY(X_CASELESS_STR_ENUM(bottom, top, left, right), derived_type, side, "bottom");
+
+    private:
+
+        void set_defaults();
+    };
+
+    using color_axis = xw::xmaterialize<xcolor_axis>;
+
     /***********************
      * axis implementation *
      ***********************/
@@ -90,7 +124,7 @@ namespace xpl
 
         this->scale() = std::move(s);
     }
-    
+
     template <class D>
     inline void xaxis<D>::apply_patch(const xeus::xjson& patch)
     {
@@ -141,6 +175,59 @@ namespace xpl
     {
         this->_model_name() = "AxisModel";
         this->_view_name() = "Axis";
+    }
+
+    /******************************
+    * xcolor_axis implementation *
+    ******************************/
+
+    template <class D>
+    template <class S>
+    inline xcolor_axis<D>::xcolor_axis(const xscale<S>& s)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scale() = s;
+    }
+
+    template <class D>
+    template <class S>
+    inline xcolor_axis<D>::xcolor_axis(xscale<S>&& s)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scale() = std::move(s);
+    }
+
+    template <class D>
+    inline void xcolor_axis<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(label, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(orientation, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scale, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(side, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xcolor_axis<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(label, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(orientation, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scale, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(side, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xcolor_axis<D>::set_defaults()
+    {
+        this->_view_name() = "ColorAxis";
+        this->_model_name() = "ColorAxisModel";
     }
 }
 
