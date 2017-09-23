@@ -214,6 +214,44 @@ namespace xpl
     using scatter = xw::xmaterialize<xscatter>;
 
     /*********************
+    * xhist declaration *
+    *********************/
+
+    template<class D>
+    class xhist: public xmark<D> 
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+        using data_type = xboxed_container<std::vector<double>>;
+        using colors_type = std::vector<color_type>;
+        using opacity_type = std::vector<double>;
+        
+        template <class XS, class YS>
+        xhist(XS&&, YS&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+        
+        XPROPERTY(int, derived_type, bins, 10);
+        XPROPERTY(colors_type, derived_type, colors);
+        XPROPERTY(data_type, derived_type, count);
+        XPROPERTY(colors_type, derived_type, midpoints);
+        XPROPERTY(bool, derived_type, normalized);
+        XPROPERTY(std::vector<double>, derived_type, opacities);
+        XPROPERTY(data_type, derived_type, sample);
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using hist = xw::xmaterialize<xhist>;
+    
+    /*********************
     * xbars declaration *
     *********************/
 
@@ -525,6 +563,64 @@ namespace xpl
     {
         this->_model_name() = "ScatterModel";
         this->_view_name() = "Scatter";
+    }
+
+    /************************
+    * xhist implementation *
+    ************************/
+
+    template <class D>
+    template <class SX, class SY>
+    inline xhist<D>::xhist(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["sample"] = std::forward<SX>(sx);
+        this->scales()["count"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
+    inline void xhist<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(bins, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(count, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(midpoints, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(normalized, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(sample, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xhist<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(bins, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(count, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(midpoints, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(normalized, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(sample, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xhist<D>::set_defaults()
+    {
+        this->_view_name() = "Hist";
+        this->_model_name() = "HistModel";
+        this->scales_metadata() = {
+            { "sample", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            { "count", {{"orientation", "vertical"}, {"dimension", "y"}}}
+        };
     }
 
     /************************
