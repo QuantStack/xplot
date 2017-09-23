@@ -79,12 +79,12 @@ namespace xpl
 
         using base_type = xaxis<D>;
         using derived_type = D;
-        using scale_type = xw::xholder<xscale>;
+        using scale_type = xw::xholder<xcolor_scale>;
 
         template <class S>
-        xcolor_axis(const xscale<S>&);
+        xcolor_axis(const xcolor_scale<S>&);
         template <class S>
-        xcolor_axis(xscale<S>&&);
+        xcolor_axis(xcolor_scale<S>&&);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -183,7 +183,7 @@ namespace xpl
 
     template <class D>
     template <class S>
-    inline xcolor_axis<D>::xcolor_axis(const xscale<S>& s)
+    inline xcolor_axis<D>::xcolor_axis(const xcolor_scale<S>& s)
         : base_type()
     {
         set_defaults();
@@ -193,7 +193,7 @@ namespace xpl
 
     template <class D>
     template <class S>
-    inline xcolor_axis<D>::xcolor_axis(xscale<S>&& s)
+    inline xcolor_axis<D>::xcolor_axis(xcolor_scale<S>&& s)
         : base_type()
     {
         set_defaults();
