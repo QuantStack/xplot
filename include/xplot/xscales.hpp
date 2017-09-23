@@ -119,6 +119,37 @@ namespace xpl
 
     using ordinal_scale = xw::xmaterialize<xordinal_scale>;
 
+    /****************************
+    * xcolor_scale declaration *
+    ****************************/
+
+    template<class D>
+    class xcolor_scale: public xscale<D>
+    {
+    public:
+
+        using base_type = xscale<D>;
+        using derived_type = D;
+
+        xcolor_scale();
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(std::vector<color_type>, derived_type, colors);
+        XPROPERTY(xtl::xoptional<double>, derived_type, max);
+        XPROPERTY(xtl::xoptional<double>, derived_type, mid);
+        XPROPERTY(xtl::xoptional<double>, derived_type, min);
+        XPROPERTY(X_CASELESS_STR_ENUM(linear), derived_type, scale_type, "linear");
+        XPROPERTY(std::string, derived_type, scheme, "RdYlGn");
+
+    private:
+
+        void set_defaults();
+    };
+
+    using color_scale = xw::xmaterialize<xcolor_scale>;
+
     /************************
      * scale implementation *
      ************************/
@@ -271,6 +302,50 @@ namespace xpl
     {
         this->_view_name() = "OrdinalScale";
         this->_model_name() = "OrdinalScaleModel";
+    }
+
+    /*******************************
+    * xcolor_scale implementation *
+    *******************************/
+
+    template <class D>
+    inline xcolor_scale<D>::xcolor_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xcolor_scale<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(max, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(mid, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(min, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_type, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scheme, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xcolor_scale<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(max, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(mid, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(min, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_type, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scheme, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xcolor_scale<D>::set_defaults()
+    {
+        this->_view_name() = "ColorScale";
+        this->_model_name() = "ColorScaleModel";
     }
 }
 
