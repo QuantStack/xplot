@@ -213,6 +213,43 @@ namespace xpl
 
     using scatter = xw::xmaterialize<xscatter>;
 
+    /**********************
+    * xlabel declaration *
+    **********************/
+
+    template<class D>
+    class xlabel: public xscatter_base<D> 
+    {
+    public:
+
+        using base_type = xscatter_base<D>;
+        using derived_type = D;
+        using data_type = xboxed_container<std::vector<std::string>>;
+        
+        template <class SX, class SY>
+        xlabel(SX&& sx, SY&& sy);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(X_CASELESS_STR_ENUM(start, middle, end), derived_type, align, "start");
+        XPROPERTY(std::vector<color_type>, derived_type, colors);
+        XPROPERTY(double, derived_type, default_size, 16.0);
+        XPROPERTY(double, derived_type, drag_size, 1.0);
+        XPROPERTY(X_CASELESS_STR_ENUM(px, em, pt, %), derived_type, font_unit, "px");
+        XPROPERTY(X_CASELESS_STR_ENUM(bold, normal, bolder), derived_type, font_weight, "bold");
+        XPROPERTY(double, derived_type, rotate_angle);
+        XPROPERTY(data_type, derived_type, text);
+        XPROPERTY(int, derived_type, x_offset);
+        XPROPERTY(int, derived_type, y_offset);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using label = xw::xmaterialize<xlabel>;
+
     /*********************
     * xhist declaration *
     *********************/
@@ -600,6 +637,59 @@ namespace xpl
     {
         this->_model_name() = "ScatterModel";
         this->_view_name() = "Scatter";
+    }
+
+    /*************************
+    * xlabel implementation *
+    *************************/
+
+    template <class D>
+    template <class SX, class SY>
+    inline xlabel<D>::xlabel(SX&& sx, SY&& sy)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xlabel<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(align, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(default_size, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(drag_size, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(font_unit, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(font_weight, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(rotate_angle, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(text, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(x_offset, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(y_offset, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xlabel<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(align, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(default_size, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(drag_size, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(font_unit, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(font_weight, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(rotate_angle, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(text, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(x_offset, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(y_offset, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xlabel<D>::set_defaults()
+    {
+        this->_view_name() = "Label";
+        this->_model_name() = "LabelModel";
     }
 
     /************************

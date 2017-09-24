@@ -126,6 +126,12 @@ namespace xpl
     {
         return "float";
     }
+
+    template<>
+    inline std::string type_to_string<std::string>() noexcept
+    {
+        return "<U5";
+    }    
 }
 
 #endif
