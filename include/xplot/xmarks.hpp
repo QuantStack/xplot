@@ -439,6 +439,10 @@ namespace xpl
         using data_type = xboxed_container<array>;
 
         template <class XS, class YS, class CS>
+        xheat_map(std::vector<std::vector<double>>&,
+                  XS&&, YS&&, CS&&);
+
+        template <class XS, class YS, class CS>
         xheat_map(std::vector<double>&,
                   std::vector<double>&,
                   std::vector<std::vector<double>>&,
@@ -1128,6 +1132,26 @@ namespace xpl
     /****************************
     * xheat_map implementation *
     ****************************/
+
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xheat_map<D>::xheat_map(std::vector<std::vector<double>>& color_,
+                                   SX&& sx, SY&& sy, SC&& sc)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["color"] = std::forward<SC>(sc);
+        color = color_;
+        std::vector<double> x_(color_.size());
+        std::iota(x_.begin(), x_.end(), 0);
+        std::vector<double> y_(color_[0].size());
+        std::iota(y_.begin(), y_.end(), 0);
+        x = x_;
+        y = y_;
+    }
 
     template <class D>
     template <class SX, class SY, class SC>
