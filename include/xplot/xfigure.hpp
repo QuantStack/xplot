@@ -56,7 +56,7 @@ namespace xpl
         XPROPERTY(double, derived_type, padding_x, 0.);
         XPROPERTY(double, derived_type, padding_y, 0.025);
         XPROPERTY(X_CASELESS_STR_ENUM(top-right, top, top-left, left, bottom-left, bottom, bottom-right, right), derived_type, legend_location, "top-right");
-        XPROPERTY(int, derived_type, animation);
+        XPROPERTY(int, derived_type, animation_duration);
 
         template <class T>
         void add_mark(const xmark<T>& w);
@@ -107,7 +107,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(padding_x, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(padding_y, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(legend_location, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(animation, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(animation_duration, patch);
     }
 
     template <class D>
@@ -129,7 +129,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(padding_x, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(padding_y, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(legend_location, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(animation, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(animation_duration, state);
 
         return state;
     }

@@ -103,6 +103,21 @@ set(XPLOT_DEPENDENCIES ${xeus_LIBRARY})
 
 include_directories(${XPLOT_INCLUDE_DIR}/xplot)
 
+set(MAPFILESPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/xplot/map_data)
+set(XPLOT_MAPFILESPEC_INSTALL_DIR "share/jupyter" CACHE STRING "install path for kernel specs")
+
+install(DIRECTORY ${MAPFILESPEC_DIR}
+        DESTINATION ${XPLOT_MAPFILESPEC_INSTALL_DIR})
+
+set(MAPFILE_DIR "\"${CMAKE_INSTALL_PREFIX}/${XPLOT_MAPFILESPEC_INSTALL_DIR}/map_data/\"")
+
+configure_file (
+    "${XPLOT_INCLUDE_DIR}/xplot/xplotConfig.hpp.in"
+    "${PROJECT_BINARY_DIR}/xplotConfig.hpp"
+)
+
+include_directories(${PROJECT_BINARY_DIR})
+
 set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xaxes.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xboxed_container.hpp
@@ -111,7 +126,8 @@ set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xplot.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xscales.hpp
-)
+    ${PROJECT_BINARY_DIR}/xplotConfig.hpp
+    )
 
 # # Output
 # # ======
@@ -175,4 +191,3 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Conf
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
               DESTINATION ${XPLOT_CMAKECONFIG_INSTALL_DIR})
-
