@@ -1,0 +1,6 @@
+#ifndef XPLOT_MAPS_CONFIG_HPP
+#define XPLOT_MAPS_CONFIG_HPP
+
+#define XPLOT_MAPS_DIR @MAPFILE_DIR@
+
+#endif

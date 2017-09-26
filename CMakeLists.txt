@@ -112,8 +112,8 @@ install(DIRECTORY ${MAPFILESPEC_DIR}
 set(MAPFILE_DIR "\"${CMAKE_INSTALL_PREFIX}/${XPLOT_MAPFILESPEC_INSTALL_DIR}/map_data/\"")
 
 configure_file (
-    "${XPLOT_INCLUDE_DIR}/xplot/xplotConfig.hpp.in"
-    "${PROJECT_BINARY_DIR}/xplotConfig.hpp"
+    "${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp.in"
+    "${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp"
 )
 
 include_directories(${PROJECT_BINARY_DIR})
@@ -126,7 +126,7 @@ set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xplot.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xscales.hpp
-    ${PROJECT_BINARY_DIR}/xplotConfig.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp
     )
 
 # # Output

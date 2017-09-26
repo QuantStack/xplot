@@ -23,7 +23,7 @@
 #include "xboxed_container.hpp"
 #include "xplot.hpp"
 #include "xscales.hpp"
-#include "xplotConfig.hpp"
+#include "xmaps_config.hpp"
 
 namespace xpl
 {
@@ -46,7 +46,7 @@ namespace xpl
 
     inline const std::string topo_load(const std::string& mapname)
     {
-        std::string output = MAPFILE_DIR;
+        std::string output = XPLOT_MAPS_DIR;
         output += mapname;
         return output;
     }

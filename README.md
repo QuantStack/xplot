@@ -4,6 +4,10 @@
 
 C++ backend for bqplot
 
+## Usage
+
+![xplot](xplot-screenshot.png)
+
 ## License
 
 We use a shared copyright model that enables all contributors to maintain the
