@@ -213,6 +213,55 @@ namespace xpl
 
     using scatter = xw::xmaterialize<xscatter>;
 
+    /********************
+    * xpie declaration *
+    ********************/
+
+    template<class D>
+    class xpie: public xmark<D>
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+        using data_type = xboxed_container<std::vector<double>>;
+        using colors_type = std::vector<color_type>;
+        using xboxed_color_type = xboxed_container<std::vector<std::string>>;
+
+        template <class SX, class SY>
+        xpie(SX&& sx, SY&& sy);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(data_type, derived_type, color);
+        XPROPERTY(colors_type, derived_type, colors, category10());
+        XPROPERTY(X_CASELESS_STR_ENUM(none, inside, outside), derived_type, display_labels, "inside");
+        XPROPERTY(bool, derived_type, display_values);
+        XPROPERTY(double, derived_type, end_angle, 360.0);
+        XPROPERTY(std::string, derived_type, font_size, "10px");
+        XPROPERTY(X_CASELESS_STR_ENUM(bold, normal, bolder), derived_type, font_weight, "normal");
+        XPROPERTY(double, derived_type, inner_radius, 0.1);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
+        XPROPERTY(std::vector<double>, derived_type, opacities);
+        XPROPERTY(double, derived_type, radius, 180.0);
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(data_type, derived_type, sizes);
+        XPROPERTY(bool, derived_type, sort);
+        XPROPERTY(double, derived_type, start_angle);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
+        XPROPERTY(std::string, derived_type, values_format, ".1f");
+        // TODO: x and y must be union of double, date and unicode
+        XPROPERTY(double, derived_type, x, 0.5);
+        XPROPERTY(double, derived_type, y, 0.5);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using pie = xw::xmaterialize<xpie>;
+
     /**********************
     * xlabel declaration *
     **********************/
@@ -637,6 +686,77 @@ namespace xpl
     {
         this->_model_name() = "ScatterModel";
         this->_view_name() = "Scatter";
+    }
+
+    /***********************
+    * xpie implementation *
+    ***********************/
+
+    template <class D>
+    template <class SX, class SY>
+    inline xpie<D>::xpie(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xpie<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(display_labels, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(display_values, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(end_angle, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(font_size, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(font_weight, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(inner_radius, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(label_color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(radius, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(sizes, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(sort, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(start_angle, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(values_format, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xpie<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(display_labels, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(display_values, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(end_angle, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(font_size, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(font_weight, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(inner_radius, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(label_color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(radius, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(sizes, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(sort, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(start_angle, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(values_format, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xpie<D>::set_defaults()
+    {
+        this->_view_name() = "Pie";
+        this->_model_name() = "PieModel";
     }
 
     /*************************
