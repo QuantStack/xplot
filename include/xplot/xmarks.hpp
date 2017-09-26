@@ -337,6 +337,41 @@ namespace xpl
 
     using hist = xw::xmaterialize<xhist>;
     
+    /************************
+    * xboxplot declaration *
+    ************************/
+
+    template<class D>
+    class xboxplot: public xmark<D>
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+        using data_type_x = xboxed_container<std::vector<double>>;
+        using data_type_y = xboxed_container<std::vector<std::vector<double>>>;
+
+        template <class XS, class YS>
+        xboxplot(XS&&, YS&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(color_type, derived_type, box_fill_color, "dodgerblue");
+        XPROPERTY(std::vector<double>, derived_type, opacities);
+        XPROPERTY(color_type, derived_type, outlier_fill_color, "gray");
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
+        XPROPERTY(data_type_x, derived_type, x);
+        XPROPERTY(data_type_y, derived_type, y);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using boxplot = xw::xmaterialize<xboxplot>;
+
     /*********************
     * xbars declaration *
     *********************/
@@ -867,6 +902,60 @@ namespace xpl
         this->scales_metadata() = {
             { "sample", {{"orientation", "horizontal"}, {"dimension", "x"}}},
             { "count", {{"orientation", "vertical"}, {"dimension", "y"}}}
+        };
+    }
+
+    /***************************
+    * xboxplot implementation *
+    ***************************/
+
+    template< class D>
+    template <class SX, class SY>
+    inline xboxplot<D>::xboxplot(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
+    inline void xboxplot<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(box_fill_color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(outlier_fill_color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xboxplot<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(box_fill_color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(outlier_fill_color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xboxplot<D>::set_defaults()
+    {
+        this->_view_name() = "Boxplot";
+        this->_model_name() = "BoxplotModel";
+        this->scales_metadata() = {
+            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}}
         };
     }
 
