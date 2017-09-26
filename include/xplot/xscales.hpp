@@ -150,6 +150,150 @@ namespace xpl
 
     using color_scale = xw::xmaterialize<xcolor_scale>;
 
+    /**************************
+    * xgeo_scale declaration *
+    **************************/
+
+    template<class D>
+    class xgeo_scale: public xscale<D>
+    {
+    public:
+
+        using base_type = xscale<D>;
+        using derived_type = D;
+
+        xgeo_scale();
+        
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using geo_scale = xw::xmaterialize<xgeo_scale>;
+
+    /*************************
+    * xmercator declaration *
+    *************************/
+
+    template<class D>
+    class xmercator: public xgeo_scale<D>
+    {
+    public:
+
+        using base_type = xgeo_scale<D>;
+        using derived_type = D;
+        //using pair_type = std::pair<double, double>;
+        using pair_type = std::vector<double>;
+        
+        xmercator();
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(pair_type, derived_type, center, pair_type({0, 60}));
+        XPROPERTY(pair_type, derived_type, rotate, pair_type({0, 0}));
+        XPROPERTY(double, derived_type, scale_factor, 190);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using mercator = xw::xmaterialize<xmercator>;
+
+    /*****************************
+    * xorthographic declaration *
+    *****************************/
+
+    template<class D>
+    class xorthographic: public xgeo_scale<D>
+    {
+    public:
+
+        using base_type = xgeo_scale<D>;
+        using derived_type = D;
+        //using pair_type = std::pair<double, double>;
+        using pair_type = std::vector<double>;
+        
+        xorthographic();
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(pair_type, derived_type, center, pair_type({0, 60}));
+        XPROPERTY(double, derived_type, clip_angle, 90.0);
+        XPROPERTY(double, derived_type, precision, 0.1);
+        XPROPERTY(pair_type, derived_type, rotate, pair_type({0, 0}));
+        XPROPERTY(double, derived_type, scale_factor, 145.0);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using orthographic = xw::xmaterialize<xorthographic>;
+
+    /***************************
+    * xalbers_usa declaration *
+    ***************************/
+
+    template<class D>
+    class xalbers_usa: public xgeo_scale<D>
+    {
+    public:
+
+        using base_type = xgeo_scale<D>;
+        using derived_type = D;
+
+        xalbers_usa();
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(double, derived_type, scale_factor, 1200);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using albers_usa = xw::xmaterialize<xalbers_usa>;
+
+    /***********************
+    * xalbers declaration *
+    ***********************/
+
+    template<class D>
+    class xalbers: public xgeo_scale<D>
+    {
+    public:
+
+        using base_type = xgeo_scale<D>;
+        using derived_type = D;
+        //using pair_type = std::pair<double, double>;
+        using pair_type = std::vector<double>;
+
+        xalbers();
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(pair_type, derived_type, center, pair_type({0, 60}));
+        XPROPERTY(pair_type, derived_type, parallels, pair_type({29.5, 45.5}));
+        XPROPERTY(double, derived_type, precision, 0.1);
+        XPROPERTY(pair_type, derived_type, rotate, pair_type({96, 0}));
+        XPROPERTY(double, derived_type, scale_factor, 250);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using albers = xw::xmaterialize<xalbers>;
+
     /************************
      * scale implementation *
      ************************/
@@ -346,6 +490,194 @@ namespace xpl
     {
         this->_view_name() = "ColorScale";
         this->_model_name() = "ColorScaleModel";
+    }
+
+    /*****************************
+    * xgeo_scale implementation *
+    *****************************/
+
+    template <class D>
+    inline xgeo_scale<D>::xgeo_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xgeo_scale<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xgeo_scale<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+
+        return state;
+    }
+
+    template <class D>
+    inline void xgeo_scale<D>::set_defaults()
+    {
+        this->_view_name() = "GeoScale";
+        this->_model_name() = "GeoScaleModel";
+    }
+
+    /****************************
+    * xmercator implementation *
+    ****************************/
+
+    template <class D>
+    inline xmercator<D>::xmercator()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xmercator<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(center, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(rotate, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_factor, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xmercator<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(center, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(rotate, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_factor, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xmercator<D>::set_defaults()
+    {
+        this->_view_name() = "Mercator";
+        this->_model_name() = "MercatorModel";
+    }
+
+    /********************************
+    * xorthographic implementation *
+    ********************************/
+
+    template <class D>
+    inline xorthographic<D>::xorthographic()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xorthographic<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(center, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(clip_angle, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(precision, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(rotate, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_factor, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xorthographic<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(center, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(clip_angle, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(precision, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(rotate, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_factor, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xorthographic<D>::set_defaults()
+    {
+        this->_view_name() = "Orthographic";
+        this->_model_name() = "OrthographicModel";
+    }
+
+    /******************************
+    * xalbers_usa implementation *
+    ******************************/
+
+    template <class D>
+    inline xalbers_usa<D>::xalbers_usa()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xalbers_usa<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_factor, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xalbers_usa<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_factor, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xalbers_usa<D>::set_defaults()
+    {
+        this->_view_name() = "AlbersUSA";
+        this->_model_name() = "AlbersUSAModel";
+    }
+
+    /**************************
+    * xalbers implementation *
+    **************************/
+
+    template <class D>
+    inline xalbers<D>::xalbers()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xalbers<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(center, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(parallels, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(precision, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(rotate, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_factor, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xalbers<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(center, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(parallels, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(precision, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(rotate, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_factor, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xalbers<D>::set_defaults()
+    {
+        this->_view_name() = "Albers";
+        this->_model_name() = "AlbersModel";
     }
 }
 

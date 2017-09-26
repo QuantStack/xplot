@@ -9,7 +9,9 @@
 #ifndef XPLOT_MARKS_HPP
 #define XPLOT_MARKS_HPP
 
+#include <fstream>
 #include <map>
+#include <streambuf>
 #include <string>
 #include <vector>
 
@@ -21,6 +23,7 @@
 #include "xboxed_container.hpp"
 #include "xplot.hpp"
 #include "xscales.hpp"
+#include "xplotConfig.hpp"
 
 namespace xpl
 {
@@ -39,6 +42,13 @@ namespace xpl
             "#17becf"
         };
         return category;
+    }
+
+    inline const std::string topo_load(const std::string& mapname)
+    {
+        std::string output = MAPFILE_DIR;
+        output += mapname;
+        return output;
     }
 
     /*********************
@@ -494,6 +504,51 @@ namespace xpl
     };
 
     using grid_heat_map = xw::xmaterialize<xgrid_heat_map>;
+
+    /********************
+    * xmap declaration *
+    ********************/
+
+    template<class D>
+    class xmap: public xmark<D>
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+
+        template <class XS>
+        xmap(XS&&);
+
+        template <class XS>
+        xmap(std::string, XS&&);
+
+        template <class XS, class YS>
+        xmap(XS&&, YS&&);
+
+        template <class XS, class YS>
+        xmap(std::string, XS&&, YS&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(xtl::xoptional<::xeus::xjson>, derived_type, color, ::xeus::xjson::object());
+        XPROPERTY(::xeus::xjson, derived_type, colors, ::xeus::xjson::object());
+        XPROPERTY(bool, derived_type, hover_highlight, true);
+        XPROPERTY(xtl::xoptional<::xeus::xjson>, derived_type, hovered_styles);
+        XPROPERTY(::xeus::xjson, derived_type, map_data);
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<std::vector<color_type>>, derived_type, selected);
+        XPROPERTY(::xeus::xjson, derived_type, selected_styles);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke_color);
+
+    private:
+
+        void set_defaults();
+        xeus::xjson read_map(std::string filename); 
+    };
+
+    using map = xw::xmaterialize<xmap>;
 
     /************************
      * xmark implementation *
@@ -1215,5 +1270,107 @@ namespace xpl
             { "color", {{"dimension", "color"}}}
         };
     }
+
+    /***********************
+    * xmap implementation *
+    ***********************/
+
+    template <class D>
+    template <class SX>
+    inline xmap<D>::xmap(SX&& sx)
+        : base_type()
+    {
+        map_data = read_map(topo_load("WorldMap.json"));
+        set_defaults();
+        this->scales()["projection"] = std::forward<SX>(sx);
+    }
+
+    template <class D>
+    template <class SX>
+    inline xmap<D>::xmap(std::string filename, SX&& sx)
+        : base_type()
+    {
+        map_data = read_map(filename);
+        set_defaults();
+        this->scales()["projection"] = std::forward<SX>(sx);
+    }
+
+    template <class D>
+    template <class SX, class SY>
+    inline xmap<D>::xmap(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        map_data = read_map(topo_load("WorldMap.json"));
+        set_defaults();
+        this->scales()["projection"] = std::forward<SX>(sx);
+        this->scales()["color"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
+    template <class SX, class SY>
+    inline xmap<D>::xmap(std::string filename, SX&& sx, SY&& sy)
+        : base_type()
+    {
+        map_data = read_map(filename);
+        set_defaults();
+        this->scales()["projection"] = std::forward<SX>(sx);
+        this->scales()["color"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
+    inline void xmap<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(hover_highlight, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(hovered_styles, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(map_data, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected_styles, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke_color, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xmap<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(hover_highlight, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(hovered_styles, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(map_data, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected_styles, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke_color, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xmap<D>::set_defaults()
+    {
+        this->_view_name() = "Map";
+        this->_model_name() = "MapModel";
+        this->scales_metadata() = {
+            {"color", { {"dimension", "color"} }},
+            {"projection", { {"dimension", "geo"} }}
+        };
+    }
+
+    template <class D>
+    inline xeus::xjson xmap<D>::read_map(std::string filename)
+    {
+        std::ifstream jsonfile(filename);
+        // TODO: we should do 
+        // auto json = nlohmann::json::parse(jsonfile);
+        // but it doesn't work with cling ...
+        std::string str((std::istreambuf_iterator<char>(jsonfile)),
+                         std::istreambuf_iterator<char>());
+        return nlohmann::json::parse(str);
+    }
+
 }
 #endif
