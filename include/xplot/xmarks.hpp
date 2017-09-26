@@ -450,6 +450,51 @@ namespace xpl
 
     using heat_map = xw::xmaterialize<xheat_map>;
 
+    /******************************
+    * xgrid_heat_map declaration *
+    ******************************/
+
+    template<class D>
+    class xgrid_heat_map: public xmark<D>
+    {
+    public:
+
+        using base_type = xmark<D>;
+        using derived_type = D;
+        using data1d_type = xboxed_container<std::vector<double>>;
+        using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
+
+        template <class XS, class YS, class CS>
+        xgrid_heat_map(std::vector<double>&,
+                       std::vector<double>&,
+                       std::vector<std::vector<double>>&,
+                       XS&&, YS&&, CS&&);
+
+        template <class XS, class YS, class CS>
+        xgrid_heat_map(std::vector<std::vector<double>>&,
+                       XS&&, YS&&, CS&&);
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(::xeus::xjson, derived_type, anchor_style, ::xeus::xjson::object());
+        XPROPERTY(data2d_type, derived_type, color);
+        XPROPERTY(data1d_type, derived_type, column);
+        XPROPERTY(X_CASELESS_STR_ENUM(start, end), derived_type, column_align, "start");
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
+        XPROPERTY(double, derived_type, opacity, 1.0);
+        XPROPERTY(data1d_type, derived_type, row);
+        XPROPERTY(X_CASELESS_STR_ENUM(start, end), derived_type, row_align, "start");
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke, "black");
+
+    private:
+
+        void set_defaults();
+    };
+
+    using grid_heat_map = xw::xmaterialize<xgrid_heat_map>;
+
     /************************
      * xmark implementation *
      ************************/
@@ -1083,7 +1128,92 @@ namespace xpl
         };
     }
 
+    /*********************************
+    * xgrid_heat_map implementation *
+    *********************************/
 
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xgrid_heat_map<D>::xgrid_heat_map(std::vector<double>& row_,
+                                             std::vector<double>& column_,
+                                             std::vector<std::vector<double>>& color_,
+                                             SX&& sx, SY&& sy, SC&& sc)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["column"] = std::forward<SX>(sx);
+        this->scales()["row"] = std::forward<SY>(sy);
+        this->scales()["color"] = std::forward<SC>(sc);
+        color = color_;
+        row = row_;
+        column = column_;
+    }
+
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xgrid_heat_map<D>::xgrid_heat_map(std::vector<std::vector<double>>& color_,
+                                             SX&& sx, SY&& sy, SC&& sc)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["column"] = std::forward<SX>(sx);
+        this->scales()["row"] = std::forward<SY>(sy);
+        this->scales()["color"] = std::forward<SC>(sc);
+        color = color_;
+        std::vector<double> row_(color_.size());
+        std::iota(row_.begin(), row_.end(), 0);
+        std::vector<double> column_(color_[0].size());
+        std::iota(column_.begin(), column_.end(), 0);
+        row = row_;
+        column = column_;
+    }
+
+    template <class D>
+    inline void xgrid_heat_map<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(anchor_style, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(column, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(column_align, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(null_color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(opacity, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(row, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(row_align, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xgrid_heat_map<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(anchor_style, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(column, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(column_align, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(null_color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(opacity, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(row, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(row_align, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xgrid_heat_map<D>::set_defaults()
+    {
+        this->_view_name() = "GridHeatMap";
+        this->_model_name() = "GridHeatMapModel";
+        this->scales_metadata() = {
+            { "column", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            { "row", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            { "color", {{"dimension", "color"}}}
+        };
+    }
 }
-
 #endif

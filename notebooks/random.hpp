@@ -16,6 +16,20 @@ auto randn(std::size_t n)
     return output;
 }
 
+auto randn(std::size_t n1, std::size_t n2)
+{
+    std::vector<std::vector<double>> output(n1, std::vector<double>(n2));
+    std::random_device rd;  
+    std::mt19937 gen(rd());
+    std::normal_distribution<> dis(5, 2);
+
+    for(auto& line: output)
+        for(auto& v: line)
+            v = dis(gen);
+
+    return output;
+}
+
 auto randint(std::size_t beg, std::size_t end)
 {
     std::random_device rd;  
