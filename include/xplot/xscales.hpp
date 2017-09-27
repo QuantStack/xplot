@@ -150,6 +150,30 @@ namespace xpl
 
     using color_scale = xw::xmaterialize<xcolor_scale>;
 
+    /************************************
+    * xordinal_color_scale declaration *
+    ************************************/
+
+    template<class D>
+    class xordinal_color_scale: public xcolor_scale<D>
+    {
+    public:
+
+        using base_type = xcolor_scale<D>;
+        using derived_type = D;
+
+        xordinal_color_scale();
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+        XPROPERTY(std::vector<double>, derived_type, domain);
+
+    private:
+
+        void set_defaults();
+    };
+
+    using ordinal_color_scale = xw::xmaterialize<xordinal_color_scale>;
+
     /**************************
     * xgeo_scale declaration *
     **************************/
@@ -490,6 +514,40 @@ namespace xpl
     {
         this->_view_name() = "ColorScale";
         this->_model_name() = "ColorScaleModel";
+    }
+
+    /***************************************
+    * xordinal_color_scale implementation *
+    ***************************************/
+
+    template <class D>
+    inline xordinal_color_scale<D>::xordinal_color_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    inline void xordinal_color_scale<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(domain, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xordinal_color_scale<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(domain, state);
+
+        return state;
+    }
+
+    template <class D>
+    inline void xordinal_color_scale<D>::set_defaults()
+    {
+        this->_view_name() = "OrdinalColorScale";
+        this->_model_name() = "OrdinalScaleModel";
     }
 
     /*****************************
