@@ -32,7 +32,7 @@ namespace xpl
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(bool, derived_type, reverse);
-        XPROPERTY(bool, derived_type, allow_padding);
+        XPROPERTY(bool, derived_type, allow_padding, true);
 
     private:
 
