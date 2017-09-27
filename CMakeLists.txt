@@ -121,12 +121,15 @@ include_directories(${PROJECT_BINARY_DIR})
 set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xaxes.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xboxed_container.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xdefault_tooltip.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xfigure.hpp
-    ${XPLOT_INCLUDE_DIR}/xplot/xmarks.hpp
-    ${XPLOT_INCLUDE_DIR}/xplot/xplot.hpp
-    ${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp
-    ${XPLOT_INCLUDE_DIR}/xplot/xscales.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xinteracts.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xmarks.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xplot.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xscales.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xtoolbar.hpp
     )
 
 # # Output
