@@ -85,11 +85,11 @@ namespace xpl
         XPROPERTY(bool, derived_type, visible, true);
         XPROPERTY(::xeus::xjson, derived_type, selected_style, ::xeus::xjson::object());
         XPROPERTY(::xeus::xjson, derived_type, unselected_style, ::xeus::xjson::object());
-        XPROPERTY(selected_type, derived_type, selected);
+        //XPROPERTY(selected_type, derived_type, selected);
         XPROPERTY(tooltip_type, derived_type, tooltip);
-        XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::object());
+        XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::parse(R"({"opacity": "0.9"})"));
         XPROPERTY(bool, derived_type, enable_hover, true);
-        XPROPERTY(::xeus::xjson, derived_type, interactions);
+        XPROPERTY(::xeus::xjson, derived_type, interactions, ::xeus::xjson::parse(R"({"hover": "tooltip"})"));
         XPROPERTY(X_CASELESS_STR_ENUM(mouse, center), derived_type, tooltip_location, "mouse");
 
     private:
@@ -156,6 +156,7 @@ namespace xpl
         using derived_type = D;
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<xtl::xoptional<color_type>>;
+        using selected_type = std::vector<int>;
 
         using callback_type = std::function<void(const xeus::xjson&)>;
 
@@ -191,6 +192,7 @@ namespace xpl
         XPROPERTY(bool, derived_type, restrict_x);
         XPROPERTY(bool, derived_type, restrict_y);
         XPROPERTY(bool, derived_type, update_on_move);
+        XPROPERTY(selected_type, derived_type, selected);
 
     private:
 
@@ -504,6 +506,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+        using selected_type = std::vector<std::vector<int>>;
         using data1d_type = xboxed_container<std::vector<double>>;
         using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
 
@@ -530,6 +533,7 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(start, end), derived_type, row_align, "start");
         XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke, "black");
+        XPROPERTY(selected_type, derived_type, selected);
 
     private:
 
@@ -608,7 +612,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(visible, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(selected_style, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(unselected_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
+        //XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_style, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(enable_hover, patch);
@@ -630,7 +634,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(visible, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(selected_style, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(unselected_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
+        //XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_style, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(enable_hover, state);
@@ -781,6 +785,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(restrict_x, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(restrict_y, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(update_on_move, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
     }
 
     template <class D>
@@ -803,7 +808,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(restrict_x, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(restrict_y, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(update_on_move, state);
-
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         return state;
     }
 
@@ -1378,6 +1383,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(row_align, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
     }
 
     template <class D>
@@ -1394,7 +1400,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(row_align, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         return state;
     }
 
