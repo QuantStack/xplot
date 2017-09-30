@@ -10,6 +10,7 @@
 #define XPLOT_MARKS_HPP
 
 #include <fstream>
+#include <list>
 #include <map>
 #include <streambuf>
 #include <string>
@@ -84,11 +85,11 @@ namespace xpl
         XPROPERTY(bool, derived_type, visible, true);
         XPROPERTY(::xeus::xjson, derived_type, selected_style, ::xeus::xjson::object());
         XPROPERTY(::xeus::xjson, derived_type, unselected_style, ::xeus::xjson::object());
-        XPROPERTY(selected_type, derived_type, selected);
+        //XPROPERTY(selected_type, derived_type, selected);
         XPROPERTY(tooltip_type, derived_type, tooltip);
-        XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::object());
+        XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::parse(R"({"opacity": "0.9"})"));
         XPROPERTY(bool, derived_type, enable_hover, true);
-        XPROPERTY(::xeus::xjson, derived_type, interactions);
+        XPROPERTY(::xeus::xjson, derived_type, interactions, ::xeus::xjson::parse(R"({"hover": "tooltip"})"));
         XPROPERTY(X_CASELESS_STR_ENUM(mouse, center), derived_type, tooltip_location, "mouse");
 
     private:
@@ -155,11 +156,26 @@ namespace xpl
         using derived_type = D;
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<xtl::xoptional<color_type>>;
+        using selected_type = std::vector<int>;
+
+        using callback_type = std::function<void(const xeus::xjson&)>;
 
         template <class SX, class SY>
         xscatter_base(SX&& sx, SY&& sy);
+
+        template <class SX, class SY, class SC>
+        xscatter_base(SX&& sx, SY&& sy, SC&& sc);
+
+        template <class SX, class SY, class SS, class SO>
+        xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so);
+
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
+
+        void on_drag_start(callback_type);
+        void on_drag(callback_type);
+        void on_drag_end(callback_type);
+        void handle_custom_message(const xeus::xjson&);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
@@ -167,7 +183,7 @@ namespace xpl
         XPROPERTY(data_type, derived_type, opacity);
         XPROPERTY(data_type, derived_type, size);
         XPROPERTY(data_type, derived_type, rotation);
-        XPROPERTY(data_type, derived_type, default_opacities);
+        XPROPERTY(std::vector<double>, derived_type, default_opacities);
         XPROPERTY(::xeus::xjson, derived_type, hovered_style);
         XPROPERTY(::xeus::xjson, derived_type, unhovered_style);
         XPROPERTY(xtl::xoptional<int>, derived_type, hovered_point);
@@ -176,10 +192,14 @@ namespace xpl
         XPROPERTY(bool, derived_type, restrict_x);
         XPROPERTY(bool, derived_type, restrict_y);
         XPROPERTY(bool, derived_type, update_on_move);
+        XPROPERTY(selected_type, derived_type, selected);
 
     private:
 
         void set_defaults();
+        std::list<callback_type> m_callbacks_drag;
+        std::list<callback_type> m_callbacks_drag_start;
+        std::list<callback_type> m_callbacks_drag_end;
     };
 
     /************************
@@ -195,10 +215,21 @@ namespace xpl
         using derived_type = D;
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<xtl::xoptional<color_type>>;
-        using names_type = std::vector<std::string>;
+        using names_type = xboxed_container<std::vector<std::string>>;
 
         template <class SX, class SY>
         xscatter(SX&& sx, SY&& sy);
+
+        // TODO: it is not the good way to add several scales
+        // because we have no idea which one we pass in the entries
+        // could be skew, color, ...
+        template <class SX, class SY, class SC>
+        xscatter(SX&& sx, SY&& sy, SC&& sc);
+
+        // TODO: same remark as the previous constructor
+        template <class SX, class SY, class SS, class SO>
+        xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so);
+
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -475,6 +506,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+        using selected_type = std::vector<std::vector<int>>;
         using data1d_type = xboxed_container<std::vector<double>>;
         using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
 
@@ -501,6 +533,7 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(start, end), derived_type, row_align, "start");
         XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke, "black");
+        XPROPERTY(selected_type, derived_type, selected);
 
     private:
 
@@ -579,7 +612,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(visible, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(selected_style, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(unselected_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
+        //XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_style, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(enable_hover, patch);
@@ -601,7 +634,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(visible, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(selected_style, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(unselected_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
+        //XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_style, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(enable_hover, state);
@@ -696,15 +729,40 @@ namespace xpl
      * xscatter_base implementation *
      ********************************/
 
+     template <class D>
+     template <class SX, class SY>
+     inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy)
+         : base_type()
+     {
+         set_defaults();
+
+         this->scales()["x"] = std::forward<SX>(sx);
+         this->scales()["y"] = std::forward<SY>(sy);
+     }
+
+     template <class D>
+     template <class SX, class SY, class SC>
+     inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SC&& sc)
+         : base_type()
+     {
+         set_defaults();
+
+         this->scales()["x"] = std::forward<SX>(sx);
+         this->scales()["y"] = std::forward<SY>(sy);
+         this->scales()["color"] = std::forward<SC>(sc);
+    }
+
     template <class D>
-    template <class SX, class SY>
-    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy)
+    template <class SX, class SY, class SS, class SO>
+    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so)
         : base_type()
     {
         set_defaults();
 
         this->scales()["x"] = std::forward<SX>(sx);
         this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["size"] = std::forward<SS>(ss);
+        this->scales()["opacities"] = std::forward<SO>(so);
     }
 
     template <class D>
@@ -727,6 +785,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(restrict_x, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(restrict_y, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(update_on_move, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
     }
 
     template <class D>
@@ -749,7 +808,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(restrict_x, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(restrict_y, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(update_on_move, state);
-
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         return state;
     }
 
@@ -766,6 +825,51 @@ namespace xpl
        };
     }
 
+    template <class D>
+    inline void xscatter_base<D>::on_drag(callback_type cb)
+    {
+        m_callbacks_drag.emplace_back(std::move(cb));
+    }
+
+    template <class D>
+    inline void xscatter_base<D>::on_drag_start(callback_type cb)
+    {
+        m_callbacks_drag_start.emplace_back(std::move(cb));
+    }
+
+    template <class D>
+    inline void xscatter_base<D>::on_drag_end(callback_type cb)
+    {
+        m_callbacks_drag_end.emplace_back(std::move(cb));
+    }
+
+    template <class D>
+    inline void xscatter_base<D>::handle_custom_message(const xeus::xjson& content)
+    {
+        auto it = content.find("event");
+        if (it != content.end() && it.value() == "drag")
+        {
+            for (auto it = m_callbacks_drag.begin(); it != m_callbacks_drag.end(); ++it)
+            {
+                it->operator()(content);
+            }
+        }
+        else if (it != content.end() && it.value() == "drag_start")
+        {
+            for (auto it = m_callbacks_drag_start.begin(); it != m_callbacks_drag_start.end(); ++it)
+            {
+                it->operator()(content);
+            }
+        }
+        else if (it != content.end() && it.value() == "drag_end")
+        {
+            for (auto it = m_callbacks_drag_end.begin(); it != m_callbacks_drag_end.end(); ++it)
+            {
+                it->operator()(content);
+            }
+        }
+    }
+
     /***************************
      * xscatter implementation *
      ***************************/
@@ -774,6 +878,22 @@ namespace xpl
     template <class SX, class SY>
     inline xscatter<D>::xscatter(SX&& sx, SY&& sy)
         : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SC&& sc)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SC>(sc))
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    template <class SX, class SY, class SS, class SO>
+    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SS>(ss), std::forward<SO>(so))
     {
         set_defaults();
     }
@@ -1263,6 +1383,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(row_align, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
     }
 
     template <class D>
@@ -1279,7 +1400,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(row_align, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         return state;
     }
 

@@ -37,3 +37,13 @@ auto randint(std::size_t beg, std::size_t end)
     std::uniform_int_distribution<> dis(beg, end-1);
     return dis(gen);
 }
+
+auto randint(std::size_t beg, std::size_t end, std::size_t size)
+{
+    std::random_device rd;  
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(beg, end-1);
+    std::vector<double> output(size);
+    std::for_each(output.begin(), output.end(), [&dis, &gen](auto& v){v = dis(gen);});
+    return output;
+}

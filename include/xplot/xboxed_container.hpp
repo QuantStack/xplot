@@ -113,6 +113,9 @@ namespace xpl
     template <class C>
     inline void from_json(const xeus::xjson& j, xboxed_container<C>& o)
     {
+        using container_type = typename xboxed_container<C>::container_type;
+        container_type& values = o;
+        values = j.at("values").get<container_type>();
     }
 
     template<>

@@ -37,16 +37,17 @@ namespace xpl
         using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
-        xaxis() = default;
         template <class S>
         xaxis(const xscale<S>&);
+
         template <class S>
         xaxis(xscale<S>&&);
+
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(X_CASELESS_STR_ENUM(horizontal, vertical), derived_type, orientation, "horizontal");
-        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(bottom, top, left, right)>, derived_type, side);
+        XPROPERTY(X_CASELESS_STR_ENUM(bottom, top, left, right), derived_type, side);
         XPROPERTY(std::string, derived_type, label, "");
         XPROPERTY(X_CASELESS_STR_ENUM(none, solid, dashed), derived_type, grid_lines, "solid");
         XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format);
@@ -79,7 +80,6 @@ namespace xpl
 
         using base_type = xaxis<D>;
         using derived_type = D;
-        using scale_type = xw::xholder<xcolor_scale>;
 
         template <class S>
         xcolor_axis(const xcolor_scale<S>&);
@@ -88,11 +88,6 @@ namespace xpl
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
-
-        XPROPERTY(std::string, derived_type, label, "");
-        XPROPERTY(X_CASELESS_STR_ENUM(horizontal, vertical), derived_type, orientation, "horizontal");
-        XPROPERTY(scale_type, derived_type, scale);
-        XPROPERTY(X_CASELESS_STR_ENUM(bottom, top, left, right), derived_type, side, "bottom");
 
     private:
 
@@ -184,42 +179,29 @@ namespace xpl
     template <class D>
     template <class S>
     inline xcolor_axis<D>::xcolor_axis(const xcolor_scale<S>& s)
-        : base_type()
+        : base_type(s)
     {
         set_defaults();
-
-        this->scale() = s;
     }
 
     template <class D>
     template <class S>
     inline xcolor_axis<D>::xcolor_axis(xcolor_scale<S>&& s)
-        : base_type()
+        : base_type(std::move(s))
     {
         set_defaults();
-
-        this->scale() = std::move(s);
     }
 
     template <class D>
     inline void xcolor_axis<D>::apply_patch(const xeus::xjson& patch)
     {
         base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(label, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(orientation, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scale, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(side, patch);
     }
 
     template <class D>
     inline xeus::xjson xcolor_axis<D>::get_state() const
     {
         xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(label, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(orientation, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scale, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(side, state);
-
         return state;
     }
 
