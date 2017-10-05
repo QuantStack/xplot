@@ -57,7 +57,7 @@ namespace xpl
     template <class C>
     void from_json(const xeus::xjson& j, xboxed_container<C>& o);
 
-    template<class T>
+    template <class T>
     std::string type_to_string() noexcept;
 
     /***********************************
@@ -118,23 +118,23 @@ namespace xpl
         values = j.at("values").get<container_type>();
     }
 
-    template<>
+    template <>
     inline std::string type_to_string<double>() noexcept
     {
         return "float";
     }
 
-    template<>
+    template <>
     inline std::string type_to_string<std::vector<double>>() noexcept
     {
         return "float";
     }
 
-    template<>
+    template <>
     inline std::string type_to_string<std::string>() noexcept
     {
         return "<U5";
-    }    
+    }
 }
 
 #endif

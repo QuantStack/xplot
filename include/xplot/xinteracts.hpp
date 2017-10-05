@@ -14,20 +14,23 @@
 namespace xpl
 {
     /****************************
-    * xinteraction declaration *
-    ****************************/
+     * xinteraction declaration *
+     ****************************/
 
-    template<class D>
-    class xinteraction: public xplot<D>
+    template <class D>
+    class xinteraction : public xplot<D>
     {
     public:
 
         using base_type = xplot<D>;
         using derived_type = D;
-        
-        xinteraction();
+
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
+
+    protected:
+
+        xinteraction();
 
     private:
 
@@ -36,19 +39,19 @@ namespace xpl
 
     using interaction = xw::xmaterialize<xinteraction>;
 
-    /*************************
-    * xpan_zoom declaration *
-    *************************/
+    using interaction_generator = xw::xgenerator<xinteraction>;
 
-    template<class D>
-    class xpan_zoom: public xinteraction<D>
+    /*************************
+     * xpan_zoom declaration *
+     *************************/
+
+    template <class D>
+    class xpan_zoom : public xinteraction<D>
     {
     public:
 
         using base_type = xinteraction<D>;
         using derived_type = D;
-
-        xpan_zoom();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -57,6 +60,10 @@ namespace xpl
         XPROPERTY(bool, derived_type, allow_zoom, true);
         XPROPERTY(::xeus::xjson, derived_type, scales);
 
+    protected:
+
+        xpan_zoom();
+
     private:
 
         void set_defaults();
@@ -64,16 +71,11 @@ namespace xpl
 
     using pan_zoom = xw::xmaterialize<xpan_zoom>;
 
-    /*******************************
-    * xinteraction implementation *
-    *******************************/
+    using pan_zoom_generator = xw::xgenerator<xpan_zoom>;
 
-    template <class D>
-    inline xinteraction<D>::xinteraction()
-        : base_type()
-    {
-        set_defaults();
-    }
+    /*******************************
+     * xinteraction implementation *
+     *******************************/
 
     template <class D>
     inline void xinteraction<D>::apply_patch(const xeus::xjson& patch)
@@ -90,6 +92,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xinteraction<D>::xinteraction()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xinteraction<D>::set_defaults()
     {
         this->_view_name() = "Interaction";
@@ -97,15 +106,8 @@ namespace xpl
     }
 
     /****************************
-    * xpan_zoom implementation *
-    ****************************/
-
-    template <class D>
-    inline xpan_zoom<D>::xpan_zoom()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xpan_zoom implementation *
+     ****************************/
 
     template <class D>
     inline void xpan_zoom<D>::apply_patch(const xeus::xjson& patch)
@@ -125,6 +127,13 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(scales, state);
 
         return state;
+    }
+
+    template <class D>
+    inline xpan_zoom<D>::xpan_zoom()
+        : base_type()
+    {
+        set_defaults();
     }
 
     template <class D>

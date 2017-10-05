@@ -18,18 +18,16 @@
 namespace xpl
 {
     /************************
-    * xtoolbar declaration *
-    ************************/
+     * xtoolbar declaration *
+     ************************/
 
-    template<class D>
-    class xtoolbar: public xw::xwidget<D>
+    template <class D>
+    class xtoolbar : public xw::xwidget<D>
     {
     public:
 
         using base_type = xw::xwidget<D>;
         using derived_type = D;
-
-        xtoolbar();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -38,22 +36,22 @@ namespace xpl
         XPROPERTY(bool, derived_type, panning);
         XPROPERTY(xw::xholder<xpan_zoom>, derived_type, panzoom);
 
+    protected:
+
+        xtoolbar();
+
     private:
+
         void set_defaults();
     };
 
     using toolbar = xw::xmaterialize<xtoolbar>;
 
-    /***************************
-    * xtoolbar implementation *
-    ***************************/
+    using toolbar_generator = xw::xgenerator<xtoolbar>;
 
-    template <class D>
-    inline xtoolbar<D>::xtoolbar()
-        : base_type()
-    {
-        set_defaults();
-    }
+    /***************************
+     * xtoolbar implementation *
+     ***************************/
 
     template <class D>
     inline void xtoolbar<D>::apply_patch(const xeus::xjson& patch)
@@ -72,6 +70,13 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(panning, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(panzoom, state);
         return state;
+    }
+
+    template <class D>
+    inline xtoolbar<D>::xtoolbar()
+        : base_type()
+    {
+        set_defaults();
     }
 
     template <class D>

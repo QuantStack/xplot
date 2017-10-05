@@ -16,19 +16,17 @@
 namespace xpl
 {
     /************************
-    * xtooltip declaration *
-    ************************/
+     * xtooltip declaration *
+     ************************/
 
-    template<class D>
-    class xtooltip: public xw::xwidget<D>
+    template <class D>
+    class xtooltip : public xw::xwidget<D>
     {
     public:
 
         using base_type = xw::xwidget<D>;
         using derived_type = D;
         using data_type = std::vector<xtl::xoptional<std::string>>;
-
-        xtooltip();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -38,6 +36,10 @@ namespace xpl
         XPROPERTY(data_type, derived_type, labels);
         XPROPERTY(bool, derived_type, show_labels, true);
 
+    protected:
+
+        xtooltip();
+
     private:
 
         void set_defaults();
@@ -45,16 +47,11 @@ namespace xpl
 
     using tooltip = xw::xmaterialize<xtooltip>;
 
-    /***************************
-    * xtooltip implementation *
-    ***************************/
+    using tooltip_generator = xw::xgenerator<xtooltip>;
 
-    template <class D>
-    inline xtooltip<D>::xtooltip()
-        : base_type()
-    {
-        set_defaults();
-    }
+    /***************************
+     * xtooltip implementation *
+     ***************************/
 
     template <class D>
     inline void xtooltip<D>::apply_patch(const xeus::xjson& patch)
@@ -76,6 +73,13 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(show_labels, state);
 
         return state;
+    }
+
+    template <class D>
+    inline xtooltip<D>::xtooltip()
+        : base_type()
+    {
+        set_defaults();
     }
 
     template <class D>

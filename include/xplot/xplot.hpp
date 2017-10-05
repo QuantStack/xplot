@@ -31,9 +31,12 @@ namespace xpl
         using base_type = xw::xobject<D>;
         using derived_type = D;
 
-        xplot();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
+
+    protected:
+
+        xplot();
 
     private:
 
@@ -45,13 +48,6 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline xplot<D>::xplot()
-        : base_type()
-    {
-        set_defaults();
-    }
-
-    template <class D>
     inline void xplot<D>::apply_patch(const xeus::xjson& patch)
     {
         base_type::apply_patch(patch);
@@ -61,6 +57,13 @@ namespace xpl
     inline xeus::xjson xplot<D>::get_state() const
     {
         return base_type::get_state();
+    }
+
+    template <class D>
+    inline xplot<D>::xplot()
+        : base_type()
+    {
+        set_defaults();
     }
 
     template <class D>

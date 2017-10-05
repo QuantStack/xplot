@@ -27,12 +27,15 @@ namespace xpl
         using base_type = xplot<D>;
         using derived_type = D;
 
-        xscale();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(bool, derived_type, reverse);
         XPROPERTY(bool, derived_type, allow_padding, true);
+
+    protected:
+
+        xscale();
 
     private:
 
@@ -51,7 +54,6 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        xlinear_scale();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -61,12 +63,18 @@ namespace xpl
         XPROPERTY(double, derived_type, mid_range, 0.8);
         XPROPERTY(double, derived_type, min_range, 0.6);
 
+    protected:
+
+        xlinear_scale();
+
     private:
 
         void set_defaults();
     };
 
     using linear_scale = xw::xmaterialize<xlinear_scale>;
+
+    using linear_scale_generator = xw::xgenerator<xlinear_scale>;
 
     /*************************
      * log_scale declaration *
@@ -80,12 +88,15 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        xlog_scale();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(xtl::xoptional<double>, derived_type, min);
         XPROPERTY(xtl::xoptional<double>, derived_type, max);
+
+    protected:
+
+        xlog_scale();
 
     private:
 
@@ -94,23 +105,28 @@ namespace xpl
 
     using log_scale = xw::xmaterialize<xlog_scale>;
 
-    /******************************
-    * xordinal_scale declaration *
-    ******************************/
+    using log_scale_generator = xw::xgenerator<xlog_scale>;
 
-    template<class D>
-    class xordinal_scale: public xscale<D> 
+    /******************************
+     * xordinal_scale declaration *
+     ******************************/
+
+    template <class D>
+    class xordinal_scale : public xscale<D>
     {
     public:
 
         using base_type = xscale<D>;
         using derived_type = D;
-        
-        xordinal_scale();
+
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(std::vector<double>, derived_type, domain);
+
+    protected:
+
+        xordinal_scale();
 
     private:
         
@@ -119,19 +135,19 @@ namespace xpl
 
     using ordinal_scale = xw::xmaterialize<xordinal_scale>;
 
-    /****************************
-    * xcolor_scale declaration *
-    ****************************/
+    using ordinal_scale_generator = xw::xgenerator<xordinal_scale>;
 
-    template<class D>
-    class xcolor_scale: public xscale<D>
+    /****************************
+     * xcolor_scale declaration *
+     ****************************/
+
+    template <class D>
+    class xcolor_scale : public xscale<D>
     {
     public:
 
         using base_type = xscale<D>;
         using derived_type = D;
-
-        xcolor_scale();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -143,6 +159,10 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(linear), derived_type, scale_type, "linear");
         XPROPERTY(std::string, derived_type, scheme, "RdYlGn");
 
+    protected:
+
+        xcolor_scale();
+
     private:
 
         void set_defaults();
@@ -150,22 +170,27 @@ namespace xpl
 
     using color_scale = xw::xmaterialize<xcolor_scale>;
 
-    /************************************
-    * xordinal_color_scale declaration *
-    ************************************/
+    using color_scale_generator = xw::xgenerator<xcolor_scale>;
 
-    template<class D>
-    class xordinal_color_scale: public xcolor_scale<D>
+    /************************************
+     * xordinal_color_scale declaration *
+     ************************************/
+
+    template <class D>
+    class xordinal_color_scale : public xcolor_scale<D>
     {
     public:
 
         using base_type = xcolor_scale<D>;
         using derived_type = D;
 
-        xordinal_color_scale();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
         XPROPERTY(std::vector<double>, derived_type, domain);
+
+    protected:
+
+        xordinal_color_scale();
 
     private:
 
@@ -174,22 +199,26 @@ namespace xpl
 
     using ordinal_color_scale = xw::xmaterialize<xordinal_color_scale>;
 
-    /**************************
-    * xgeo_scale declaration *
-    **************************/
+    using ordinal_color_scale_generator = xw::xgenerator<xordinal_color_scale>;
 
-    template<class D>
-    class xgeo_scale: public xscale<D>
+    /**************************
+     * xgeo_scale declaration *
+     **************************/
+
+    template <class D>
+    class xgeo_scale : public xscale<D>
     {
     public:
 
         using base_type = xscale<D>;
         using derived_type = D;
 
-        xgeo_scale();
-        
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
+
+    protected:
+
+        xgeo_scale();
 
     private:
 
@@ -198,12 +227,14 @@ namespace xpl
 
     using geo_scale = xw::xmaterialize<xgeo_scale>;
 
-    /*************************
-    * xmercator declaration *
-    *************************/
+    using geo_scale_generator = xw::xgenerator<xgeo_scale>;
 
-    template<class D>
-    class xmercator: public xgeo_scale<D>
+    /*************************
+     * xmercator declaration *
+     *************************/
+
+    template <class D>
+    class xmercator : public xgeo_scale<D>
     {
     public:
 
@@ -211,8 +242,6 @@ namespace xpl
         using derived_type = D;
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
-        
-        xmercator();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -221,6 +250,10 @@ namespace xpl
         XPROPERTY(pair_type, derived_type, rotate, pair_type({0, 0}));
         XPROPERTY(double, derived_type, scale_factor, 190);
 
+    protected:
+
+        xmercator();
+
     private:
 
         void set_defaults();
@@ -228,12 +261,14 @@ namespace xpl
 
     using mercator = xw::xmaterialize<xmercator>;
 
-    /*****************************
-    * xorthographic declaration *
-    *****************************/
+    using mercator_generator = xw::xgenerator<xmercator>;
 
-    template<class D>
-    class xorthographic: public xgeo_scale<D>
+    /*****************************
+     * xorthographic declaration *
+     *****************************/
+
+    template <class D>
+    class xorthographic : public xgeo_scale<D>
     {
     public:
 
@@ -241,8 +276,6 @@ namespace xpl
         using derived_type = D;
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
-        
-        xorthographic();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -253,6 +286,10 @@ namespace xpl
         XPROPERTY(pair_type, derived_type, rotate, pair_type({0, 0}));
         XPROPERTY(double, derived_type, scale_factor, 145.0);
 
+    protected:
+
+        xorthographic();
+
     private:
 
         void set_defaults();
@@ -260,24 +297,28 @@ namespace xpl
 
     using orthographic = xw::xmaterialize<xorthographic>;
 
-    /***************************
-    * xalbers_usa declaration *
-    ***************************/
+    using orthographic_generator = xw::xgenerator<xorthographic>;
 
-    template<class D>
-    class xalbers_usa: public xgeo_scale<D>
+    /***************************
+     * xalbers_usa declaration *
+     ***************************/
+
+    template <class D>
+    class xalbers_usa : public xgeo_scale<D>
     {
     public:
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
 
-        xalbers_usa();
-
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(double, derived_type, scale_factor, 1200);
+
+    protected:
+
+        xalbers_usa();
 
     private:
 
@@ -286,12 +327,14 @@ namespace xpl
 
     using albers_usa = xw::xmaterialize<xalbers_usa>;
 
-    /***********************
-    * xalbers declaration *
-    ***********************/
+    using albers_usa_generator = xw::xgenerator<xalbers_usa>;
 
-    template<class D>
-    class xalbers: public xgeo_scale<D>
+    /***********************
+     * xalbers declaration *
+     ***********************/
+
+    template <class D>
+    class xalbers : public xgeo_scale<D>
     {
     public:
 
@@ -299,8 +342,6 @@ namespace xpl
         using derived_type = D;
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
-
-        xalbers();
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -311,6 +352,10 @@ namespace xpl
         XPROPERTY(pair_type, derived_type, rotate, pair_type({96, 0}));
         XPROPERTY(double, derived_type, scale_factor, 250);
 
+    protected:
+
+        xalbers();
+
     private:
 
         void set_defaults();
@@ -318,16 +363,11 @@ namespace xpl
 
     using albers = xw::xmaterialize<xalbers>;
 
+    using albers_generator = xw::xgenerator<xalbers>;
+
     /************************
      * scale implementation *
      ************************/
-
-    template <class D>
-    inline xscale<D>::xscale()
-        : base_type()
-    {
-        set_defaults();
-    }
 
     template <class D>
     inline void xscale<D>::apply_patch(const xeus::xjson& patch)
@@ -350,6 +390,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xscale<D>::xscale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xscale<D>::set_defaults()
     {
         this->_model_name() = "ScaleModel";
@@ -359,13 +406,6 @@ namespace xpl
     /*******************************
      * linear_scale implementation *
      *******************************/
-
-    template <class D>
-    inline xlinear_scale<D>::xlinear_scale()
-        : base_type()
-    {
-        set_defaults();
-    }
 
     template <class D>
     inline void xlinear_scale<D>::apply_patch(const xeus::xjson& patch)
@@ -394,6 +434,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xlinear_scale<D>::xlinear_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xlinear_scale<D>::set_defaults()
     {
         this->_model_name() = "LinearScaleModel";
@@ -403,13 +450,6 @@ namespace xpl
     /****************************
      * log_scale implementation *
      ****************************/
-
-    template <class D>
-    inline xlog_scale<D>::xlog_scale()
-        : base_type()
-    {
-        set_defaults();
-    }
 
     template <class D>
     inline void xlog_scale<D>::apply_patch(const xeus::xjson& patch)
@@ -432,6 +472,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xlog_scale<D>::xlog_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xlog_scale<D>::set_defaults()
     {
         this->_model_name() = "LogScaleModel";
@@ -439,15 +486,8 @@ namespace xpl
     }
 
     /*********************************
-    * xordinal_scale implementation *
-    *********************************/
-
-    template <class D>
-    inline xordinal_scale<D>::xordinal_scale()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xordinal_scale implementation *
+     *********************************/
 
     template <class D>
     inline void xordinal_scale<D>::apply_patch(const xeus::xjson& patch)
@@ -466,6 +506,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xordinal_scale<D>::xordinal_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xordinal_scale<D>::set_defaults()
     {
         this->_view_name() = "OrdinalScale";
@@ -473,15 +520,8 @@ namespace xpl
     }
 
     /*******************************
-    * xcolor_scale implementation *
-    *******************************/
-
-    template <class D>
-    inline xcolor_scale<D>::xcolor_scale()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xcolor_scale implementation *
+     *******************************/
 
     template <class D>
     inline void xcolor_scale<D>::apply_patch(const xeus::xjson& patch)
@@ -510,6 +550,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xcolor_scale<D>::xcolor_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xcolor_scale<D>::set_defaults()
     {
         this->_view_name() = "ColorScale";
@@ -517,15 +564,8 @@ namespace xpl
     }
 
     /***************************************
-    * xordinal_color_scale implementation *
-    ***************************************/
-
-    template <class D>
-    inline xordinal_color_scale<D>::xordinal_color_scale()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xordinal_color_scale implementation *
+     ***************************************/
 
     template <class D>
     inline void xordinal_color_scale<D>::apply_patch(const xeus::xjson& patch)
@@ -544,6 +584,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xordinal_color_scale<D>::xordinal_color_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xordinal_color_scale<D>::set_defaults()
     {
         this->_view_name() = "OrdinalColorScale";
@@ -551,15 +598,8 @@ namespace xpl
     }
 
     /*****************************
-    * xgeo_scale implementation *
-    *****************************/
-
-    template <class D>
-    inline xgeo_scale<D>::xgeo_scale()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xgeo_scale implementation *
+     *****************************/
 
     template <class D>
     inline void xgeo_scale<D>::apply_patch(const xeus::xjson& patch)
@@ -576,6 +616,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xgeo_scale<D>::xgeo_scale()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xgeo_scale<D>::set_defaults()
     {
         this->_view_name() = "GeoScale";
@@ -583,15 +630,8 @@ namespace xpl
     }
 
     /****************************
-    * xmercator implementation *
-    ****************************/
-
-    template <class D>
-    inline xmercator<D>::xmercator()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xmercator implementation *
+     ****************************/
 
     template <class D>
     inline void xmercator<D>::apply_patch(const xeus::xjson& patch)
@@ -614,6 +654,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xmercator<D>::xmercator()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xmercator<D>::set_defaults()
     {
         this->_view_name() = "Mercator";
@@ -621,15 +668,8 @@ namespace xpl
     }
 
     /********************************
-    * xorthographic implementation *
-    ********************************/
-
-    template <class D>
-    inline xorthographic<D>::xorthographic()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xorthographic implementation *
+     ********************************/
 
     template <class D>
     inline void xorthographic<D>::apply_patch(const xeus::xjson& patch)
@@ -656,6 +696,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xorthographic<D>::xorthographic()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xorthographic<D>::set_defaults()
     {
         this->_view_name() = "Orthographic";
@@ -663,15 +710,8 @@ namespace xpl
     }
 
     /******************************
-    * xalbers_usa implementation *
-    ******************************/
-
-    template <class D>
-    inline xalbers_usa<D>::xalbers_usa()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xalbers_usa implementation *
+     ******************************/
 
     template <class D>
     inline void xalbers_usa<D>::apply_patch(const xeus::xjson& patch)
@@ -690,6 +730,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xalbers_usa<D>::xalbers_usa()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xalbers_usa<D>::set_defaults()
     {
         this->_view_name() = "AlbersUSA";
@@ -697,15 +744,8 @@ namespace xpl
     }
 
     /**************************
-    * xalbers implementation *
-    **************************/
-
-    template <class D>
-    inline xalbers<D>::xalbers()
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xalbers implementation *
+     **************************/
 
     template <class D>
     inline void xalbers<D>::apply_patch(const xeus::xjson& patch)
@@ -729,6 +769,13 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(scale_factor, state);
 
         return state;
+    }
+
+    template <class D>
+    inline xalbers<D>::xalbers()
+        : base_type()
+    {
+        set_defaults();
     }
 
     template <class D>
