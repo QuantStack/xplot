@@ -22,9 +22,9 @@
 #include "xwidgets/xwidget.hpp"
 
 #include "xboxed_container.hpp"
+#include "xmaps_config.hpp"
 #include "xplot.hpp"
 #include "xscales.hpp"
-#include "xmaps_config.hpp"
 
 namespace xpl
 {
@@ -40,8 +40,7 @@ namespace xpl
             "#e377c2",
             "#7f7f7f",
             "#bcbd22",
-            "#17becf"
-        };
+            "#17becf"};
         return category;
     }
 
@@ -72,7 +71,6 @@ namespace xpl
         using selected_type = std::vector<xtl::xoptional<int>>;
         using tooltip_type = xtl::xoptional<xmark_tooltip_type>;
 
-        xmark();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -91,6 +89,10 @@ namespace xpl
         XPROPERTY(bool, derived_type, enable_hover, true);
         XPROPERTY(::xeus::xjson, derived_type, interactions, ::xeus::xjson::parse(R"({"hover": "tooltip"})"));
         XPROPERTY(X_CASELESS_STR_ENUM(mouse, center), derived_type, tooltip_location, "mouse");
+
+    protected:
+
+        xmark();
 
     private:
 
@@ -113,9 +115,6 @@ namespace xpl
         using opacities_type = std::vector<double>;
         using curves_subset_type = std::vector<int>;
 
-        template <class XS, class YS>
-        xlines(XS&&, YS&&);
-
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -128,13 +127,18 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(none, labels), derived_type, labels_visibility, "none");
         XPROPERTY(curves_subset_type, derived_type, curves_subset);
         XPROPERTY(X_CASELESS_STR_ENUM(solid, dashed, dotted, dash_dotted), derived_type, line_style, "solid");
-        XPROPERTY(X_CASELESS_STR_ENUM(linear, basis, basis-open, basis-closed, bundle, cardinal, cardinal-open, cardinal-closed, monotone, step-before, step-after), derived_type, interpolation, "linear");
+        XPROPERTY(X_CASELESS_STR_ENUM(linear, basis, basis - open, basis - closed, bundle, cardinal, cardinal - open, cardinal - closed, monotone, step - before, step - after), derived_type, interpolation, "linear");
         XPROPERTY(bool, derived_type, close_path, false);
         XPROPERTY(X_CASELESS_STR_ENUM(none, bottom, top, inside), derived_type, fill, "none");
-        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse)>, derived_type, marker);
+        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle - down, triangle - up, arrow, rectangle, ellipse)>, derived_type, marker);
         XPROPERTY(int, derived_type, marker_size, 64);
         XPROPERTY(opacities_type, derived_type, opacities);
         XPROPERTY(opacities_type, derived_type, fill_opacities);
+
+    protected:
+
+        template <class XS, class YS>
+        xlines(XS&&, YS&&);
 
     private:
 
@@ -142,6 +146,8 @@ namespace xpl
     };
 
     using lines = xw::xmaterialize<xlines>;
+
+    using lines_generator = xw::xgenerator<xlines>;
 
     /*****************************
      * xscatter_base declaration *
@@ -159,15 +165,6 @@ namespace xpl
         using selected_type = std::vector<int>;
 
         using callback_type = std::function<void(const xeus::xjson&)>;
-
-        template <class SX, class SY>
-        xscatter_base(SX&& sx, SY&& sy);
-
-        template <class SX, class SY, class SC>
-        xscatter_base(SX&& sx, SY&& sy, SC&& sc);
-
-        template <class SX, class SY, class SS, class SO>
-        xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -194,6 +191,17 @@ namespace xpl
         XPROPERTY(bool, derived_type, update_on_move);
         XPROPERTY(selected_type, derived_type, selected);
 
+    protected:
+
+        template <class SX, class SY>
+        xscatter_base(SX&& sx, SY&& sy);
+
+        template <class SX, class SY, class SC>
+        xscatter_base(SX&& sx, SY&& sy, SC&& sc);
+
+        template <class SX, class SY, class SS, class SO>
+        xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so);
+
     private:
 
         void set_defaults();
@@ -217,6 +225,25 @@ namespace xpl
         using colors_type = std::vector<xtl::xoptional<color_type>>;
         using names_type = xboxed_container<std::vector<std::string>>;
 
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(data_type, derived_type, skew);
+        XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle - down, triangle - up, arrow, rectangle, ellipse), derived_type, marker, "circle");
+        XPROPERTY(colors_type, derived_type, colors, {"DeepSkyBlue"});
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
+        XPROPERTY(double, derived_type, stroke_width, 1.5);
+        XPROPERTY(double, derived_type, default_skew, 0.5);
+        XPROPERTY(int, derived_type, default_size, 64);
+        XPROPERTY(names_type, derived_type, names);
+        XPROPERTY(bool, derived_type, display_names, true);
+        XPROPERTY(bool, derived_type, fill, true);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, drag_color);
+        XPROPERTY(double, derived_type, drag_size, 5.);
+        XPROPERTY(bool, derived_type, names_unique, true);
+
+    protected:
+
         template <class SX, class SY>
         xscatter(SX&& sx, SY&& sy);
 
@@ -230,23 +257,6 @@ namespace xpl
         template <class SX, class SY, class SS, class SO>
         xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so);
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
-
-        XPROPERTY(data_type, derived_type, skew);
-        XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse), derived_type, marker, "circle");
-        XPROPERTY(colors_type, derived_type, colors, {"DeepSkyBlue"});
-        XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
-        XPROPERTY(double, derived_type, stroke_width, 1.5);
-        XPROPERTY(double, derived_type, default_skew, 0.5);
-        XPROPERTY(int, derived_type, default_size, 64);
-        XPROPERTY(names_type, derived_type, names);
-        XPROPERTY(bool, derived_type, display_names, true);
-        XPROPERTY(bool, derived_type, fill, true);
-        XPROPERTY(xtl::xoptional<color_type>, derived_type, drag_color);
-        XPROPERTY(double, derived_type, drag_size, 5.);
-        XPROPERTY(bool, derived_type, names_unique, true);
-
     private:
 
         void set_defaults();
@@ -254,23 +264,21 @@ namespace xpl
 
     using scatter = xw::xmaterialize<xscatter>;
 
-    /********************
-    * xpie declaration *
-    ********************/
+    using scatter_generator = xw::xgenerator<xscatter>;
 
-    template<class D>
-    class xpie: public xmark<D>
+    /********************
+     * xpie declaration *
+     ********************/
+
+    template <class D>
+    class xpie : public xmark<D>
     {
     public:
-
         using base_type = xmark<D>;
         using derived_type = D;
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using xboxed_color_type = xboxed_container<std::vector<std::string>>;
-
-        template <class SX, class SY>
-        xpie(SX&& sx, SY&& sy);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -296,6 +304,11 @@ namespace xpl
         XPROPERTY(double, derived_type, x, 0.5);
         XPROPERTY(double, derived_type, y, 0.5);
 
+    protected:
+
+        template <class SX, class SY>
+        xpie(SX&& sx, SY&& sy);
+
     private:
 
         void set_defaults();
@@ -303,21 +316,20 @@ namespace xpl
 
     using pie = xw::xmaterialize<xpie>;
 
-    /**********************
-    * xlabel declaration *
-    **********************/
+    using pie_generator = xw::xgenerator<xpie>;
 
-    template<class D>
-    class xlabel: public xscatter_base<D> 
+    /**********************
+     * xlabel declaration *
+     **********************/
+
+    template <class D>
+    class xlabel : public xscatter_base<D>
     {
     public:
 
         using base_type = xscatter_base<D>;
         using derived_type = D;
         using data_type = xboxed_container<std::vector<std::string>>;
-        
-        template <class SX, class SY>
-        xlabel(SX&& sx, SY&& sy);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -333,6 +345,11 @@ namespace xpl
         XPROPERTY(int, derived_type, x_offset);
         XPROPERTY(int, derived_type, y_offset);
 
+    protected:
+
+        template <class SX, class SY>
+        xlabel(SX&& sx, SY&& sy);
+
     private:
 
         void set_defaults();
@@ -340,27 +357,25 @@ namespace xpl
 
     using label = xw::xmaterialize<xlabel>;
 
-    /*********************
-    * xhist declaration *
-    *********************/
+    using label_generator = xw::xgenerator<xlabel>;
 
-    template<class D>
-    class xhist: public xmark<D> 
+    /*********************
+     * xhist declaration *
+     *********************/
+
+    template <class D>
+    class xhist : public xmark<D>
     {
     public:
-
         using base_type = xmark<D>;
         using derived_type = D;
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
-        
-        template <class XS, class YS>
-        xhist(XS&&, YS&&);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
-        
+
         XPROPERTY(int, derived_type, bins, 10);
         XPROPERTY(colors_type, derived_type, colors);
         XPROPERTY(data_type, derived_type, count);
@@ -371,19 +386,26 @@ namespace xpl
         XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
 
+    protected:
+
+        template <class XS, class YS>
+        xhist(XS&&, YS&&);
+
     private:
 
         void set_defaults();
     };
 
     using hist = xw::xmaterialize<xhist>;
-    
-    /************************
-    * xboxplot declaration *
-    ************************/
 
-    template<class D>
-    class xboxplot: public xmark<D>
+    using hist_generator = xw::xgenerator<xhist>;
+
+    /************************
+     * xboxplot declaration *
+     ************************/
+
+    template <class D>
+    class xboxplot : public xmark<D>
     {
     public:
 
@@ -391,9 +413,6 @@ namespace xpl
         using derived_type = D;
         using data_type_x = xboxed_container<std::vector<double>>;
         using data_type_y = xboxed_container<std::vector<std::vector<double>>>;
-
-        template <class XS, class YS>
-        xboxplot(XS&&, YS&&);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -406,6 +425,11 @@ namespace xpl
         XPROPERTY(data_type_x, derived_type, x);
         XPROPERTY(data_type_y, derived_type, y);
 
+    protected:
+
+        template <class XS, class YS>
+        xboxplot(XS&&, YS&&);
+
     private:
 
         void set_defaults();
@@ -413,12 +437,14 @@ namespace xpl
 
     using boxplot = xw::xmaterialize<xboxplot>;
 
-    /*********************
-    * xbars declaration *
-    *********************/
+    using boxplot_generator = xw::xgenerator<xboxplot>;
 
-    template<class D>
-    class xbars: public xmark<D> 
+    /*********************
+     * xbars declaration *
+     *********************/
+
+    template <class D>
+    class xbars : public xmark<D>
     {
     public:
 
@@ -427,9 +453,6 @@ namespace xpl
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
-
-        template <class XS, class YS>
-        xbars(XS&&, YS&&);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -447,19 +470,26 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(vertical, horizontal), derived_type, orientation, "vertical");
         XPROPERTY(X_CASELESS_STR_ENUM(stacked, grouped), derived_type, type, "stacked");
 
+    protected:
+
+        template <class XS, class YS>
+        xbars(XS&&, YS&&);
+
     private:
-        
+
         void set_defaults();
     };
 
     using bars = xw::xmaterialize<xbars>;
 
-    /*************************
-    * xheat_map declaration *
-    *************************/
+    using bars_generator = xw::xgenerator<xbars>;
 
-    template<class D>
-    class xheat_map: public xmark<D>
+    /*************************
+     * xheat_map declaration *
+     *************************/
+
+    template <class D>
+    class xheat_map : public xmark<D>
     {
     public:
 
@@ -468,6 +498,17 @@ namespace xpl
         using coord_type = xboxed_container<std::vector<double>>;
         using array = std::vector<std::vector<double>>;
         using data_type = xboxed_container<array>;
+
+        xeus::xjson get_state() const;
+        void apply_patch(const xeus::xjson& patch);
+
+        XPROPERTY(xtl::xoptional<data_type>, derived_type, color);
+        XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
+        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<coord_type>, derived_type, x);
+        XPROPERTY(xtl::xoptional<coord_type>, derived_type, y);
+
+    protected:
 
         template <class XS, class YS, class CS>
         xheat_map(std::vector<std::vector<double>>&,
@@ -479,15 +520,6 @@ namespace xpl
                   std::vector<std::vector<double>>&,
                   XS&&, YS&&, CS&&);
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
-
-        XPROPERTY(xtl::xoptional<data_type>, derived_type, color);
-        XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
-        XPROPERTY(xtl::xoptional<coord_type>, derived_type, x);
-        XPROPERTY(xtl::xoptional<coord_type>, derived_type, y);
-
     private:
 
         void set_defaults();
@@ -495,12 +527,14 @@ namespace xpl
 
     using heat_map = xw::xmaterialize<xheat_map>;
 
-    /******************************
-    * xgrid_heat_map declaration *
-    ******************************/
+    using heat_map_generator = xw::xgenerator<xheat_map>;
 
-    template<class D>
-    class xgrid_heat_map: public xmark<D>
+    /******************************
+     * xgrid_heat_map declaration *
+     ******************************/
+
+    template <class D>
+    class xgrid_heat_map : public xmark<D>
     {
     public:
 
@@ -509,16 +543,6 @@ namespace xpl
         using selected_type = std::vector<std::vector<int>>;
         using data1d_type = xboxed_container<std::vector<double>>;
         using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
-
-        template <class XS, class YS, class CS>
-        xgrid_heat_map(std::vector<double>&,
-                       std::vector<double>&,
-                       std::vector<std::vector<double>>&,
-                       XS&&, YS&&, CS&&);
-
-        template <class XS, class YS, class CS>
-        xgrid_heat_map(std::vector<std::vector<double>>&,
-                       XS&&, YS&&, CS&&);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -535,6 +559,18 @@ namespace xpl
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke, "black");
         XPROPERTY(selected_type, derived_type, selected);
 
+    protected:
+
+        template <class XS, class YS, class CS>
+        xgrid_heat_map(std::vector<double>&,
+                       std::vector<double>&,
+                       std::vector<std::vector<double>>&,
+                       XS&&, YS&&, CS&&);
+
+        template <class XS, class YS, class CS>
+        xgrid_heat_map(std::vector<std::vector<double>>&,
+                       XS&&, YS&&, CS&&);
+
     private:
 
         void set_defaults();
@@ -542,29 +578,18 @@ namespace xpl
 
     using grid_heat_map = xw::xmaterialize<xgrid_heat_map>;
 
-    /********************
-    * xmap declaration *
-    ********************/
+    using grid_heat_map_generator = xw::xgenerator<xgrid_heat_map>;
 
-    template<class D>
-    class xmap: public xmark<D>
+    /********************
+     * xmap declaration *
+     ********************/
+
+    template <class D>
+    class xmap : public xmark<D>
     {
     public:
-
         using base_type = xmark<D>;
         using derived_type = D;
-
-        template <class XS>
-        xmap(XS&&);
-
-        template <class XS>
-        xmap(std::string, XS&&);
-
-        template <class XS, class YS>
-        xmap(XS&&, YS&&);
-
-        template <class XS, class YS>
-        xmap(std::string, XS&&, YS&&);
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -579,24 +604,33 @@ namespace xpl
         XPROPERTY(::xeus::xjson, derived_type, selected_styles);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke_color);
 
+    protected:
+
+        template <class XS>
+        xmap(XS&&);
+
+        template <class XS>
+        xmap(std::string, XS&&);
+
+        template <class XS, class YS>
+        xmap(XS&&, YS&&);
+
+        template <class XS, class YS>
+        xmap(std::string, XS&&, YS&&);
+
     private:
 
         void set_defaults();
-        xeus::xjson read_map(std::string filename); 
+        xeus::xjson read_map(std::string filename);
     };
 
     using map = xw::xmaterialize<xmap>;
 
+    using map_generator = xw::xgenerator<xmap>;
+
     /************************
      * xmark implementation *
      ************************/
-
-    template <class D>
-    inline xmark<D>::xmark()
-        : base_type()
-    {
-        set_defaults();
-    }
 
     template <class D>
     inline void xmark<D>::apply_patch(const xeus::xjson& patch)
@@ -645,6 +679,13 @@ namespace xpl
     }
 
     template <class D>
+    inline xmark<D>::xmark()
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xmark<D>::set_defaults()
     {
         this->_model_name() = "MarkModel";
@@ -653,17 +694,6 @@ namespace xpl
     /*************************
      * xlines implementation *
      *************************/
-
-    template <class D>
-    template <class SX, class SY>
-    inline xlines<D>::xlines(SX&& sx, SY&& sy)
-        : base_type()
-    {
-        set_defaults();
-
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
-    }
 
     template <class D>
     inline void xlines<D>::apply_patch(const xeus::xjson& patch)
@@ -714,56 +744,30 @@ namespace xpl
     }
 
     template <class D>
-    inline void xlines<D>::set_defaults()
-    {
-        this->_model_name() = "LinesModel";
-        this->_view_name() = "Lines";
-        this->scales_metadata() = {
-            { "x", {{ "orientation", "horizontal" }, { "dimension", "x" }}},
-            { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
-            { "color", {{ "dimension", "color" }}}
-        };
-    }
-
-    /********************************
-     * xscatter_base implementation *
-     ********************************/
-
-     template <class D>
-     template <class SX, class SY>
-     inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy)
-         : base_type()
-     {
-         set_defaults();
-
-         this->scales()["x"] = std::forward<SX>(sx);
-         this->scales()["y"] = std::forward<SY>(sy);
-     }
-
-     template <class D>
-     template <class SX, class SY, class SC>
-     inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SC&& sc)
-         : base_type()
-     {
-         set_defaults();
-
-         this->scales()["x"] = std::forward<SX>(sx);
-         this->scales()["y"] = std::forward<SY>(sy);
-         this->scales()["color"] = std::forward<SC>(sc);
-    }
-
-    template <class D>
-    template <class SX, class SY, class SS, class SO>
-    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so)
+    template <class SX, class SY>
+    inline xlines<D>::xlines(SX&& sx, SY&& sy)
         : base_type()
     {
         set_defaults();
 
         this->scales()["x"] = std::forward<SX>(sx);
         this->scales()["y"] = std::forward<SY>(sy);
-        this->scales()["size"] = std::forward<SS>(ss);
-        this->scales()["opacities"] = std::forward<SO>(so);
     }
+
+    template <class D>
+    inline void xlines<D>::set_defaults()
+    {
+        this->_model_name() = "LinesModel";
+        this->_view_name() = "Lines";
+        this->scales_metadata() = {
+            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            {"color", {{"dimension", "color"}}}};
+    }
+
+    /********************************
+     * xscatter_base implementation *
+     ********************************/
 
     template <class D>
     inline void xscatter_base<D>::apply_patch(const xeus::xjson& patch)
@@ -813,16 +817,51 @@ namespace xpl
     }
 
     template <class D>
+    template <class SX, class SY>
+    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SC&& sc)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["color"] = std::forward<SC>(sc);
+    }
+
+    template <class D>
+    template <class SX, class SY, class SS, class SO>
+    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["size"] = std::forward<SS>(ss);
+        this->scales()["opacities"] = std::forward<SO>(so);
+    }
+
+    template <class D>
     inline void xscatter_base<D>::set_defaults()
     {
-        this->scales_metadata() = { 
-            { "x", {{ "orientation", "horizontal" }, { "dimension", "x" }}},
-            { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
-            { "color", {{ "dimension", "color" }}},
-            { "size", {{ "dimension", "size" }}},
-            { "opacity", {{ "dimension", "opacity" }}},
-            { "rotation", {{ "dimension", "rotation" }}}
-       };
+        this->scales_metadata() = {
+            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            {"color", {{"dimension", "color"}}},
+            {"size", {{"dimension", "size"}}},
+            {"opacity", {{"dimension", "opacity"}}},
+            {"rotation", {{"dimension", "rotation"}}}};
     }
 
     template <class D>
@@ -875,30 +914,6 @@ namespace xpl
      ***************************/
 
     template <class D>
-    template <class SX, class SY>
-    inline xscatter<D>::xscatter(SX&& sx, SY&& sy)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
-    {
-        set_defaults();
-    }
-
-    template <class D>
-    template <class SX, class SY, class SC>
-    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SC&& sc)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SC>(sc))
-    {
-        set_defaults();
-    }
-
-    template <class D>
-    template <class SX, class SY, class SS, class SO>
-    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SS>(ss), std::forward<SO>(so))
-    {
-        set_defaults();
-    }
-
-    template <class D>
     inline void xscatter<D>::apply_patch(const xeus::xjson& patch)
     {
         base_type::apply_patch(patch);
@@ -941,6 +956,30 @@ namespace xpl
     }
 
     template <class D>
+    template <class SX, class SY>
+    inline xscatter<D>::xscatter(SX&& sx, SY&& sy)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    template <class SX, class SY, class SC>
+    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SC&& sc)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SC>(sc))
+    {
+        set_defaults();
+    }
+
+    template <class D>
+    template <class SX, class SY, class SS, class SO>
+    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SS>(ss), std::forward<SO>(so))
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xscatter<D>::set_defaults()
     {
         this->_model_name() = "ScatterModel";
@@ -948,16 +987,8 @@ namespace xpl
     }
 
     /***********************
-    * xpie implementation *
-    ***********************/
-
-    template <class D>
-    template <class SX, class SY>
-    inline xpie<D>::xpie(SX&& sx, SY&& sy)
-        : base_type()
-    {
-        set_defaults();
-    }
+     * xpie implementation *
+     ***********************/
 
     template <class D>
     inline void xpie<D>::apply_patch(const xeus::xjson& patch)
@@ -1012,6 +1043,14 @@ namespace xpl
     }
 
     template <class D>
+    template <class SX, class SY>
+    inline xpie<D>::xpie(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xpie<D>::set_defaults()
     {
         this->_view_name() = "Pie";
@@ -1019,16 +1058,8 @@ namespace xpl
     }
 
     /*************************
-    * xlabel implementation *
-    *************************/
-
-    template <class D>
-    template <class SX, class SY>
-    inline xlabel<D>::xlabel(SX&& sx, SY&& sy)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
-    {
-        set_defaults();
-    }
+     * xlabel implementation *
+     *************************/
 
     template <class D>
     inline void xlabel<D>::apply_patch(const xeus::xjson& patch)
@@ -1065,6 +1096,14 @@ namespace xpl
     }
 
     template <class D>
+    template <class SX, class SY>
+    inline xlabel<D>::xlabel(SX&& sx, SY&& sy)
+        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
+    {
+        set_defaults();
+    }
+
+    template <class D>
     inline void xlabel<D>::set_defaults()
     {
         this->_view_name() = "Label";
@@ -1072,19 +1111,8 @@ namespace xpl
     }
 
     /************************
-    * xhist implementation *
-    ************************/
-
-    template <class D>
-    template <class SX, class SY>
-    inline xhist<D>::xhist(SX&& sx, SY&& sy)
-        : base_type()
-    {
-        set_defaults();
-
-        this->scales()["sample"] = std::forward<SX>(sx);
-        this->scales()["count"] = std::forward<SY>(sy);
-    }
+     * xhist implementation *
+     ************************/
 
     template <class D>
     inline void xhist<D>::apply_patch(const xeus::xjson& patch)
@@ -1119,30 +1147,29 @@ namespace xpl
     }
 
     template <class D>
+    template <class SX, class SY>
+    inline xhist<D>::xhist(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["sample"] = std::forward<SX>(sx);
+        this->scales()["count"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
     inline void xhist<D>::set_defaults()
     {
         this->_view_name() = "Hist";
         this->_model_name() = "HistModel";
         this->scales_metadata() = {
-            { "sample", {{"orientation", "horizontal"}, {"dimension", "x"}}},
-            { "count", {{"orientation", "vertical"}, {"dimension", "y"}}}
-        };
+            {"sample", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"count", {{"orientation", "vertical"}, {"dimension", "y"}}}};
     }
 
     /***************************
-    * xboxplot implementation *
-    ***************************/
-
-    template< class D>
-    template <class SX, class SY>
-    inline xboxplot<D>::xboxplot(SX&& sx, SY&& sy)
-        : base_type()
-    {
-        set_defaults();
-
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
-    }
+     * xboxplot implementation *
+     ***************************/
 
     template <class D>
     inline void xboxplot<D>::apply_patch(const xeus::xjson& patch)
@@ -1173,23 +1200,8 @@ namespace xpl
     }
 
     template <class D>
-    inline void xboxplot<D>::set_defaults()
-    {
-        this->_view_name() = "Boxplot";
-        this->_model_name() = "BoxplotModel";
-        this->scales_metadata() = {
-            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
-            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}}
-        };
-    }
-
-    /************************
-    * xbars implementation *
-    ************************/
-
-    template <class D>
     template <class SX, class SY>
-    inline xbars<D>::xbars(SX&& sx, SY&& sy)
+    inline xboxplot<D>::xboxplot(SX&& sx, SY&& sy)
         : base_type()
     {
         set_defaults();
@@ -1198,6 +1210,19 @@ namespace xpl
         this->scales()["y"] = std::forward<SY>(sy);
     }
 
+    template <class D>
+    inline void xboxplot<D>::set_defaults()
+    {
+        this->_view_name() = "Boxplot";
+        this->_model_name() = "BoxplotModel";
+        this->scales_metadata() = {
+            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}}};
+    }
+
+    /************************
+     * xbars implementation *
+     ************************/
 
     template <class D>
     inline void xbars<D>::apply_patch(const xeus::xjson& patch)
@@ -1238,20 +1263,54 @@ namespace xpl
     }
 
     template <class D>
+    template <class SX, class SY>
+    inline xbars<D>::xbars(SX&& sx, SY&& sy)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scales()["x"] = std::forward<SX>(sx);
+        this->scales()["y"] = std::forward<SY>(sy);
+    }
+
+    template <class D>
     inline void xbars<D>::set_defaults()
     {
         this->_view_name() = "Bars";
         this->_model_name() = "BarsModel";
         this->scales_metadata() = {
-            { "x", {{ "orientation", "horizontal" }, { "dimension", "x" }}},
-            { "y", {{ "orientation", "vertical" }, { "dimension", "y" }}},
-            { "color", {{ "dimension", "color" }}}
-        };        
-    }    
+            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            {"color", {{"dimension", "color"}}}};
+    }
 
     /****************************
-    * xheat_map implementation *
-    ****************************/
+     * xheat_map implementation *
+     ****************************/
+
+    template <class D>
+    inline void xheat_map<D>::apply_patch(const xeus::xjson& patch)
+    {
+        base_type::apply_patch(patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(null_color, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+    }
+
+    template <class D>
+    inline xeus::xjson xheat_map<D>::get_state() const
+    {
+        xeus::xjson state = base_type::get_state();
+        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(null_color, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
+
+        return state;
+    }
 
     template <class D>
     template <class SX, class SY, class SC>
@@ -1292,44 +1351,19 @@ namespace xpl
     }
 
     template <class D>
-    inline void xheat_map<D>::apply_patch(const xeus::xjson& patch)
-    {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(null_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
-    }
-
-    template <class D>
-    inline xeus::xjson xheat_map<D>::get_state() const
-    {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(null_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-
-        return state;
-    }
-
-    template <class D>
     inline void xheat_map<D>::set_defaults()
     {
         this->_view_name() = "HeatMap";
         this->_model_name() = "HeatMapModel";
         this->scales_metadata() = {
-            { "x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
-            { "y", {{"orientation", "vertical"}, {"dimension", "y"}}},
-            { "color", {{"dimension", "color"}}}
-        };
+            {"x", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"y", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            {"color", {{"dimension", "color"}}}};
     }
 
     /*********************************
-    * xgrid_heat_map implementation *
-    *********************************/
+     * xgrid_heat_map implementation *
+     *********************************/
 
     template <class D>
     template <class SX, class SY, class SC>
@@ -1410,15 +1444,14 @@ namespace xpl
         this->_view_name() = "GridHeatMap";
         this->_model_name() = "GridHeatMapModel";
         this->scales_metadata() = {
-            { "column", {{"orientation", "horizontal"}, {"dimension", "x"}}},
-            { "row", {{"orientation", "vertical"}, {"dimension", "y"}}},
-            { "color", {{"dimension", "color"}}}
-        };
+            {"column", {{"orientation", "horizontal"}, {"dimension", "x"}}},
+            {"row", {{"orientation", "vertical"}, {"dimension", "y"}}},
+            {"color", {{"dimension", "color"}}}};
     }
 
     /***********************
-    * xmap implementation *
-    ***********************/
+     * xmap implementation *
+     ***********************/
 
     template <class D>
     template <class SX>
@@ -1500,22 +1533,21 @@ namespace xpl
         this->_view_name() = "Map";
         this->_model_name() = "MapModel";
         this->scales_metadata() = {
-            {"color", { {"dimension", "color"} }},
-            {"projection", { {"dimension", "geo"} }}
-        };
+            {"color", {{"dimension", "color"}}},
+            {"projection", {{"dimension", "geo"}}}};
     }
 
     template <class D>
     inline xeus::xjson xmap<D>::read_map(std::string filename)
     {
         std::ifstream jsonfile(filename);
-        // TODO: we should do 
+
+        // TODO: we should do
         // auto json = nlohmann::json::parse(jsonfile);
         // but it doesn't work with cling ...
         std::string str((std::istreambuf_iterator<char>(jsonfile)),
-                         std::istreambuf_iterator<char>());
+                        std::istreambuf_iterator<char>());
         return nlohmann::json::parse(str);
     }
-
 }
 #endif

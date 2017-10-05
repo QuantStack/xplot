@@ -36,7 +36,6 @@ namespace xpl
         using marks_type = std::vector<xw::xholder<xmark>>;
         using scales_type = xw::xholder<xscale>;
 
-        xfigure();
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
@@ -70,6 +69,10 @@ namespace xpl
         template <class T>
         void add_axis(xaxis<T>&& w);
 
+    protected:
+
+        xfigure();
+
     private:
 
         void set_defaults();
@@ -77,16 +80,11 @@ namespace xpl
 
     using figure = xw::xmaterialize<xfigure>;
 
+    using figure_generator = xw::xgenerator<xfigure>;
+
     /**************************
      * xfigure implementation *
      **************************/
-
-    template <class D>
-    inline xfigure<D>::xfigure()
-        : base_type()
-    {
-        set_defaults();
-    }
 
     template <class D>
     inline void xfigure<D>::apply_patch(const xeus::xjson& patch)
@@ -113,7 +111,7 @@ namespace xpl
     template <class D>
     inline xeus::xjson xfigure<D>::get_state() const
     {
-        xeus::xjson state =  base_type::get_state();
+        xeus::xjson state = base_type::get_state();
 
         XOBJECT_SET_PATCH_FROM_PROPERTY(title, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
@@ -172,6 +170,13 @@ namespace xpl
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
         this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    inline xfigure<D>::xfigure()
+        : base_type()
+    {
+        set_defaults();
     }
 
     template <class D>
