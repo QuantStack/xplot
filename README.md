@@ -8,6 +8,14 @@ C++ backend for bqplot
 
 ![xplot](xplot-screenshot.png)
 
+## Dependencies
+
+All the dependencies of xplot are available for the conda package manager. 
+
+| `xplot` | `xwidgets`  |  `xeus`       |
+|---------|-------------|---------------|
+|  master |   ~0.4.0    |  >=0.7.0,<0.8 |
+
 ## License
 
 We use a shared copyright model that enables all contributors to maintain the
