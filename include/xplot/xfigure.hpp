@@ -12,7 +12,6 @@
 #include <string>
 #include <vector>
 
-#include "xwidgets/xholder_id.hpp"
 #include "xwidgets/xwidget.hpp"
 
 #include "xaxes.hpp"
@@ -32,6 +31,7 @@ namespace xpl
 
         using base_type = xw::xwidget<D>;
         using derived_type = D;
+
         using axes_type = std::vector<xw::xholder<xaxis>>;
         using marks_type = std::vector<xw::xholder<xmark>>;
         using scales_type = xw::xholder<xscale>;
@@ -72,6 +72,8 @@ namespace xpl
     protected:
 
         xfigure();
+
+        using base_type::base_type;
 
     private:
 
@@ -136,7 +138,7 @@ namespace xpl
     template <class T>
     inline void xfigure<D>::add_mark(const xmark<T>& w)
     {
-        this->marks().emplace_back(make_id_holder(w));
+        this->marks().emplace_back(xw::make_id_holder<xmark>(w.id()));
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
         this->send_patch(std::move(state));
@@ -146,7 +148,7 @@ namespace xpl
     template <class T>
     inline void xfigure<D>::add_mark(xmark<T>&& w)
     {
-        this->marks().emplace_back(make_owning_holder(std::move(w)));
+        this->marks().emplace_back(xw::make_owning_holder(std::move(w)));
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
         this->send_patch(std::move(state));
@@ -156,7 +158,7 @@ namespace xpl
     template <class T>
     inline void xfigure<D>::add_axis(const xaxis<T>& w)
     {
-        this->axes().emplace_back(make_id_holder(w));
+        this->axes().emplace_back(xw::make_id_holder<xaxis>(w.id()));
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
         this->send_patch(std::move(state));
@@ -166,7 +168,7 @@ namespace xpl
     template <class T>
     inline void xfigure<D>::add_axis(xaxis<T>&& w)
     {
-        this->axes().emplace_back(make_owning_holder(std::move(w)));
+        this->axes().emplace_back(xw::make_owning_holder(std::move(w)));
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
         this->send_patch(std::move(state));

@@ -15,8 +15,6 @@
 
 #include "xtl/xoptional.hpp"
 
-#include "xwidgets/xholder_id.hpp"
-
 #include "xplot.hpp"
 #include "xscales.hpp"
 
@@ -34,6 +32,7 @@ namespace xpl
 
         using base_type = xplot<D>;
         using derived_type = D;
+
         using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
@@ -63,6 +62,8 @@ namespace xpl
 
         template <class S>
         xaxis(xscale<S>&&);
+
+        using base_type::base_type;
 
     private:
 
@@ -95,6 +96,8 @@ namespace xpl
 
         template <class S>
         xcolor_axis(xcolor_scale<S>&&);
+
+        using base_type::base_type;
 
     private:
 

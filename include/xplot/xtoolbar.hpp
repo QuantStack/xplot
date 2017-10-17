@@ -9,7 +9,9 @@
 #ifndef XPLOT_TOOLBAR_HPP
 #define XPLOT_TOOLBAR_HPP
 
-#include "xwidgets/xholder_id.hpp"
+#include "xtl/xoptional.hpp"
+
+#include "xwidgets/xmaterialize.hpp"
 #include "xwidgets/xwidget.hpp"
 
 #include "xfigure.hpp"
@@ -17,6 +19,9 @@
 
 namespace xpl
 {
+    template <class D>
+    class xfigure;
+
     /************************
      * xtoolbar declaration *
      ************************/
@@ -34,15 +39,23 @@ namespace xpl
 
         XPROPERTY(xw::xholder<xfigure>, derived_type, figure);
         XPROPERTY(bool, derived_type, panning);
-        XPROPERTY(xw::xholder<xpan_zoom>, derived_type, panzoom);
+        XPROPERTY(xtl::xoptional<xw::xmaterialize<xpan_zoom>>, derived_type, panzoom);
 
     protected:
 
-        xtoolbar();
+        template <class S>
+        xtoolbar(const xfigure<S>&);
+
+        template <class S>
+        xtoolbar(xfigure<S>&&);
+
+        using base_type::base_type;
 
     private:
 
         void set_defaults();
+
+        static int register_panzoom();
     };
 
     using toolbar = xw::xmaterialize<xtoolbar>;
@@ -73,10 +86,22 @@ namespace xpl
     }
 
     template <class D>
-    inline xtoolbar<D>::xtoolbar()
+    template <class S>
+    inline xtoolbar<D>::xtoolbar(const xfigure<S>& fig)
+        : base_type()
+    {
+        static int init = register_panzoom();
+        set_defaults();
+        this->figure() = fig;
+    }
+
+    template <class D>
+    template <class S>
+    inline xtoolbar<D>::xtoolbar(xfigure<S>&& fig)
         : base_type()
     {
         set_defaults();
+        this->figure() = std::move(fig);
     }
 
     template <class D>
@@ -84,10 +109,21 @@ namespace xpl
     {
         this->_view_name() = "Toolbar";
         this->_model_module() = "bqplot";
-        this->_model_module_version() = "^0.3.0-alpha.6";
+        this->_model_module_version() = "^0.3.0";
         this->_model_name() = "ToolbarModel";
         this->_view_module() = "bqplot";
-        this->_view_module_version() = "^0.3.0-alpha.6";
+        this->_view_module_version() = "^0.3.0";
+    }
+
+    template <class D>
+    inline int xtoolbar<D>::register_panzoom()
+    {
+        xw::get_xfactory().register_maker("bqplot",
+                                          "PanZoomModel",
+                                          "bqplot",
+                                          "PanZoom",
+                                          xw::xmaker<xpan_zoom>);
+        return 0;
     }
 }
 #endif

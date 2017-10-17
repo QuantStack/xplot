@@ -37,6 +37,8 @@ namespace xpl
 
         xscale();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -66,6 +68,8 @@ namespace xpl
     protected:
 
         xlinear_scale();
+
+        using base_type::base_type;
 
     private:
 
@@ -98,6 +102,8 @@ namespace xpl
 
         xlog_scale();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -127,6 +133,8 @@ namespace xpl
     protected:
 
         xordinal_scale();
+
+        using base_type::base_type;
 
     private:
         
@@ -163,6 +171,8 @@ namespace xpl
 
         xcolor_scale();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -192,6 +202,8 @@ namespace xpl
 
         xordinal_color_scale();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -220,14 +232,12 @@ namespace xpl
 
         xgeo_scale();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
     };
-
-    using geo_scale = xw::xmaterialize<xgeo_scale>;
-
-    using geo_scale_generator = xw::xgenerator<xgeo_scale>;
 
     /*************************
      * xmercator declaration *
@@ -240,6 +250,7 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
 
@@ -253,6 +264,8 @@ namespace xpl
     protected:
 
         xmercator();
+
+        using base_type::base_type;
 
     private:
 
@@ -320,6 +333,8 @@ namespace xpl
 
         xalbers_usa();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -340,6 +355,7 @@ namespace xpl
 
         using base_type = xgeo_scale<D>;
         using derived_type = D;
+
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
 
@@ -355,6 +371,8 @@ namespace xpl
     protected:
 
         xalbers();
+
+        using base_type::base_type;
 
     private:
 

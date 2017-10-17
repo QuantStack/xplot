@@ -26,6 +26,7 @@ namespace xpl
 
         using base_type = xw::xwidget<D>;
         using derived_type = D;
+
         using data_type = std::vector<xtl::xoptional<std::string>>;
 
         xeus::xjson get_state() const;
@@ -39,6 +40,8 @@ namespace xpl
     protected:
 
         xtooltip();
+
+        using base_type::base_type;
 
     private:
 
@@ -87,10 +90,10 @@ namespace xpl
     {
         this->_view_name() = "Tooltip";
         this->_model_module() = "bqplot";
-        this->_model_module_version() = "^0.3.0-alpha.6";
+        this->_model_module_version() = "^0.3.0";
         this->_model_name() = "TooltipModel";
         this->_view_module() = "bqplot";
-        this->_view_module_version() = "^0.3.0-alpha.6";
+        this->_view_module_version() = "^0.3.0";
     }
 }
 #endif

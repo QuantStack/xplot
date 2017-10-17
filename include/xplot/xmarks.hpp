@@ -18,7 +18,6 @@
 
 #include "xtl/xoptional.hpp"
 
-#include "xwidgets/xholder_id.hpp"
 #include "xwidgets/xwidget.hpp"
 
 #include "xboxed_container.hpp"
@@ -65,6 +64,7 @@ namespace xpl
 
         using base_type = xplot<D>;
         using derived_type = D;
+
         using scales_type = xmark_scales_type;
         using preserve_domain_type = std::map<std::string, bool>;
         using labels_type = std::vector<std::string>;
@@ -94,6 +94,8 @@ namespace xpl
 
         xmark();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -110,6 +112,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using opacities_type = std::vector<double>;
@@ -127,10 +130,10 @@ namespace xpl
         XPROPERTY(X_CASELESS_STR_ENUM(none, labels), derived_type, labels_visibility, "none");
         XPROPERTY(curves_subset_type, derived_type, curves_subset);
         XPROPERTY(X_CASELESS_STR_ENUM(solid, dashed, dotted, dash_dotted), derived_type, line_style, "solid");
-        XPROPERTY(X_CASELESS_STR_ENUM(linear, basis, basis - open, basis - closed, bundle, cardinal, cardinal - open, cardinal - closed, monotone, step - before, step - after), derived_type, interpolation, "linear");
+        XPROPERTY(X_CASELESS_STR_ENUM(linear, basis, basis-open, basis-closed, bundle, cardinal, cardinal-open, cardinal-closed, monotone, step-before, step-after), derived_type, interpolation, "linear");
         XPROPERTY(bool, derived_type, close_path, false);
         XPROPERTY(X_CASELESS_STR_ENUM(none, bottom, top, inside), derived_type, fill, "none");
-        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle - down, triangle - up, arrow, rectangle, ellipse)>, derived_type, marker);
+        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse)>, derived_type, marker);
         XPROPERTY(int, derived_type, marker_size, 64);
         XPROPERTY(opacities_type, derived_type, opacities);
         XPROPERTY(opacities_type, derived_type, fill_opacities);
@@ -139,6 +142,8 @@ namespace xpl
 
         template <class XS, class YS>
         xlines(XS&&, YS&&);
+
+        using base_type::base_type;
 
     private:
 
@@ -160,6 +165,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<xtl::xoptional<color_type>>;
         using selected_type = std::vector<int>;
@@ -193,18 +199,21 @@ namespace xpl
 
     protected:
 
-        template <class SX, class SY>
-        xscatter_base(SX&& sx, SY&& sy);
+        template <class XS, class YS>
+        xscatter_base(XS&&, YS&&);
 
-        template <class SX, class SY, class SC>
-        xscatter_base(SX&& sx, SY&& sy, SC&& sc);
+        template <class XS, class YS, class CS>
+        xscatter_base(XS&&, YS&&, CS&&);
 
-        template <class SX, class SY, class SS, class SO>
-        xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so);
+        template <class XS, class YS, class SS, class OS>
+        xscatter_base(XS&&, YS&&, SS&&, OS&&);
+
+        using base_type::base_type;
 
     private:
 
         void set_defaults();
+
         std::list<callback_type> m_callbacks_drag;
         std::list<callback_type> m_callbacks_drag_start;
         std::list<callback_type> m_callbacks_drag_end;
@@ -221,15 +230,16 @@ namespace xpl
 
         using base_type = xscatter_base<D>;
         using derived_type = D;
-        using data_type = xboxed_container<std::vector<double>>;
-        using colors_type = std::vector<xtl::xoptional<color_type>>;
+
+        using data_type = typename base_type::data_type;
+        using colors_type = typename base_type::colors_type;
         using names_type = xboxed_container<std::vector<std::string>>;
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(data_type, derived_type, skew);
-        XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle - down, triangle - up, arrow, rectangle, ellipse), derived_type, marker, "circle");
+        XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse), derived_type, marker, "circle");
         XPROPERTY(colors_type, derived_type, colors, {"DeepSkyBlue"});
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
         XPROPERTY(double, derived_type, stroke_width, 1.5);
@@ -244,18 +254,20 @@ namespace xpl
 
     protected:
 
-        template <class SX, class SY>
-        xscatter(SX&& sx, SY&& sy);
+        template <class XS, class YS>
+        xscatter(XS&&, YS&&);
 
         // TODO: it is not the good way to add several scales
         // because we have no idea which one we pass in the entries
         // could be skew, color, ...
-        template <class SX, class SY, class SC>
-        xscatter(SX&& sx, SY&& sy, SC&& sc);
+        template <class XS, class YS, class CS>
+        xscatter(XS&& xs, YS&& ys, CS&& cs);
 
         // TODO: same remark as the previous constructor
-        template <class SX, class SY, class SS, class SO>
-        xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so);
+        template <class XS, class YS, class SS, class OS>
+        xscatter(XS&& xs, YS&& ys, SS&& ss, OS&& os);
+
+        using base_type::base_type;
 
     private:
 
@@ -274,8 +286,10 @@ namespace xpl
     class xpie : public xmark<D>
     {
     public:
+
         using base_type = xmark<D>;
         using derived_type = D;
+
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using xboxed_color_type = xboxed_container<std::vector<std::string>>;
@@ -306,8 +320,10 @@ namespace xpl
 
     protected:
 
-        template <class SX, class SY>
-        xpie(SX&& sx, SY&& sy);
+        template <class XS, class YS>
+        xpie(XS&&, YS&&);
+
+        using base_type::base_type;
 
     private:
 
@@ -329,6 +345,7 @@ namespace xpl
 
         using base_type = xscatter_base<D>;
         using derived_type = D;
+
         using data_type = xboxed_container<std::vector<std::string>>;
 
         xeus::xjson get_state() const;
@@ -347,8 +364,10 @@ namespace xpl
 
     protected:
 
-        template <class SX, class SY>
-        xlabel(SX&& sx, SY&& sy);
+        template <class XS, class YS>
+        xlabel(XS&&, YS&&);
+
+        using base_type::base_type;
 
     private:
 
@@ -367,8 +386,10 @@ namespace xpl
     class xhist : public xmark<D>
     {
     public:
+
         using base_type = xmark<D>;
         using derived_type = D;
+
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
@@ -391,6 +412,8 @@ namespace xpl
         template <class XS, class YS>
         xhist(XS&&, YS&&);
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -411,6 +434,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+
         using data_type_x = xboxed_container<std::vector<double>>;
         using data_type_y = xboxed_container<std::vector<std::vector<double>>>;
 
@@ -429,6 +453,8 @@ namespace xpl
 
         template <class XS, class YS>
         xboxplot(XS&&, YS&&);
+
+        using base_type::base_type;
 
     private:
 
@@ -450,6 +476,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+
         using data_type = xboxed_container<std::vector<double>>;
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
@@ -475,6 +502,8 @@ namespace xpl
         template <class XS, class YS>
         xbars(XS&&, YS&&);
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -495,6 +524,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+
         using coord_type = xboxed_container<std::vector<double>>;
         using array = std::vector<std::vector<double>>;
         using data_type = xboxed_container<array>;
@@ -520,6 +550,8 @@ namespace xpl
                   std::vector<std::vector<double>>&,
                   XS&&, YS&&, CS&&);
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -540,6 +572,7 @@ namespace xpl
 
         using base_type = xmark<D>;
         using derived_type = D;
+
         using selected_type = std::vector<std::vector<int>>;
         using data1d_type = xboxed_container<std::vector<double>>;
         using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
@@ -571,6 +604,8 @@ namespace xpl
         xgrid_heat_map(std::vector<std::vector<double>>&,
                        XS&&, YS&&, CS&&);
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -588,6 +623,7 @@ namespace xpl
     class xmap : public xmark<D>
     {
     public:
+
         using base_type = xmark<D>;
         using derived_type = D;
 
@@ -606,17 +642,22 @@ namespace xpl
 
     protected:
 
-        template <class XS>
-        xmap(XS&&);
+        template <class GS>
+        xmap(xscale<GS>&&);
 
-        template <class XS>
-        xmap(std::string, XS&&);
+        template <class GS>
+        xmap(const xscale<GS>&);
 
-        template <class XS, class YS>
-        xmap(XS&&, YS&&);
+        template <class GS>
+        xmap(std::string, GS&&);
 
-        template <class XS, class YS>
-        xmap(std::string, XS&&, YS&&);
+        template <class GS, class CS>
+        xmap(GS&&, CS&&);
+
+        template <class GS, class CS>
+        xmap(std::string, GS&&, CS&&);
+
+        using base_type::base_type;
 
     private:
 
@@ -744,14 +785,14 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xlines<D>::xlines(SX&& sx, SY&& sy)
+    template <class XS, class YS>
+    inline xlines<D>::xlines(XS&& xs, YS&& ys)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
     }
 
     template <class D>
@@ -817,39 +858,39 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy)
+    template <class XS, class YS>
+    inline xscatter_base<D>::xscatter_base(XS&& xs, YS&& ys)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
     }
 
     template <class D>
-    template <class SX, class SY, class SC>
-    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SC&& sc)
+    template <class XS, class YS, class CS>
+    inline xscatter_base<D>::xscatter_base(XS&& xs, YS&& ys, CS&& cs)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
-        this->scales()["color"] = std::forward<SC>(sc);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
+        this->scales()["color"] = std::forward<CS>(cs);
     }
 
     template <class D>
-    template <class SX, class SY, class SS, class SO>
-    inline xscatter_base<D>::xscatter_base(SX&& sx, SY&& sy, SS&& ss, SO&& so)
+    template <class XS, class YS, class SS, class OS>
+    inline xscatter_base<D>::xscatter_base(XS&& xs, YS&& ys, SS&& ss, OS&& os)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
         this->scales()["size"] = std::forward<SS>(ss);
-        this->scales()["opacities"] = std::forward<SO>(so);
+        this->scales()["opacities"] = std::forward<OS>(os);
     }
 
     template <class D>
@@ -956,25 +997,25 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xscatter<D>::xscatter(SX&& sx, SY&& sy)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
+    template <class XS, class YS>
+    inline xscatter<D>::xscatter(XS&& xs, YS&& ys)
+        : base_type(std::forward<XS>(xs), std::forward<YS>(ys))
     {
         set_defaults();
     }
 
     template <class D>
-    template <class SX, class SY, class SC>
-    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SC&& sc)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SC>(sc))
+    template <class XS, class YS, class CS>
+    inline xscatter<D>::xscatter(XS&& xs, YS&& ys, CS&& cs)
+        : base_type(std::forward<XS>(xs), std::forward<YS>(ys), std::forward<CS>(cs))
     {
         set_defaults();
     }
 
     template <class D>
-    template <class SX, class SY, class SS, class SO>
-    inline xscatter<D>::xscatter(SX&& sx, SY&& sy, SS&& ss, SO&& so)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy), std::forward<SS>(ss), std::forward<SO>(so))
+    template <class XS, class YS, class SS, class OS>
+    inline xscatter<D>::xscatter(XS&& xs, YS&& ys, SS&& ss, OS&& os)
+        : base_type(std::forward<XS>(xs), std::forward<YS>(ys), std::forward<SS>(ss), std::forward<OS>(os))
     {
         set_defaults();
     }
@@ -1043,8 +1084,8 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xpie<D>::xpie(SX&& sx, SY&& sy)
+    template <class XS, class YS>
+    inline xpie<D>::xpie(XS&& xs, YS&& ys)
         : base_type()
     {
         set_defaults();
@@ -1096,9 +1137,9 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xlabel<D>::xlabel(SX&& sx, SY&& sy)
-        : base_type(std::forward<SX>(sx), std::forward<SY>(sy))
+    template <class XS, class YS>
+    inline xlabel<D>::xlabel(XS&& xs, YS&& ys)
+        : base_type(std::forward<XS>(xs), std::forward<YS>(ys))
     {
         set_defaults();
     }
@@ -1147,14 +1188,14 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xhist<D>::xhist(SX&& sx, SY&& sy)
+    template <class XS, class YS>
+    inline xhist<D>::xhist(XS&& xs, YS&& ys)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["sample"] = std::forward<SX>(sx);
-        this->scales()["count"] = std::forward<SY>(sy);
+        this->scales()["sample"] = std::forward<XS>(xs);
+        this->scales()["count"] = std::forward<YS>(ys);
     }
 
     template <class D>
@@ -1200,14 +1241,14 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xboxplot<D>::xboxplot(SX&& sx, SY&& sy)
+    template <class XS, class YS>
+    inline xboxplot<D>::xboxplot(XS&& xs, YS&& ys)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
     }
 
     template <class D>
@@ -1263,14 +1304,14 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xbars<D>::xbars(SX&& sx, SY&& sy)
+    template <class XS, class YS>
+    inline xbars<D>::xbars(XS&& xs, YS&& ys)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
     }
 
     template <class D>
@@ -1313,16 +1354,16 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY, class SC>
+    template <class XS, class YS, class CS>
     inline xheat_map<D>::xheat_map(std::vector<std::vector<double>>& color_,
-                                   SX&& sx, SY&& sy, SC&& sc)
+                                   XS&& xs, YS&& ys, CS&& cs)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
-        this->scales()["color"] = std::forward<SC>(sc);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
+        this->scales()["color"] = std::forward<CS>(cs);
         color = color_;
         std::vector<double> x_(color_.size());
         std::iota(x_.begin(), x_.end(), 0);
@@ -1333,18 +1374,18 @@ namespace xpl
     }
 
     template <class D>
-    template <class SX, class SY, class SC>
+    template <class XS, class YS, class CS>
     inline xheat_map<D>::xheat_map(std::vector<double>& x_,
                                    std::vector<double>& y_,
                                    std::vector<std::vector<double>>& color_,
-                                   SX&& sx, SY&& sy, SC&& sc)
+                                   XS&& xs, YS&& ys, CS&& cs)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["x"] = std::forward<SX>(sx);
-        this->scales()["y"] = std::forward<SY>(sy);
-        this->scales()["color"] = std::forward<SC>(sc);
+        this->scales()["x"] = std::forward<XS>(xs);
+        this->scales()["y"] = std::forward<YS>(ys);
+        this->scales()["color"] = std::forward<CS>(cs);
         color = color_;
         x = x_;
         y = y_;
@@ -1366,34 +1407,34 @@ namespace xpl
      *********************************/
 
     template <class D>
-    template <class SX, class SY, class SC>
+    template <class XS, class YS, class CS>
     inline xgrid_heat_map<D>::xgrid_heat_map(std::vector<double>& row_,
                                              std::vector<double>& column_,
                                              std::vector<std::vector<double>>& color_,
-                                             SX&& sx, SY&& sy, SC&& sc)
+                                             XS&& xs, YS&& ys, CS&& cs)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["column"] = std::forward<SX>(sx);
-        this->scales()["row"] = std::forward<SY>(sy);
-        this->scales()["color"] = std::forward<SC>(sc);
+        this->scales()["column"] = std::forward<XS>(xs);
+        this->scales()["row"] = std::forward<YS>(ys);
+        this->scales()["color"] = std::forward<CS>(cs);
         color = color_;
         row = row_;
         column = column_;
     }
 
     template <class D>
-    template <class SX, class SY, class SC>
+    template <class XS, class YS, class CS>
     inline xgrid_heat_map<D>::xgrid_heat_map(std::vector<std::vector<double>>& color_,
-                                             SX&& sx, SY&& sy, SC&& sc)
+                                             XS&& xs, YS&& ys, CS&& cs)
         : base_type()
     {
         set_defaults();
 
-        this->scales()["column"] = std::forward<SX>(sx);
-        this->scales()["row"] = std::forward<SY>(sy);
-        this->scales()["color"] = std::forward<SC>(sc);
+        this->scales()["column"] = std::forward<XS>(xs);
+        this->scales()["row"] = std::forward<YS>(ys);
+        this->scales()["color"] = std::forward<CS>(cs);
         color = color_;
         std::vector<double> row_(color_.size());
         std::iota(row_.begin(), row_.end(), 0);
@@ -1454,45 +1495,55 @@ namespace xpl
      ***********************/
 
     template <class D>
-    template <class SX>
-    inline xmap<D>::xmap(SX&& sx)
+    template <class GS>
+    inline xmap<D>::xmap(xscale<GS>&& gs)
         : base_type()
     {
         map_data = read_map(topo_load("WorldMap.json"));
         set_defaults();
-        this->scales()["projection"] = std::forward<SX>(sx);
+        this->scales()["projection"] = std::move(gs);
     }
 
     template <class D>
-    template <class SX>
-    inline xmap<D>::xmap(std::string filename, SX&& sx)
-        : base_type()
-    {
-        map_data = read_map(filename);
-        set_defaults();
-        this->scales()["projection"] = std::forward<SX>(sx);
-    }
-
-    template <class D>
-    template <class SX, class SY>
-    inline xmap<D>::xmap(SX&& sx, SY&& sy)
+    template <class GS>
+    inline xmap<D>::xmap(const xscale<GS>& gs)
         : base_type()
     {
         map_data = read_map(topo_load("WorldMap.json"));
         set_defaults();
-        this->scales()["projection"] = std::forward<SX>(sx);
-        this->scales()["color"] = std::forward<SY>(sy);
+        this->scales()["projection"] = gs;
     }
 
     template <class D>
-    template <class SX, class SY>
-    inline xmap<D>::xmap(std::string filename, SX&& sx, SY&& sy)
+    template <class GS>
+    inline xmap<D>::xmap(std::string filename, GS&& gs)
         : base_type()
     {
         map_data = read_map(filename);
         set_defaults();
-        this->scales()["projection"] = std::forward<SX>(sx);
-        this->scales()["color"] = std::forward<SY>(sy);
+        this->scales()["projection"] = std::forward<GS>(gs);
+    }
+
+    template <class D>
+    template <class GS, class CS>
+    inline xmap<D>::xmap(GS&& gs, CS&& cs)
+        : base_type()
+    {
+        map_data = read_map(topo_load("WorldMap.json"));
+        set_defaults();
+        this->scales()["projection"] = std::forward<GS>(gs);
+        this->scales()["color"] = std::forward<CS>(cs);
+    }
+
+    template <class D>
+    template <class GS, class CS>
+    inline xmap<D>::xmap(std::string filename, GS&& gs, CS&& cs)
+        : base_type()
+    {
+        map_data = read_map(filename);
+        set_defaults();
+        this->scales()["projection"] = std::forward<GS>(gs);
+        this->scales()["color"] = std::forward<CS>(cs);
     }
 
     template <class D>
@@ -1542,9 +1593,9 @@ namespace xpl
     {
         std::ifstream jsonfile(filename);
 
-        // TODO: we should do
-        // auto json = nlohmann::json::parse(jsonfile);
-        // but it doesn't work with cling ...
+        // TODO: we should do:
+        // return xeus::xjson::parse(jsonfile);
+
         std::string str((std::istreambuf_iterator<char>(jsonfile)),
                         std::istreambuf_iterator<char>());
         return nlohmann::json::parse(str);
