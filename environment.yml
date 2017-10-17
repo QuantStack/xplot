@@ -1,0 +1,12 @@
+name: xplot
+channels:
+  - nodefaults
+  - QuantStack
+dependencies:
+  - xwidgets
+  - xplot
+  - bqplot
+  - xeus-cling
+  - notebook
+  - widgetsnbextension
+  - ipywidgets >=7.0  # Fixing conda conflict
