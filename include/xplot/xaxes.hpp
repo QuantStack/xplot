@@ -17,6 +17,7 @@
 
 #include "xplot.hpp"
 #include "xscales.hpp"
+#include "xinteracts.hpp"
 
 namespace xpl
 {

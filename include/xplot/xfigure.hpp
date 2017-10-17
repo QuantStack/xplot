@@ -35,6 +35,7 @@ namespace xpl
         using axes_type = std::vector<xw::xholder<xaxis>>;
         using marks_type = std::vector<xw::xholder<xmark>>;
         using scales_type = xw::xholder<xscale>;
+        using interaction_type = xw::xholder<xinteraction>;
 
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
@@ -42,7 +43,7 @@ namespace xpl
         XPROPERTY(std::string, derived_type, title);
         XPROPERTY(axes_type, derived_type, axes);
         XPROPERTY(marks_type, derived_type, marks);
-        XPROPERTY(::xeus::xjson, derived_type, interaction);
+        XPROPERTY(xtl::xoptional<interaction_type>, derived_type, interaction);
         XPROPERTY(scales_type, derived_type, scale_x);
         XPROPERTY(scales_type, derived_type, scale_y);
         XPROPERTY(::xeus::xjson, derived_type, title_style);
