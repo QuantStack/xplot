@@ -32,6 +32,8 @@ namespace xpl
 
         xinteraction();
 
+        using base_type::base_type;
+
     private:
 
         void set_defaults();
@@ -58,11 +60,13 @@ namespace xpl
 
         XPROPERTY(bool, derived_type, allow_pan, true);
         XPROPERTY(bool, derived_type, allow_zoom, true);
-        XPROPERTY(::xeus::xjson, derived_type, scales);
+        XPROPERTY(::xeus::xjson, derived_type, scales, xeus::xjson::object());
 
     protected:
 
         xpan_zoom();
+
+        using base_type::base_type;
 
     private:
 
