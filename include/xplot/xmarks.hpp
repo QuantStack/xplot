@@ -18,6 +18,7 @@
 
 #include "xtl/xoptional.hpp"
 
+#include "xwidgets/xeither.hpp"
 #include "xwidgets/xwidget.hpp"
 
 #include "xboxed_container.hpp"
@@ -88,7 +89,7 @@ namespace xpl
         XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::parse(R"({"opacity": "0.9"})"));
         XPROPERTY(bool, derived_type, enable_hover, true);
         XPROPERTY(::xeus::xjson, derived_type, interactions, ::xeus::xjson::parse(R"({"hover": "tooltip"})"));
-        XPROPERTY(X_CASELESS_STR_ENUM(mouse, center), derived_type, tooltip_location, "mouse");
+        XPROPERTY(std::string, derived_type, tooltip_location, "mouse", XEITHER("mouse", "center"));
 
     protected:
 
@@ -127,13 +128,13 @@ namespace xpl
         XPROPERTY(colors_type, derived_type, colors, category10());
         XPROPERTY(colors_type, derived_type, fill_colors);
         XPROPERTY(double, derived_type, stroke_width, 2.0);
-        XPROPERTY(X_CASELESS_STR_ENUM(none, labels), derived_type, labels_visibility, "none");
+        XPROPERTY(std::string, derived_type, labels_visibility, "none", XEITHER("none", "labels"));
         XPROPERTY(curves_subset_type, derived_type, curves_subset);
-        XPROPERTY(X_CASELESS_STR_ENUM(solid, dashed, dotted, dash_dotted), derived_type, line_style, "solid");
-        XPROPERTY(X_CASELESS_STR_ENUM(linear, basis, basis-open, basis-closed, bundle, cardinal, cardinal-open, cardinal-closed, monotone, step-before, step-after), derived_type, interpolation, "linear");
+        XPROPERTY(std::string, derived_type, line_style, "solid", XEITHER("solid", "dashed", "dotted", "dash_dotted"));
+        XPROPERTY(std::string, derived_type, interpolation, "linear", XEITHER("linear", "basis", "basis-open", "basis-closed", "bundle", "cardinal", "cardinal-open", "cardinal-closed", "monotone", "step-before", "step-after"));
         XPROPERTY(bool, derived_type, close_path, false);
-        XPROPERTY(X_CASELESS_STR_ENUM(none, bottom, top, inside), derived_type, fill, "none");
-        XPROPERTY(xtl::xoptional<X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse)>, derived_type, marker);
+        XPROPERTY(std::string, derived_type, fill, "none", XEITHER("none", "bottom", "top", "inside"));
+        XPROPERTY(xtl::xoptional<std::string>, derived_type, marker, {}, XEITHER_OPTIONAL("circle", "cross", "diamond", "square", "triangle-down", "triangle-up", "arrow", "rectangle", "ellipse"));
         XPROPERTY(int, derived_type, marker_size, 64);
         XPROPERTY(opacities_type, derived_type, opacities);
         XPROPERTY(opacities_type, derived_type, fill_opacities);
@@ -239,7 +240,7 @@ namespace xpl
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(data_type, derived_type, skew);
-        XPROPERTY(X_CASELESS_STR_ENUM(circle, cross, diamond, square, triangle-down, triangle-up, arrow, rectangle, ellipse), derived_type, marker, "circle");
+        XPROPERTY(std::string, derived_type, marker, "circle", XEITHER("circle", "cross", "diamond", "square", "triangle-down", "triangle-up", "arrow", "rectangle", "ellipse"));
         XPROPERTY(colors_type, derived_type, colors, {"DeepSkyBlue"});
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
         XPROPERTY(double, derived_type, stroke_width, 1.5);
@@ -299,11 +300,11 @@ namespace xpl
 
         XPROPERTY(data_type, derived_type, color);
         XPROPERTY(colors_type, derived_type, colors, category10());
-        XPROPERTY(X_CASELESS_STR_ENUM(none, inside, outside), derived_type, display_labels, "inside");
+        XPROPERTY(std::string, derived_type, display_labels, "inside", XEITHER("none", "inside", "outside"));
         XPROPERTY(bool, derived_type, display_values);
         XPROPERTY(double, derived_type, end_angle, 360.0);
         XPROPERTY(std::string, derived_type, font_size, "10px");
-        XPROPERTY(X_CASELESS_STR_ENUM(bold, normal, bolder), derived_type, font_weight, "normal");
+        XPROPERTY(std::string, derived_type, font_weight, "normal", XEITHER("bold", "normal", "bolder"));
         XPROPERTY(double, derived_type, inner_radius, 0.1);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
         XPROPERTY(std::vector<double>, derived_type, opacities);
@@ -351,12 +352,12 @@ namespace xpl
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
-        XPROPERTY(X_CASELESS_STR_ENUM(start, middle, end), derived_type, align, "start");
+        XPROPERTY(std::string, derived_type, align, "start", XEITHER("start", "middle", "end"));
         XPROPERTY(std::vector<color_type>, derived_type, colors);
         XPROPERTY(double, derived_type, default_size, 16.0);
         XPROPERTY(double, derived_type, drag_size, 1.0);
-        XPROPERTY(X_CASELESS_STR_ENUM(px, em, pt, %), derived_type, font_unit, "px");
-        XPROPERTY(X_CASELESS_STR_ENUM(bold, normal, bolder), derived_type, font_weight, "bold");
+        XPROPERTY(std::string, derived_type, font_unit, "px", XEITHER("px", "em", "pt", "%"));
+        XPROPERTY(std::string, derived_type, font_weight, "bold", XEITHER("bold", "normal", "bolder"));
         XPROPERTY(double, derived_type, rotate_angle);
         XPROPERTY(data_type, derived_type, text);
         XPROPERTY(int, derived_type, x_offset);
@@ -492,10 +493,10 @@ namespace xpl
         XPROPERTY(colors_type, derived_type, colors, category10());
         XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
-        XPROPERTY(X_CASELESS_STR_ENUM(center, left, right), derived_type, align, "center");
-        XPROPERTY(X_CASELESS_STR_ENUM(auto, group, element), derived_type, color_mode, "auto");
-        XPROPERTY(X_CASELESS_STR_ENUM(vertical, horizontal), derived_type, orientation, "vertical");
-        XPROPERTY(X_CASELESS_STR_ENUM(stacked, grouped), derived_type, type, "stacked");
+        XPROPERTY(std::string, derived_type, align, "center", XEITHER("center", "left", "right"));
+        XPROPERTY(std::string, derived_type, color_mode, "auto", XEITHER("auto", "group", "element"));
+        XPROPERTY(std::string, derived_type, orientation, "vertical", XEITHER("vertical", "horizontal"));
+        XPROPERTY(std::string, derived_type, type, "stacked", XEITHER("stacked", "grouped"));
 
     protected:
 
@@ -583,11 +584,11 @@ namespace xpl
         XPROPERTY(::xeus::xjson, derived_type, anchor_style, ::xeus::xjson::object());
         XPROPERTY(data2d_type, derived_type, color);
         XPROPERTY(data1d_type, derived_type, column);
-        XPROPERTY(X_CASELESS_STR_ENUM(start, end), derived_type, column_align, "start");
+        XPROPERTY(std::string, derived_type, column_align, "start", XEITHER("start", "end"));
         XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
         XPROPERTY(double, derived_type, opacity, 1.0);
         XPROPERTY(data1d_type, derived_type, row);
-        XPROPERTY(X_CASELESS_STR_ENUM(start, end), derived_type, row_align, "start");
+        XPROPERTY(std::string, derived_type, row_align, "start", XEITHER("start", "end"));
         XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke, "black");
         XPROPERTY(selected_type, derived_type, selected);

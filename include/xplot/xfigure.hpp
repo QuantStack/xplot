@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#include "xwidgets/xeither.hpp"
 #include "xwidgets/xwidget.hpp"
 
 #include "xaxes.hpp"
@@ -55,7 +56,7 @@ namespace xpl
         }));
         XPROPERTY(double, derived_type, padding_x, 0.);
         XPROPERTY(double, derived_type, padding_y, 0.025);
-        XPROPERTY(X_CASELESS_STR_ENUM(top-right, top, top-left, left, bottom-left, bottom, bottom-right, right), derived_type, legend_location, "top-right");
+        XPROPERTY(std::string, derived_type, legend_location, "top-right", XEITHER("top-right", "top", "top-left", "left", "bottom-left", "bottom", "bottom-right", "right"));
         XPROPERTY(int, derived_type, animation_duration);
 
         template <class T>

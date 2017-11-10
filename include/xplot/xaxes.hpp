@@ -15,6 +15,8 @@
 
 #include "xtl/xoptional.hpp"
 
+#include "xwidgets/xeither.hpp"
+
 #include "xplot.hpp"
 #include "xscales.hpp"
 #include "xinteracts.hpp"
@@ -40,16 +42,16 @@ namespace xpl
         xeus::xjson get_state() const;
         void apply_patch(const xeus::xjson& patch);
 
-        XPROPERTY(X_CASELESS_STR_ENUM(horizontal, vertical), derived_type, orientation, "horizontal");
-        XPROPERTY(X_CASELESS_STR_ENUM(bottom, top, left, right), derived_type, side);
+        XPROPERTY(std::string, derived_type, orientation, "horizontal", XEITHER("horizontal", "vertical"));
+        XPROPERTY(std::string, derived_type, side, "bottom", XEITHER("bottom", "top", "left", "right"));
         XPROPERTY(std::string, derived_type, label, "");
-        XPROPERTY(X_CASELESS_STR_ENUM(none, solid, dashed), derived_type, grid_lines, "solid");
+        XPROPERTY(std::string, derived_type, grid_lines, "solid", XEITHER("none", "solid", "dashed"));
         XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format);
         XPROPERTY(scale_type, derived_type, scale);
         XPROPERTY(xtl::xoptional<int>, derived_type, num_ticks);
         XPROPERTY(::xeus::xjson, derived_type, tick_values, xeus::xjson::array());
         XPROPERTY(::xeus::xjson, derived_type, offset, ::xeus::xjson::object());
-        XPROPERTY(X_CASELESS_STR_ENUM(middle, start, end), derived_type, label_location, "middle");
+        XPROPERTY(std::string, derived_type, label_location, "middle", XEITHER("middle", "start", "end"));
         XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, grid_color);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, color);

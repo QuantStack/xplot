@@ -11,6 +11,8 @@
 
 #include "xtl/xoptional.hpp"
 
+#include "xwidgets/xeither.hpp"
+
 #include "xplot.hpp"
 
 namespace xpl
@@ -164,7 +166,7 @@ namespace xpl
         XPROPERTY(xtl::xoptional<double>, derived_type, max);
         XPROPERTY(xtl::xoptional<double>, derived_type, mid);
         XPROPERTY(xtl::xoptional<double>, derived_type, min);
-        XPROPERTY(X_CASELESS_STR_ENUM(linear), derived_type, scale_type, "linear");
+        XPROPERTY(std::string, derived_type, scale_type, "linear");
         XPROPERTY(std::string, derived_type, scheme, "RdYlGn");
 
     protected:
