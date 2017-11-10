@@ -50,3 +50,6 @@ docs/build/
 
 # Generated files
 *.pc
+
+# Generated header
+include/xplot/xmaps_config.hpp
