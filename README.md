@@ -5,6 +5,8 @@
 
 C++ backend for bqplot
 
+**xplot is an early developer preview, and is not suitable for general usage yet. Features and implementation are subject to change.**
+
 ## Usage
 
 ![xplot](xplot-screenshot.png)
