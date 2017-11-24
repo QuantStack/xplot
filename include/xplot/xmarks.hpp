@@ -69,7 +69,7 @@ namespace xpl
         using scales_type = xmark_scales_type;
         using preserve_domain_type = std::map<std::string, bool>;
         using labels_type = std::vector<std::string>;
-        using selected_type = std::vector<xtl::xoptional<int>>;
+        using selected_type = xtl::xoptional<std::vector<int>>;
         using tooltip_type = xtl::xoptional<xmark_tooltip_type>;
 
         xeus::xjson get_state() const;
@@ -84,7 +84,7 @@ namespace xpl
         XPROPERTY(bool, derived_type, visible, true);
         XPROPERTY(::xeus::xjson, derived_type, selected_style, ::xeus::xjson::object());
         XPROPERTY(::xeus::xjson, derived_type, unselected_style, ::xeus::xjson::object());
-        //XPROPERTY(selected_type, derived_type, selected);
+        XPROPERTY(selected_type, derived_type, selected);
         XPROPERTY(tooltip_type, derived_type, tooltip);
         XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::parse(R"({"opacity": "0.9"})"));
         XPROPERTY(bool, derived_type, enable_hover, true);
@@ -688,7 +688,7 @@ namespace xpl
         XOBJECT_SET_PROPERTY_FROM_PATCH(visible, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(selected_style, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(unselected_style, patch);
-        //XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
+        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_style, patch);
         XOBJECT_SET_PROPERTY_FROM_PATCH(enable_hover, patch);
@@ -710,7 +710,7 @@ namespace xpl
         XOBJECT_SET_PATCH_FROM_PROPERTY(visible, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(selected_style, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(unselected_style, state);
-        //XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
+        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_style, state);
         XOBJECT_SET_PATCH_FROM_PROPERTY(enable_hover, state);
