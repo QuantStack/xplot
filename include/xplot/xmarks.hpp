@@ -1370,8 +1370,8 @@ namespace xpl
         std::iota(x_.begin(), x_.end(), 0);
         std::vector<double> y_(color_[0].size());
         std::iota(y_.begin(), y_.end(), 0);
-        x = x_;
-        y = y_;
+        this->x() = x_;
+        this->y() = y_;
     }
 
     template <class D>
@@ -1387,9 +1387,9 @@ namespace xpl
         this->scales()["x"] = std::forward<XS>(xs);
         this->scales()["y"] = std::forward<YS>(ys);
         this->scales()["color"] = std::forward<CS>(cs);
-        color = color_;
-        x = x_;
-        y = y_;
+        this->color() = color_;
+        this->x() = x_;
+        this->y() = y_;
     }
 
     template <class D>
@@ -1420,9 +1420,9 @@ namespace xpl
         this->scales()["column"] = std::forward<XS>(xs);
         this->scales()["row"] = std::forward<YS>(ys);
         this->scales()["color"] = std::forward<CS>(cs);
-        color = color_;
-        row = row_;
-        column = column_;
+        this->color() = color_;
+        this->row() = row_;
+        this->column() = column_;
     }
 
     template <class D>
@@ -1436,13 +1436,13 @@ namespace xpl
         this->scales()["column"] = std::forward<XS>(xs);
         this->scales()["row"] = std::forward<YS>(ys);
         this->scales()["color"] = std::forward<CS>(cs);
-        color = color_;
+        this->color() = color_;
         std::vector<double> row_(color_.size());
         std::iota(row_.begin(), row_.end(), 0);
         std::vector<double> column_(color_[0].size());
         std::iota(column_.begin(), column_.end(), 0);
-        row = row_;
-        column = column_;
+        this->row() = row_;
+        this->column() = column_;
     }
 
     template <class D>
