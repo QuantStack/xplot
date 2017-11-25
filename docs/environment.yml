@@ -1,0 +1,7 @@
+name: xplot-docs
+
+channels:
+  - conda-forge
+
+dependencies:
+  - breathe
