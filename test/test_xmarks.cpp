@@ -14,7 +14,8 @@ namespace xpl
 {
     TEST(xmarks, lines)
     {
-        lines line;
+        linear_scale sx, sy;
+        lines line(sx, sy);
         int res = line.marker_size();
         EXPECT_EQ(64, res);
     }
