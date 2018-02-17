@@ -2,7 +2,7 @@
 
 [![Travis](https://travis-ci.org/QuantStack/xplot.svg?branch=master)](https://travis-ci.org/QuantStack/xplot)
 [![Documentation](http://readthedocs.org/projects/xplot/badge/?version=latest)](https://xplot.readthedocs.io/en/latest/?badge=latest)
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://beta.mybinder.org/v2/gh/QuantStack/xplot/0.3.0-binder?filepath=notebooks)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://beta.mybinder.org/v2/gh/QuantStack/xplot/0.4.0?filepath=notebooks)
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 C++ backend for the bqplot 2-D plotting library
@@ -15,14 +15,15 @@ C++ backend for the bqplot 2-D plotting library
 
 ## Dependencies
 
-All the dependencies of xplot are available for the conda package manager. 
+All the dependencies of xplot are available for the conda package manager.
 
-| `xplot` | `xwidgets`  |  `xeus`       |
-|---------|-------------|---------------|
-|  master |   ~0.6.0    |  >=0.8.0,<0.9 |
-|  0.3.0  |   ~0.6.0    |  >=0.8.0,<0.9 |
-|  0.2.0  |   ~0.5.0    |  >=0.8.0,<0.9 |
-|  0.1.0  |   ~0.4.0    |  >=0.7.0,<0.8 |
+| `xplot` | `xwidgets`  |  `xeus`         |
+|---------|-------------|-----------------|
+|  master |   ~0.7.1    |  >=0.10.0,<0.11 |
+|  0.4.0  |   ~0.7.1    |  >=0.10.0,<0.11 |
+|  0.3.0  |   ~0.6.0    |  >=0.8.0,<0.9   |
+|  0.2.0  |   ~0.5.0    |  >=0.8.0,<0.9   |
+|  0.1.0  |   ~0.4.0    |  >=0.7.0,<0.8   |
 
 ## License
 
