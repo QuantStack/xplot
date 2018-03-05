@@ -90,10 +90,10 @@ namespace xpl
     {
         this->_view_name() = "Tooltip";
         this->_model_module() = "bqplot";
-        this->_model_module_version() = "^0.3.0";
+        this->_model_module_version() = "^0.3.6";
         this->_model_name() = "TooltipModel";
         this->_view_module() = "bqplot";
-        this->_view_module_version() = "^0.3.0";
+        this->_view_module_version() = "^0.3.6";
     }
 }
 #endif
