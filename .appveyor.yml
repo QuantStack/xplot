@@ -28,10 +28,10 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda install gtest cmake xeus xproperty -c QuantStack -c conda-forge
+  - conda install gtest cmake xeus=0.11.0 cppzmq xproperty xtl gcc-7 xwidgets=0.8.1 -c QuantStack -c conda-forge
   - cmake -G "NMake Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON .
-  - nmake test_xwidgets
+  - nmake test_xplot
   - cd test
 
 build_script:
-  - .\test_xwidgets
+  - .\test_xplot
