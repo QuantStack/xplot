@@ -105,7 +105,7 @@ set(XPLOT_DEPENDENCIES ${xeus_LIBRARY})
 include_directories(${XPLOT_INCLUDE_DIR}/xplot)
 
 set(MAPFILESPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/xplot/map_data)
-set(XPLOT_MAPFILESPEC_INSTALL_DIR "share/jupyter" CACHE STRING "install path for kernel specs")
+set(XPLOT_MAPFILESPEC_INSTALL_DIR "share/jupyter" CACHE STRING "install path for map files")
 
 install(DIRECTORY ${MAPFILESPEC_DIR}
         DESTINATION ${XPLOT_MAPFILESPEC_INSTALL_DIR})

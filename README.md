@@ -1,4 +1,4 @@
-# ![xtplot](http://quantstack.net/assets/images/xplot.svg)
+# ![xplot](http://quantstack.net/assets/images/xplot.svg)
 
 [![Travis](https://travis-ci.org/QuantStack/xplot.svg?branch=master)](https://travis-ci.org/QuantStack/xplot)
 [![Documentation](http://readthedocs.org/projects/xplot/badge/?version=latest)](https://xplot.readthedocs.io/en/latest/?badge=latest)
