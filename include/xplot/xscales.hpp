@@ -9,9 +9,10 @@
 #ifndef XPLOT_SCALES_HPP
 #define XPLOT_SCALES_HPP
 
-#include "xtl/xoptional.hpp"
+#include <string>
+#include <vector>
 
-#include "xwidgets/xeither.hpp"
+#include "xtl/xoptional.hpp"
 
 #include "xplot.hpp"
 
@@ -139,7 +140,7 @@ namespace xpl
         using base_type::base_type;
 
     private:
-        
+ 
         void set_defaults();
     };
 

@@ -43,7 +43,7 @@ namespace xpl
         void apply_patch(const xeus::xjson& patch);
 
         XPROPERTY(std::string, derived_type, orientation, "horizontal", XEITHER("horizontal", "vertical"));
-        XPROPERTY(std::string, derived_type, side, "bottom", XEITHER("bottom", "top", "left", "right"));
+        XPROPERTY(xtl::xoptional<std::string>, derived_type, side, xtl::missing<std::string>(), XEITHER_OPTIONAL("bottom", "top", "left", "right"));
         XPROPERTY(std::string, derived_type, label, "");
         XPROPERTY(std::string, derived_type, grid_lines, "solid", XEITHER("none", "solid", "dashed"));
         XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format);
