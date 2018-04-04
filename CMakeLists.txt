@@ -6,106 +6,30 @@
 # The full license is in the file LICENSE, distributed with this software. #
 ############################################################################
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.8)
 project(xplot)
+
+message(STATUS "Forcing tests build type to Release")
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 
 set(XPLOT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(XPLOT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# Versionning
-# ===========
+# Configuration
+# =============
 
-file(STRINGS "${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp" xplot_version_defines
-     REGEX "#define XPLOT_VERSION_(MAJOR|MINOR|PATCH)")
-foreach(ver ${xplot_version_defines})
-    if(ver MATCHES "#define XPLOT_VERSION_(MAJOR|MINOR|PATCH) +([^ ]+)$")
-        set(XWIDGETS_VERSION_${CMAKE_MATCH_1} "${CMAKE_MATCH_2}" CACHE INTERNAL "")
-    endif()
-endforeach()
-set(${PROJECT_NAME}_VERSION 
-    ${XPLOT_VERSION_MAJOR}.${XPLOT_VERSION_MINOR}.${XPLOT_VERSION_PATCH})
-message(STATUS "xplot v${${PROJECT_NAME}_VERSION}")
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-# Compilation flags
-# =================
+set(XPLOT_INSTALL_LIBRARY_DIR "\"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\"")
 
-include(CheckCXXCompilerFlag)
-
-string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
-
-OPTION(DISABLE_ARCH_NATIVE "disable -march=native flag" OFF)
-
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused-parameter -Wextra -Wreorder")
-    if (DISABLE_ARCH_NATIVE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=generic")
-    else()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
-    endif()
-
-    CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
-
-    if (HAS_CPP14_FLAG)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-    else()
-        message(FATAL_ERROR "Unsupported compiler -- xeux requires c++14 support!")
-    endif()
-
-    # Enable link time optimization and set the default symbol
-    # visibility to hidden (very important to obtain small binaries)
-    if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-        # Check for Link Time Optimization support
-        # (GCC/Clang)
-        CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
-        if (HAS_LTO_FLAG)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
-        endif()
-
-        # Intel equivalent to LTO is called IPO
-        if (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-            CHECK_CXX_COMPILER_FLAG("-ipo" HAS_IPO_FLAG)
-            if (HAS_IPO_FLAG)
-                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ipo")
-            endif()
-        endif()
-    endif()
-    message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
-endif()
-
-if(MSVC)
-    add_definitions(-DNOMINMAX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /bigobj")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251 /wd4996")
-    # Allows to compile in debug without requiring each dependencies to
-    # be compiled in debug
-    if(${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
-        set(CMAKE_CXX_FLAGS_DEBUG "/DNDEBUG /MD /Zi /Ob0 /Od /RTC1")
-        message(STATUS "Overriding CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
-    endif()
-endif()
-
-# Dependencies
-# ============
-
-find_package(xeus REQUIRED)
-
-include_directories(${xeus_INCLUDE_DIRS})
-
-find_package(xproperty REQUIRED)
-include_directories(${xproperty_INCLUDE_DIRS})
-
-find_package(xwidgets REQUIRED)
-include_directories(${xwidgets_INCLUDE_DIRS})
-
-set(XPLOT_DEPENDENCIES ${xeus_LIBRARY})
-
-# Source files
-# ============
-
-include_directories(${XPLOT_INCLUDE_DIR}/xplot)
+configure_file (
+    "${XPLOT_INCLUDE_DIR}/xplot/xplot_config_cling.hpp.in"
+    "${XPLOT_INCLUDE_DIR}/xplot/xplot_config_cling.hpp"
+)
 
 set(MAPFILESPEC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/xplot/map_data)
-set(XPLOT_MAPFILESPEC_INSTALL_DIR "share/jupyter" CACHE STRING "install path for map files")
+set(XPLOT_MAPFILESPEC_INSTALL_DIR "share/xplot" CACHE STRING "install path for map files")
 
 install(DIRECTORY ${MAPFILESPEC_DIR}
         DESTINATION ${XPLOT_MAPFILESPEC_INSTALL_DIR})
@@ -117,7 +41,44 @@ configure_file (
     "${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp"
 )
 
-include_directories(${PROJECT_BINARY_DIR})
+# Versionning
+# ===========
+
+file(STRINGS "${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp" xplot_version_defines
+     REGEX "#define XPLOT_VERSION_(MAJOR|MINOR|PATCH)")
+foreach(ver ${xplot_version_defines})
+    if(ver MATCHES "#define XPLOT_VERSION_(MAJOR|MINOR|PATCH) +([^ ]+)$")
+        set(XPLOT_VERSION_${CMAKE_MATCH_1} "${CMAKE_MATCH_2}" CACHE INTERNAL "")
+    endif()
+endforeach()
+set(XPLOT_VERSION
+    ${XPLOT_VERSION_MAJOR}.${XPLOT_VERSION_MINOR}.${XPLOT_VERSION_PATCH})
+message(STATUS "xplot version: v${XPLOT_VERSION}")
+
+# Binary version
+# See the following URL for explanations about the binary versionning
+# https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html#Updating-version-info
+file(STRINGS "${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp" xplot_version_defines
+    REGEX "#define XPLOT_BINARY_(CURRENT|REVISION|AGE)")
+foreach(ver ${xplot_version_defines})
+    if(ver MATCHES "#define XPLOT_BINARY_(CURRENT|REVISION|AGE) +([^ ]+)$")
+        set(XPLOT_BINARY_${CMAKE_MATCH_1} "${CMAKE_MATCH_2}" CACHE INTERNAL "")
+    endif()
+endforeach()
+set(XPLOT_BINARY_VERSION
+    ${XPLOT_BINARY_CURRENT}.${XPLOT_BINARY_REVISION}.${XPLOT_BINARY_AGE})
+message(STATUS "xplot binary version: v${XPLOT_BINARY_VERSION}")
+
+# Dependencies
+# ============
+
+find_package(cppzmq 4.2.3 REQUIRED)
+find_package(xtl 0.4 REQUIRED)
+find_package(xeus 0.11.0 REQUIRED)
+find_package(xwidgets 0.8.2 REQUIRED)
+
+# Source files
+# ============
 
 set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xaxes.hpp
@@ -128,30 +89,86 @@ set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xmarks.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xplot_config.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xplot_config_cling.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xplot.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xscales.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xtoolbar.hpp
-    )
+)
 
-# # Output
-# # ======
-# 
-# set(XPLOT_TARGET xplot)
-# add_library(${XPLOT_TARGET} SHARED ${XPLOT_SOURCES} ${XPLOT_HEADERS})
-# target_link_libraries(${XPLOT_TARGET} ${XPLOT_DEPENDENCIES})
-# set_target_properties(${XPLOT_TARGET} PROPERTIES
-#                       PUBLIC_HEADER "${XPLOT_HEADERS}"
-#                       COMPILE_DEFINITIONS "XPLOT_EXPORTS"
-#                       PREFIX ""
-#                       OUTPUT_NAME "libxplot")
-# 
-# get_property(XPLOT_NAME TARGET ${XPLOT_TARGET} PROPERTY OUTPUT_NAME)
+set(XPLOT_SOURCES
+    ${XPLOT_SOURCE_DIR}/xplot.cpp
+)
+
+# Output
+# ======
+
+add_library(xplot SHARED ${XPLOT_SOURCES} ${XPLOT_HEADERS})
+target_include_directories(xplot PUBLIC $<BUILD_INTERFACE:${XPLOT_INCLUDE_DIR}>
+                                           $<INSTALL_INTERFACE:include>)
+
+target_link_libraries(xplot PUBLIC xtl)
+target_link_libraries(xplot PUBLIC xwidgets)
+
+set_target_properties(xplot PROPERTIES
+                      PUBLIC_HEADER "${XPLOT_HEADERS}"
+                      COMPILE_DEFINITIONS "XPLOT_EXPORTS"
+                      PREFIX ""
+                      VERSION ${XPLOT_BINARY_VERSION}
+                      SOVERSION ${XPLOT_BINARY_CURRENT}
+                      OUTPUT_NAME "libxplot")
+
+# Compilation flags
+# =================
+
+include(CheckCXXCompilerFlag)
+string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
+OPTION(DISABLE_ARCH_NATIVE "disable -march=native flag" OFF)
+
+set_target_properties(xplot PROPERTIES
+    CXX_EXTENSIONS OFF
+    CXX_STANDARD_REQUIRED 14)
+
+target_compile_features(xplot PRIVATE cxx_std_14)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+    target_compile_options(xplot PUBLIC -Wunused-parameter -Wextra -Wreorder)
+    if (DISABLE_ARCH_NATIVE)
+        target_compile_options(xplot PUBLIC -mtune=generic)
+    else()
+        target_compile_options(xplot PUBLIC -march=native)
+    endif()
+
+    # Enable link time optimization and set the default symbol
+    # visibility to hidden (very important to obtain small binaries)
+    if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+        # Check for Link Time Optimization support
+        # (GCC/Clang)
+        CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
+        if (HAS_LTO_FLAG)
+            target_compile_options(xplot PUBLIC -flto)
+        endif()
+
+        # Intel equivalent to LTO is called IPO
+        if (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+            CHECK_CXX_COMPILER_FLAG("-ipo" HAS_IPO_FLAG)
+            if (HAS_IPO_FLAG)
+                target_compile_options(xplot PUBLIC -ipo)
+            endif()
+        endif()
+    endif()
+    message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+endif()
+
 # if(MSVC)
-#     set(XPLOT_LINK_FILE ${XPLOT_NAME}${CMAKE_LINK_LIBRARY_SUFFIX})
-#     set(XPLOT_RUNTIME_FILE ${XPLOT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
-# else()
-#     set(XPLOT_LINK_FILE ${XPLOT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
-#     set(XPLOT_RUNTIME_FILE ${XPLOT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
+#     target_compile_definitions(xplot PUBLIC -DNOMINMAX)
+#     target_compile_options(xplot PUBLIC /DGUID_WINDOWS /MP /bigobj)
+#     target_compile_options(xplot PUBLIC /wd4251 /wd 4996)
+#     # Allows to compile in debug without requiring each dependencies to
+#     # be compiled in debug
+#     if(${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+#         set(CMAKE_CXX_FLAGS_DEBUG "/DNDEBUG /MD /Zi /Ob0 /Od /RTC1")
+#         message(STATUS "Overriding CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
+#     endif()
 # endif()
 
 # Tests
@@ -171,27 +188,28 @@ endif()
 # Installation
 # ============
 
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
+set(XPLOT_CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}" CACHE STRING "install path for xplotConfig.cmake")
 
-install(FILES ${XPLOT_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/xplot)
-
-install(TARGETS ${XPLOT_TARGET}
+install(TARGETS xplot
+        EXPORT ${PROJECT_NAME}-targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/xplot)
 
-set(XPLOT_CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}" CACHE
-    STRING "install path for xplotConfig.cmake")
+# Makes the project importable from the build directory
+export(EXPORT ${PROJECT_NAME}-targets
+       FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake")
 
 configure_package_config_file(${PROJECT_NAME}Config.cmake.in
                               "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
                               INSTALL_DESTINATION ${XPLOT_CMAKECONFIG_INSTALL_DIR})
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-                                 VERSION ${${PROJECT_NAME}_VERSION}
+                                 VERSION ${XPLOT_VERSION}
                                  COMPATIBILITY AnyNewerVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
               DESTINATION ${XPLOT_CMAKECONFIG_INSTALL_DIR})
+install(EXPORT ${PROJECT_NAME}-targets
+        FILE ${PROJECT_NAME}Targets.cmake
+DESTINATION ${XPLOT_CMAKECONFIG_INSTALL_DIR})

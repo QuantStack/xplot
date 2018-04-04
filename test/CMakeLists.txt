@@ -6,42 +6,17 @@
 # The full license is in the file LICENSE, distributed with this software. #
 ############################################################################
 
-cmake_minimum_required(VERSION 3.1)
-
-if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    project(xplot-test)
-
-    find_package(xplot REQUIRED CONFIG)
-    set(XPLOT_INCLUDE_DIR ${xplot_INCLUDE_DIRS})
-endif ()
-
-# Compilation flags
-# =================
+cmake_minimum_required(VERSION 3.8)
 
 message(STATUS "Forcing tests build type to Release")
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 
-include(CheckCXXCompilerFlag)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    project(xwidgets-test)
 
-string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
-
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -Wunused-parameter -Wextra -Wreorder -Wconversion")
-    CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
-
-    if (HAS_CPP14_FLAG)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-    else()
-        message(FATAL_ERROR "Unsupported compiler -- xwidgets requires C++14 support!")
-    endif()
-endif()
-
-if(MSVC)
-    add_definitions(-DNOMINMAX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /MP /bigobj")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251 /wd4996")
-    set(CMAKE_EXE_LINKER_FLAGS /MANIFEST:NO)
-endif()
+    find_package(xwidgets REQUIRED CONFIG)
+    set(XWIDGETS_INCLUDE_DIR ${xwidgets_INCLUDE_DIRS})
+endif ()
 
 # Dependencies
 # ============
@@ -94,22 +69,28 @@ set(XPLOT_TESTS
 # Output
 # ======
 
-set(XPLOT_TEST_TARGET test_xplot)
-
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
 if("${isSystemDir}" STREQUAL "-1")
-   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif("${isSystemDir}" STREQUAL "-1")
+
+set(XPLOT_TEST_TARGET test_xplot)
 
 add_executable(${XPLOT_TEST_TARGET} ${XPLOT_TESTS} ${XPLOT_HEADERS})
 if(DOWNLOAD_GTEST OR GTEST_SRC_DIR)
     add_dependencies(${XPLOT_TEST_TARGET} gtest_main)
 endif()
 
-target_link_libraries(${XPLOT_TEST_TARGET} ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
-                      ${XPLOT_TARGET} ${XPLOT_DEPENDENCIES})
+target_compile_features(${XPLOT_TEST_TARGET} PRIVATE cxx_std_14)
+
+target_link_libraries(${XPLOT_TEST_TARGET} 
+                        PRIVATE xwidgets 
+                        PUBLIC  xtl
+                        PRIVATE xeus
+                        PRIVATE ${GTEST_BOTH_LIBRARIES} 
+                        PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 

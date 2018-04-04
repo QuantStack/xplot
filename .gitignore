@@ -53,3 +53,4 @@ docs/build/
 
 # Generated header
 include/xplot/xmaps_config.hpp
+include/xplot/xplot_config_cling.hpp

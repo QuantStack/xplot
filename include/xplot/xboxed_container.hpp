@@ -15,7 +15,6 @@
 
 namespace xpl
 {
-
     /********************************
      * xboxed_container declaration *
      ********************************/

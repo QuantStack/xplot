@@ -17,6 +17,7 @@
 
 #include "xaxes.hpp"
 #include "xmarks.hpp"
+#include "xplot_config.hpp"
 #include "xscales.hpp"
 
 namespace xpl
@@ -190,8 +191,8 @@ namespace xpl
         this->_model_module() = "bqplot";
         this->_view_name() = "Figure";
         this->_view_module() = "bqplot";
-        this->_model_module_version() = "^0.3.6";
-        this->_view_module_version() = "^0.3.6";
+        this->_model_module_version() = XBQPLOT_VERSION;
+        this->_view_module_version() = XBQPLOT_VERSION;
 
         linear_scale sx;
         sx.min = 0.0;
