@@ -1086,7 +1086,7 @@ namespace xpl
 
     template <class D>
     template <class XS, class YS>
-    inline xpie<D>::xpie(XS&& xs, YS&& ys)
+    inline xpie<D>::xpie(XS&&, YS&&)
         : base_type()
     {
         set_defaults();
