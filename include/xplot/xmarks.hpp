@@ -321,8 +321,7 @@ namespace xpl
 
     protected:
 
-        template <class XS, class YS>
-        xpie(XS&&, YS&&);
+        xpie();
 
         using base_type::base_type;
 
@@ -1085,8 +1084,7 @@ namespace xpl
     }
 
     template <class D>
-    template <class XS, class YS>
-    inline xpie<D>::xpie(XS&&, YS&&)
+    inline xpie<D>::xpie()
         : base_type()
     {
         set_defaults();
@@ -1602,4 +1600,63 @@ namespace xpl
         return nlohmann::json::parse(str);
     }
 }
+
+/*********************
+ * precompiled types *
+ *********************/
+
+#ifndef _WIN32
+    extern template class xw::xmaterialize<xpl::xlines>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xlines>>;
+    extern template class xw::xgenerator<xpl::xlines>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xlines>>;
+
+    extern template class xw::xmaterialize<xpl::xscatter>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xscatter>>;
+    extern template class xw::xgenerator<xpl::xscatter>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xscatter>>;
+
+    extern template class xw::xmaterialize<xpl::xpie>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xpie>>;
+    extern template xw::xmaterialize<xpl::xpie>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xpie>;
+    extern template xw::xgenerator<xpl::xpie>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xpie>>;
+
+    extern template class xw::xmaterialize<xpl::xlabel>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xlabel>>;
+    extern template class xw::xgenerator<xpl::xlabel>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xlabel>>;
+
+    extern template class xw::xmaterialize<xpl::xhist>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xhist>>;
+    extern template class xw::xgenerator<xpl::xhist>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xhist>>;
+
+    extern template class xw::xmaterialize<xpl::xboxplot>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xboxplot>>;
+    extern template class xw::xgenerator<xpl::xboxplot>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xboxplot>>;
+
+    extern template class xw::xmaterialize<xpl::xbars>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xbars>>;
+    extern template class xw::xgenerator<xpl::xbars>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xbars>>;
+
+    extern template class xw::xmaterialize<xpl::xheat_map>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xheat_map>>;
+    extern template class xw::xgenerator<xpl::xheat_map>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xheat_map>>;
+
+    extern template class xw::xmaterialize<xpl::xgrid_heat_map>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xgrid_heat_map>>;
+    extern template class xw::xgenerator<xpl::xgrid_heat_map>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xgrid_heat_map>>;
+
+    extern template class xw::xmaterialize<xpl::xmap>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xmap>>;
+    extern template class xw::xgenerator<xpl::xmap>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xmap>>;
+#endif
+
 #endif

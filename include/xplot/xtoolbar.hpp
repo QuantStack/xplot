@@ -9,6 +9,8 @@
 #ifndef XPLOT_TOOLBAR_HPP
 #define XPLOT_TOOLBAR_HPP
 
+#include <utility>
+
 #include "xtl/xoptional.hpp"
 
 #include "xwidgets/xmaterialize.hpp"
@@ -126,4 +128,16 @@ namespace xpl
         return 0;
     }
 }
+
+/*********************
+ * precompiled types *
+ *********************/
+
+#ifndef _WIN32
+    extern template class xw::xmaterialize<xpl::xtoolbar>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xtoolbar>>;
+    extern template class xw::xgenerator<xpl::xtoolbar>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xtoolbar>>;
+#endif
+
 #endif

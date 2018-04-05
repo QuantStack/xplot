@@ -9,6 +9,7 @@
 #ifndef XPLOT_DEFAULT_TOOLTIP_HPP
 #define XPLOT_DEFAULT_TOOLTIP_HPP
 
+#include <string>
 #include <vector>
 
 #include "xwidgets/xwidget.hpp"
@@ -98,4 +99,18 @@ namespace xpl
         this->_view_module_version() = XBQPLOT_VERSION;
     }
 }
+
+/*********************
+ * precompiled types *
+ *********************/
+
+#ifndef _WIN32
+    extern template class xw::xmaterialize<xpl::xtooltip>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xtooltip>>;
+    extern template xw::xmaterialize<xpl::xtooltip>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xtooltip>;
+    extern template xw::xgenerator<xpl::xtooltip>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xtooltip>>;
+#endif
+
 #endif

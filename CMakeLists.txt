@@ -83,7 +83,7 @@ find_package(xwidgets 0.8.2 REQUIRED)
 set(XPLOT_HEADERS
     ${XPLOT_INCLUDE_DIR}/xplot/xaxes.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xboxed_container.hpp
-    ${XPLOT_INCLUDE_DIR}/xplot/xdefault_tooltip.hpp
+    ${XPLOT_INCLUDE_DIR}/xplot/xtooltip.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xfigure.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xinteracts.hpp
     ${XPLOT_INCLUDE_DIR}/xplot/xmaps_config.hpp
@@ -96,7 +96,12 @@ set(XPLOT_HEADERS
 )
 
 set(XPLOT_SOURCES
-    ${XPLOT_SOURCE_DIR}/xplot.cpp
+    ${XPLOT_SOURCE_DIR}/xaxes.cpp
+    ${XPLOT_SOURCE_DIR}/xfigure.cpp
+    ${XPLOT_SOURCE_DIR}/xmarks.cpp
+    ${XPLOT_SOURCE_DIR}/xscales.cpp
+    ${XPLOT_SOURCE_DIR}/xtoolbar.cpp
+    ${XPLOT_SOURCE_DIR}/xtooltip.cpp
 )
 
 # Output
@@ -104,10 +109,12 @@ set(XPLOT_SOURCES
 
 add_library(xplot SHARED ${XPLOT_SOURCES} ${XPLOT_HEADERS})
 target_include_directories(xplot PUBLIC $<BUILD_INTERFACE:${XPLOT_INCLUDE_DIR}>
-                                           $<INSTALL_INTERFACE:include>)
+                                        $<INSTALL_INTERFACE:include>)
 
-target_link_libraries(xplot PUBLIC xtl)
-target_link_libraries(xplot PUBLIC xwidgets)
+target_link_libraries(xplot
+    PUBLIC xtl
+    PUBLIC xeus
+    PUBLIC xwidgets)
 
 set_target_properties(xplot PROPERTIES
                       PUBLIC_HEADER "${XPLOT_HEADERS}"

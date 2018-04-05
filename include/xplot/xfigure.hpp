@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "xwidgets/xeither.hpp"
 #include "xwidgets/xwidget.hpp"
@@ -208,5 +209,18 @@ namespace xpl
         this->scale_y() = std::move(sy);
     }
 }
+
+/*********************
+ * precompiled types *
+ *********************/
+
+#ifndef _WIN32
+    extern template class xw::xmaterialize<xpl::xfigure>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xfigure>>;
+    extern template xw::xmaterialize<xpl::xfigure>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xfigure>;
+    extern template xw::xgenerator<xpl::xfigure>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xfigure>>;
+#endif
 
 #endif

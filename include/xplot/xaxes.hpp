@@ -23,7 +23,6 @@
 
 namespace xpl
 {
-
     /********************
      * axis declaration *
      ********************/
@@ -227,5 +226,21 @@ namespace xpl
         this->_model_name() = "ColorAxisModel";
     }
 }
+
+/*********************
+ * precompiled types *
+ *********************/
+
+#ifndef _WIN32
+    extern template class xw::xmaterialize<xpl::xaxis>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xaxis>>;
+    extern template class xw::xgenerator<xpl::xaxis>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xaxis>>;
+
+    extern template class xw::xmaterialize<xpl::xcolor_axis>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xcolor_axis>>;
+    extern template class xw::xgenerator<xpl::xcolor_axis>;
+    extern template class xw::xtransport<xw::xgenerator<xpl::xcolor_axis>>;
+#endif
 
 #endif
