@@ -87,10 +87,11 @@ endif()
 
 target_compile_features(${XPLOT_TEST_TARGET} PRIVATE cxx_std_14)
 
-target_link_libraries(${XPLOT_TEST_TARGET} 
-                        PRIVATE xwidgets 
-                        PUBLIC  xtl
-                        PRIVATE xeus
-                        PRIVATE ${GTEST_BOTH_LIBRARIES} 
+target_link_libraries(${XPLOT_TEST_TARGET}
+                        PUBLIC xtl
+                        PUBLIC xeus
+                        PUBLIC xwidgets
+                        PUBLIC xplot
+                        PRIVATE ${GTEST_BOTH_LIBRARIES}
                         PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 

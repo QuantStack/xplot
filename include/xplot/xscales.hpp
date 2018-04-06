@@ -140,7 +140,7 @@ namespace xpl
         using base_type::base_type;
 
     private:
- 
+
         void set_defaults();
     };
 
@@ -806,5 +806,74 @@ namespace xpl
         this->_model_name() = "AlbersModel";
     }
 }
+
+/*********************
+ * precompiled types *
+ *********************/
+
+#ifndef _WIN32
+    extern template class xw::xmaterialize<xpl::xlinear_scale>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xlinear_scale>>;
+    extern template xw::xmaterialize<xpl::xlinear_scale>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xlinear_scale>;
+    extern template xw::xgenerator<xpl::xlinear_scale>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xlinear_scale>>;
+
+    extern template class xw::xmaterialize<xpl::xlog_scale>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xlog_scale>>;
+    extern template xw::xmaterialize<xpl::xlog_scale>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xlog_scale>;
+    extern template xw::xgenerator<xpl::xlog_scale>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xlog_scale>>;
+
+    extern template class xw::xmaterialize<xpl::xcolor_scale>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xcolor_scale>>;
+    extern template xw::xmaterialize<xpl::xcolor_scale>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xcolor_scale>;
+    extern template xw::xgenerator<xpl::xcolor_scale>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xcolor_scale>>;
+
+    extern template class xw::xmaterialize<xpl::xordinal_scale>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xordinal_scale>>;
+    extern template xw::xmaterialize<xpl::xordinal_scale>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xordinal_scale>;
+    extern template xw::xgenerator<xpl::xordinal_scale>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xordinal_scale>>;
+
+    extern template class xw::xmaterialize<xpl::xordinal_color_scale>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xordinal_color_scale>>;
+    extern template xw::xmaterialize<xpl::xordinal_color_scale>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xordinal_color_scale>;
+    extern template xw::xgenerator<xpl::xordinal_color_scale>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xordinal_color_scale>>;
+
+    extern template class xw::xmaterialize<xpl::xmercator>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xmercator>>;
+    extern template xw::xmaterialize<xpl::xmercator>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xmercator>;
+    extern template xw::xgenerator<xpl::xmercator>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xmercator>>;
+
+    extern template class xw::xmaterialize<xpl::xorthographic>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xorthographic>>;
+    extern template xw::xmaterialize<xpl::xorthographic>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xorthographic>;
+    extern template xw::xgenerator<xpl::xorthographic>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xorthographic>>;
+
+    extern template class xw::xmaterialize<xpl::xalbers>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xalbers>>;
+    extern template xw::xmaterialize<xpl::xalbers>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xalbers>;
+    extern template xw::xgenerator<xpl::xalbers>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xalbers>>;
+
+    extern template class xw::xmaterialize<xpl::xalbers_usa>;
+    extern template class xw::xtransport<xw::xmaterialize<xpl::xalbers_usa>>;
+    extern template xw::xmaterialize<xpl::xalbers_usa>::xmaterialize();
+    extern template class xw::xgenerator<xpl::xalbers_usa>;
+    extern template xw::xgenerator<xpl::xalbers_usa>::xgenerator();
+    extern template class xw::xtransport<xw::xgenerator<xpl::xalbers_usa>>;
+#endif
 
 #endif
