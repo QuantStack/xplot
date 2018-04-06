@@ -12,7 +12,7 @@ C++ backend for the bqplot 2-D plotting library
 
 ## Usage
 
-![xplot](xplot-screenshot.png)
+![xplot](xplot-screencast.gif)
 
 ## Dependencies
 
@@ -26,6 +26,22 @@ All the dependencies of xplot are available for the conda package manager.
 |  0.3.0  |   ~0.6.0    |  >=0.8.0,<0.9   |
 |  0.2.0  |   ~0.5.0    |  >=0.8.0,<0.9   |
 |  0.1.0  |   ~0.4.0    |  >=0.7.0,<0.8   |
+
+## Installation
+
+`xplot` and its dependencies have been packaged for the conda package manager.
+
+- To install the xeus-cling kernel, and xwidgets
+
+```
+conda install xplot xeus-cling -c QuantStack -c conda-forge
+```
+
+- To install the front-end components
+
+```
+conda install notebook bqplot -c QuantStack -c conda-forge
+```
 
 ## License
 
