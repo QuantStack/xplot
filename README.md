@@ -10,6 +10,40 @@ C++ backend for the bqplot 2-D plotting library
 
 **xplot is an early developer preview, and is not suitable for general usage yet. Features and implementation are subject to change.**
 
+## Installation
+
+We provide a package for the conda package manager.
+
+- Installing `xplot` and the C++ kernel
+
+```bash
+conda install xeus-cling xplot -c QuantStack -c conda-forge
+```
+
+Then, the front-end extension must be installed for either the classic notebook or JupyterLab.
+
+- Installing the extensions for the classic notebook
+
+```
+conda install widgetsnbextension -c conda-forge
+conda install bqplot -c conda-forge
+```
+
+- Installing the JupyterLab extension
+
+```
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install bqplot
+```
+
+## Installation from sources
+
+Or you can directly install it from the sources if you have all the dependencies already installed:
+
+```bash
+cmake -D CMAKE_INSTALL_PREFIX=your_install_prefix
+make install
+```
 ## Usage
 
 ![xplot](xplot-screencast.gif)
@@ -27,22 +61,6 @@ All the dependencies of xplot are available for the conda package manager.
 |  0.3.0  |   ~0.6.0    |  >=0.8.0,<0.9   |
 |  0.2.0  |   ~0.5.0    |  >=0.8.0,<0.9   |
 |  0.1.0  |   ~0.4.0    |  >=0.7.0,<0.8   |
-
-## Installation
-
-`xplot` and its dependencies have been packaged for the conda package manager.
-
-- To install the xeus-cling kernel, and xwidgets
-
-```
-conda install xplot xeus-cling -c QuantStack -c conda-forge
-```
-
-- To install the front-end components
-
-```
-conda install notebook bqplot -c QuantStack -c conda-forge
-```
 
 ## License
 
