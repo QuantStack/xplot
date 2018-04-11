@@ -68,10 +68,20 @@ namespace xpl
         void add_mark(xmark<T>&& w);
 
         template <class T>
+        void remove_mark(const xmark<T>& w);
+
+        void clear_marks();
+
+        template <class T>
         void add_axis(const xaxis<T>& w);
 
         template <class T>
         void add_axis(xaxis<T>&& w);
+
+        template <class T>
+        void remove_axis(const xaxis<T>& w);
+
+        void clear_axes();
 
     protected:
 
@@ -160,6 +170,33 @@ namespace xpl
 
     template <class D>
     template <class T>
+    inline void xfigure<D>::remove_mark(const xmark<T>& w)
+    {
+        this->marks().erase(
+            std::remove_if(
+                this->marks().begin(), this->marks().end(),
+                [&w](const xw::xholder<xmark>& element) {
+                    return element.id() == w.id();
+                }
+            ),
+            this->marks().end()
+        );
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    inline void xfigure<D>::clear_marks()
+    {
+        this->marks() = {};
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    template <class T>
     inline void xfigure<D>::add_axis(const xaxis<T>& w)
     {
         this->axes().emplace_back(xw::make_id_holder<xaxis>(w.id()));
@@ -173,6 +210,33 @@ namespace xpl
     inline void xfigure<D>::add_axis(xaxis<T>&& w)
     {
         this->axes().emplace_back(xw::make_owning_holder(std::move(w)));
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    template <class T>
+    inline void xfigure<D>::remove_axis(const xaxis<T>& w)
+    {
+        this->axes().erase(
+            std::remove_if(
+                this->axes().begin(), this->axes().end(),
+                [&w](const xw::xholder<xaxis>& element) {
+                    return element.id() == w.id();
+                }
+            ),
+            this->axes().end()
+        );
+        xeus::xjson state;
+        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
+        this->send_patch(std::move(state));
+    }
+
+    template <class D>
+    inline void xfigure<D>::clear_axes()
+    {
+        this->axes() = {};
         xeus::xjson state;
         XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
         this->send_patch(std::move(state));
