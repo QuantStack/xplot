@@ -175,7 +175,9 @@ namespace xpl
         this->marks().erase(
             std::remove_if(
                 this->marks().begin(), this->marks().end(),
-                [&w](xw::xholder<xmark> _w){return _w.id() == w.id();}
+                [&w](const xw::xholder<xmark>& element) {
+                    return element.id() == w.id();
+                }
             ),
             this->marks().end()
         );
@@ -220,7 +222,9 @@ namespace xpl
         this->axes().erase(
             std::remove_if(
                 this->axes().begin(), this->axes().end(),
-                [&w](xw::xholder<xaxis> _w){return _w.id() == w.id();}
+                [&w](const xw::xholder<xaxis>& element) {
+                    return element.id() == w.id();
+                }
             ),
             this->axes().end()
         );
