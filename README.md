@@ -3,12 +3,23 @@
 [![Travis](https://travis-ci.org/QuantStack/xplot.svg?branch=master)](https://travis-ci.org/QuantStack/xplot)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/733j3qm6kn3sh0b4?svg=true)](https://ci.appveyor.com/project/QuantStack/xplot)
 [![Documentation](http://readthedocs.org/projects/xplot/badge/?version=latest)](https://xplot.readthedocs.io/en/latest/?badge=latest)
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://beta.mybinder.org/v2/gh/QuantStack/xplot/0.5.0?filepath=notebooks)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/QuantStack/xplot/0.5.0?filepath=notebooks)
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-C++ backend for the bqplot 2-D plotting library
+C++ backend for the bqplot 2-D plotting library.
 
 **xplot is an early developer preview, and is not suitable for general usage yet. Features and implementation are subject to change.**
+
+## Introduction
+
+`xplot` is a C++ backend for the bqplot 2-D plotting library. It is based upon
+the `xwidgets` library, the C++ implementation of the Jupyter interactive
+widgets protocol.
+
+`xplot` enables the use of the bqplot 2-D library in the C++ notebook, powered
+by the `xeus-cling` kernel and the `cling` C++ interpreter from CERN. `xplot`
+can also be used to create applications making use of the Jupyter interactive
+widgets without the C++ kernel.
 
 ## Installation
 
@@ -20,7 +31,8 @@ We provide a package for the conda package manager.
 conda install xeus-cling xplot -c QuantStack -c conda-forge
 ```
 
-Then, the front-end extension must be installed for either the classic notebook or JupyterLab.
+Then, the front-end extension must be installed for either the classic notebook
+or JupyterLab.
 
 - Installing the extensions for the classic notebook
 
@@ -38,7 +50,8 @@ jupyter labextension install bqplot
 
 ## Installation from sources
 
-Or you can directly install it from the sources if you have all the dependencies already installed:
+Or you can directly install it from the sources if you have all the
+dependencies already installed:
 
 ```bash
 cmake -D CMAKE_INSTALL_PREFIX=your_install_prefix
