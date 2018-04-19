@@ -38,8 +38,8 @@ namespace xpl
         using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::string, derived_type, orientation, "horizontal", XEITHER("horizontal", "vertical"));
         XPROPERTY(xtl::xoptional<std::string>, derived_type, side, xtl::missing<std::string>(), XEITHER_OPTIONAL("bottom", "top", "left", "right"));
@@ -88,8 +88,8 @@ namespace xpl
         using base_type = xaxis<D>;
         using derived_type = D;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
     protected:
 
@@ -115,48 +115,47 @@ namespace xpl
      ***********************/
 
     template <class D>
-    inline void xaxis<D>::apply_patch(const xeus::xjson& patch)
+    inline void xaxis<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
 
-        XOBJECT_SET_PROPERTY_FROM_PATCH(orientation, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(side, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(label, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(tick_format, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scale, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(num_ticks, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(tick_values, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(offset, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(label_location, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(label_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(grid_lines, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(grid_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(label_offset, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(visible, patch);
+        xw::set_property_from_patch(orientation, patch, buffers);
+        xw::set_property_from_patch(side, patch, buffers);
+        xw::set_property_from_patch(label, patch, buffers);
+        xw::set_property_from_patch(tick_format, patch, buffers);
+        xw::set_property_from_patch(scale, patch, buffers);
+        xw::set_property_from_patch(num_ticks, patch, buffers);
+        xw::set_property_from_patch(tick_values, patch, buffers);
+        xw::set_property_from_patch(offset, patch, buffers);
+        xw::set_property_from_patch(label_location, patch, buffers);
+        xw::set_property_from_patch(label_color, patch, buffers);
+        xw::set_property_from_patch(grid_lines, patch, buffers);
+        xw::set_property_from_patch(grid_color, patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(label_offset, patch, buffers);
+        xw::set_property_from_patch(visible, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xaxis<D>::get_state() const
+    inline void xaxis<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
+        base_type::serialize_state(state, buffers);
 
-        XOBJECT_SET_PATCH_FROM_PROPERTY(orientation, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(side, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(label, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(tick_format, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scale, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(num_ticks, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(tick_values, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(offset, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(label_location, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(label_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(grid_lines, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(grid_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(label_offset, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(visible, state);
-        return state;
+        xw::set_patch_from_property(orientation, state, buffers);
+        xw::set_patch_from_property(side, state, buffers);
+        xw::set_patch_from_property(label, state, buffers);
+        xw::set_patch_from_property(tick_format, state, buffers);
+        xw::set_patch_from_property(scale, state, buffers);
+        xw::set_patch_from_property(num_ticks, state, buffers);
+        xw::set_patch_from_property(tick_values, state, buffers);
+        xw::set_patch_from_property(offset, state, buffers);
+        xw::set_patch_from_property(label_location, state, buffers);
+        xw::set_patch_from_property(label_color, state, buffers);
+        xw::set_patch_from_property(grid_lines, state, buffers);
+        xw::set_patch_from_property(grid_color, state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(label_offset, state, buffers);
+        xw::set_patch_from_property(visible, state, buffers);
     }
 
     template <class D>
@@ -191,16 +190,15 @@ namespace xpl
      ******************************/
 
     template <class D>
-    inline void xcolor_axis<D>::apply_patch(const xeus::xjson& patch)
+    inline void xcolor_axis<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xcolor_axis<D>::get_state() const
+    inline void xcolor_axis<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        return state;
+        base_type::serialize_state(state, buffers);
     }
 
     template <class D>

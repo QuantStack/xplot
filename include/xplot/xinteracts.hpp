@@ -25,8 +25,8 @@ namespace xpl
         using base_type = xplot<D>;
         using derived_type = D;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
     protected:
 
@@ -55,8 +55,8 @@ namespace xpl
         using base_type = xinteraction<D>;
         using derived_type = D;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(bool, derived_type, allow_pan, true);
         XPROPERTY(bool, derived_type, allow_zoom, true);
@@ -82,17 +82,15 @@ namespace xpl
      *******************************/
 
     template <class D>
-    inline void xinteraction<D>::apply_patch(const xeus::xjson& patch)
+    inline void xinteraction<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xinteraction<D>::get_state() const
+    inline void xinteraction<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-
-        return state;
+        base_type::serialize_state(state, buffers);
     }
 
     template <class D>
@@ -114,23 +112,21 @@ namespace xpl
      ****************************/
 
     template <class D>
-    inline void xpan_zoom<D>::apply_patch(const xeus::xjson& patch)
+    inline void xpan_zoom<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(allow_pan, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(allow_zoom, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(allow_pan, patch, buffers);
+        xw::set_property_from_patch(allow_zoom, patch, buffers);
+        xw::set_property_from_patch(scales, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xpan_zoom<D>::get_state() const
+    inline void xpan_zoom<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(allow_pan, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(allow_zoom, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(allow_pan, state, buffers);
+        xw::set_patch_from_property(allow_zoom, state, buffers);
+        xw::set_patch_from_property(scales, state, buffers);
     }
 
     template <class D>

@@ -67,7 +67,7 @@ All the dependencies of xplot are available for the conda package manager.
 
 | `xplot` | `xwidgets`  |  `xeus`         |
 |---------|-------------|-----------------|
-|  master |   ~0.9.0    |  >=0.12.0,<0.13 |
+|  master |   ~0.10.0   |  >=0.12.0,<0.13 |
 |  0.6.0  |   ~0.9.0    |  >=0.12.0,<0.13 |
 |  0.5.0  |   ~0.8.2    |  >=0.11.0,<0.12 |
 |  0.4.1  |   ~0.8.1    |  >=0.11.0,<0.12 |
