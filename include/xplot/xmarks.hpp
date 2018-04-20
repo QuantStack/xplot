@@ -72,8 +72,8 @@ namespace xpl
         using selected_type = xtl::xoptional<std::vector<int>>;
         using tooltip_type = xtl::xoptional<xmark_tooltip_type>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(scales_type, derived_type, scales);
         XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
@@ -119,8 +119,8 @@ namespace xpl
         using opacities_type = std::vector<double>;
         using curves_subset_type = std::vector<int>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
@@ -173,8 +173,8 @@ namespace xpl
 
         using callback_type = std::function<void(const xeus::xjson&)>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         void on_drag_start(callback_type);
         void on_drag(callback_type);
@@ -236,8 +236,8 @@ namespace xpl
         using colors_type = typename base_type::colors_type;
         using names_type = xboxed_container<std::vector<std::string>>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, skew);
         XPROPERTY(std::string, derived_type, marker, "circle", XEITHER("circle", "cross", "diamond", "square", "triangle-down", "triangle-up", "arrow", "rectangle", "ellipse"));
@@ -295,8 +295,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using xboxed_color_type = xboxed_container<std::vector<std::string>>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, color);
         XPROPERTY(colors_type, derived_type, colors, category10());
@@ -348,8 +348,8 @@ namespace xpl
 
         using data_type = xboxed_container<std::vector<std::string>>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::string, derived_type, align, "start", XEITHER("start", "middle", "end"));
         XPROPERTY(std::vector<color_type>, derived_type, colors);
@@ -394,8 +394,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(int, derived_type, bins, 10);
         XPROPERTY(colors_type, derived_type, colors);
@@ -438,8 +438,8 @@ namespace xpl
         using data_type_x = xboxed_container<std::vector<double>>;
         using data_type_y = xboxed_container<std::vector<std::vector<double>>>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(color_type, derived_type, box_fill_color, "dodgerblue");
         XPROPERTY(std::vector<double>, derived_type, opacities);
@@ -481,8 +481,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
@@ -529,8 +529,8 @@ namespace xpl
         using array = std::vector<std::vector<double>>;
         using data_type = xboxed_container<array>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(xtl::xoptional<data_type>, derived_type, color);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
@@ -577,8 +577,8 @@ namespace xpl
         using data1d_type = xboxed_container<std::vector<double>>;
         using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(::xeus::xjson, derived_type, anchor_style, ::xeus::xjson::object());
         XPROPERTY(data2d_type, derived_type, color);
@@ -627,8 +627,8 @@ namespace xpl
         using base_type = xmark<D>;
         using derived_type = D;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(xtl::xoptional<::xeus::xjson>, derived_type, color, ::xeus::xjson::object());
         XPROPERTY(::xeus::xjson, derived_type, colors, ::xeus::xjson::object());
@@ -674,49 +674,47 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xmark<D>::apply_patch(const xeus::xjson& patch)
+    inline void xmark<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
 
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(preserve_domain, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(display_legend, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(labels, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(apply_clip, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(visible, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(unselected_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(enable_hover, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(interactions, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(tooltip_location, patch);
+        xw::set_property_from_patch(scales, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(preserve_domain, patch, buffers);
+        xw::set_property_from_patch(display_legend, patch, buffers);
+        xw::set_property_from_patch(labels, patch, buffers);
+        xw::set_property_from_patch(apply_clip, patch, buffers);
+        xw::set_property_from_patch(visible, patch, buffers);
+        xw::set_property_from_patch(selected_style, patch, buffers);
+        xw::set_property_from_patch(unselected_style, patch, buffers);
+        xw::set_property_from_patch(selected, patch, buffers);
+        xw::set_property_from_patch(tooltip, patch, buffers);
+        xw::set_property_from_patch(tooltip_style, patch, buffers);
+        xw::set_property_from_patch(enable_hover, patch, buffers);
+        xw::set_property_from_patch(interactions, patch, buffers);
+        xw::set_property_from_patch(tooltip_location, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xmark<D>::get_state() const
+    inline void xmark<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
+        base_type::serialize_state(state, buffers);
 
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(preserve_domain, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(display_legend, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(labels, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(apply_clip, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(visible, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(unselected_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(enable_hover, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(interactions, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(tooltip_location, state);
-
-        return state;
+        xw::set_patch_from_property(scales, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(preserve_domain, state, buffers);
+        xw::set_patch_from_property(display_legend, state, buffers);
+        xw::set_patch_from_property(labels, state, buffers);
+        xw::set_patch_from_property(apply_clip, state, buffers);
+        xw::set_patch_from_property(visible, state, buffers);
+        xw::set_patch_from_property(selected_style, state, buffers);
+        xw::set_patch_from_property(unselected_style, state, buffers);
+        xw::set_patch_from_property(selected, state, buffers);
+        xw::set_patch_from_property(tooltip, state, buffers);
+        xw::set_patch_from_property(tooltip_style, state, buffers);
+        xw::set_patch_from_property(enable_hover, state, buffers);
+        xw::set_patch_from_property(interactions, state, buffers);
+        xw::set_patch_from_property(tooltip_location, state, buffers);
     }
 
     template <class D>
@@ -737,51 +735,49 @@ namespace xpl
      *************************/
 
     template <class D>
-    inline void xlines<D>::apply_patch(const xeus::xjson& patch)
+    inline void xlines<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
 
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(fill_colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke_width, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(labels_visibility, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(curves_subset, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(line_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(interpolation, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(close_path, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(fill, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(marker, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(marker_size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(fill_opacities, patch);
+        xw::set_property_from_patch(x, patch, buffers);
+        xw::set_property_from_patch(y, patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(fill_colors, patch, buffers);
+        xw::set_property_from_patch(stroke_width, patch, buffers);
+        xw::set_property_from_patch(labels_visibility, patch, buffers);
+        xw::set_property_from_patch(curves_subset, patch, buffers);
+        xw::set_property_from_patch(line_style, patch, buffers);
+        xw::set_property_from_patch(interpolation, patch, buffers);
+        xw::set_property_from_patch(close_path, patch, buffers);
+        xw::set_property_from_patch(fill, patch, buffers);
+        xw::set_property_from_patch(marker, patch, buffers);
+        xw::set_property_from_patch(marker_size, patch, buffers);
+        xw::set_property_from_patch(opacities, patch, buffers);
+        xw::set_property_from_patch(fill_opacities, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xlines<D>::get_state() const
+    inline void xlines<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
+        base_type::serialize_state(state, buffers);
 
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(fill_colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke_width, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(labels_visibility, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(curves_subset, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(line_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(interpolation, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(close_path, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(fill, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marker, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marker_size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(fill_opacities, state);
-
-        return state;
+        xw::set_patch_from_property(x, state, buffers);
+        xw::set_patch_from_property(y, state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(fill_colors, state, buffers);
+        xw::set_patch_from_property(stroke_width, state, buffers);
+        xw::set_patch_from_property(labels_visibility, state, buffers);
+        xw::set_patch_from_property(curves_subset, state, buffers);
+        xw::set_patch_from_property(line_style, state, buffers);
+        xw::set_patch_from_property(interpolation, state, buffers);
+        xw::set_patch_from_property(close_path, state, buffers);
+        xw::set_patch_from_property(fill, state, buffers);
+        xw::set_patch_from_property(marker, state, buffers);
+        xw::set_patch_from_property(marker_size, state, buffers);
+        xw::set_patch_from_property(opacities, state, buffers);
+        xw::set_patch_from_property(fill_opacities, state, buffers);
     }
 
     template <class D>
@@ -811,50 +807,49 @@ namespace xpl
      ********************************/
 
     template <class D>
-    inline void xscatter_base<D>::apply_patch(const xeus::xjson& patch)
+    inline void xscatter_base<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
 
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacity, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(rotation, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(default_opacities, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(hovered_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(unhovered_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(hovered_point, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(enable_move, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(enable_delete, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(restrict_x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(restrict_y, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(update_on_move, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
+        xw::set_property_from_patch(x, patch, buffers);
+        xw::set_property_from_patch(y, patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(opacity, patch, buffers);
+        xw::set_property_from_patch(size, patch, buffers);
+        xw::set_property_from_patch(rotation, patch, buffers);
+        xw::set_property_from_patch(default_opacities, patch, buffers);
+        xw::set_property_from_patch(hovered_style, patch, buffers);
+        xw::set_property_from_patch(unhovered_style, patch, buffers);
+        xw::set_property_from_patch(hovered_point, patch, buffers);
+        xw::set_property_from_patch(enable_move, patch, buffers);
+        xw::set_property_from_patch(enable_delete, patch, buffers);
+        xw::set_property_from_patch(restrict_x, patch, buffers);
+        xw::set_property_from_patch(restrict_y, patch, buffers);
+        xw::set_property_from_patch(update_on_move, patch, buffers);
+        xw::set_property_from_patch(selected, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xscatter_base<D>::get_state() const
+    inline void xscatter_base<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
+        base_type::serialize_state(state, buffers);
 
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacity, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(rotation, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(default_opacities, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(hovered_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(unhovered_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(hovered_point, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(enable_move, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(enable_delete, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(restrict_x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(restrict_y, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(update_on_move, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
-        return state;
+        xw::set_patch_from_property(x, state, buffers);
+        xw::set_patch_from_property(y, state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(opacity, state, buffers);
+        xw::set_patch_from_property(size, state, buffers);
+        xw::set_patch_from_property(rotation, state, buffers);
+        xw::set_patch_from_property(default_opacities, state, buffers);
+        xw::set_patch_from_property(hovered_style, state, buffers);
+        xw::set_patch_from_property(unhovered_style, state, buffers);
+        xw::set_patch_from_property(hovered_point, state, buffers);
+        xw::set_patch_from_property(enable_move, state, buffers);
+        xw::set_patch_from_property(enable_delete, state, buffers);
+        xw::set_patch_from_property(restrict_x, state, buffers);
+        xw::set_patch_from_property(restrict_y, state, buffers);
+        xw::set_patch_from_property(update_on_move, state, buffers);
+        xw::set_patch_from_property(selected, state, buffers);
     }
 
     template <class D>
@@ -955,45 +950,43 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline void xscatter<D>::apply_patch(const xeus::xjson& patch)
+    inline void xscatter<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
 
-        XOBJECT_SET_PROPERTY_FROM_PATCH(skew, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(marker, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke_width, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(default_skew, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(default_size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(names, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(display_names, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(fill, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(drag_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(drag_size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(names_unique, patch);
+        xw::set_property_from_patch(skew, patch, buffers);
+        xw::set_property_from_patch(marker, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(stroke, patch, buffers);
+        xw::set_property_from_patch(stroke_width, patch, buffers);
+        xw::set_property_from_patch(default_skew, patch, buffers);
+        xw::set_property_from_patch(default_size, patch, buffers);
+        xw::set_property_from_patch(names, patch, buffers);
+        xw::set_property_from_patch(display_names, patch, buffers);
+        xw::set_property_from_patch(fill, patch, buffers);
+        xw::set_property_from_patch(drag_color, patch, buffers);
+        xw::set_property_from_patch(drag_size, patch, buffers);
+        xw::set_property_from_patch(names_unique, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xscatter<D>::get_state() const
+    inline void xscatter<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
+        base_type::serialize_state(state, buffers);
 
-        XOBJECT_SET_PATCH_FROM_PROPERTY(skew, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marker, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke_width, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(default_skew, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(default_size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(names, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(display_names, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(fill, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(drag_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(drag_size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(names_unique, state);
-
-        return state;
+        xw::set_patch_from_property(skew, state, buffers);
+        xw::set_patch_from_property(marker, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(stroke, state, buffers);
+        xw::set_patch_from_property(stroke_width, state, buffers);
+        xw::set_patch_from_property(default_skew, state, buffers);
+        xw::set_patch_from_property(default_size, state, buffers);
+        xw::set_patch_from_property(names, state, buffers);
+        xw::set_patch_from_property(display_names, state, buffers);
+        xw::set_patch_from_property(fill, state, buffers);
+        xw::set_patch_from_property(drag_color, state, buffers);
+        xw::set_patch_from_property(drag_size, state, buffers);
+        xw::set_patch_from_property(names_unique, state, buffers);
     }
 
     template <class D>
@@ -1032,55 +1025,53 @@ namespace xpl
      ***********************/
 
     template <class D>
-    inline void xpie<D>::apply_patch(const xeus::xjson& patch)
+    inline void xpie<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(display_labels, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(display_values, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(end_angle, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(font_size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(font_weight, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(inner_radius, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(label_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(radius, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(sizes, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(sort, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(start_angle, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(values_format, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(display_labels, patch, buffers);
+        xw::set_property_from_patch(display_values, patch, buffers);
+        xw::set_property_from_patch(end_angle, patch, buffers);
+        xw::set_property_from_patch(font_size, patch, buffers);
+        xw::set_property_from_patch(font_weight, patch, buffers);
+        xw::set_property_from_patch(inner_radius, patch, buffers);
+        xw::set_property_from_patch(label_color, patch, buffers);
+        xw::set_property_from_patch(opacities, patch, buffers);
+        xw::set_property_from_patch(radius, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(sizes, patch, buffers);
+        xw::set_property_from_patch(sort, patch, buffers);
+        xw::set_property_from_patch(start_angle, patch, buffers);
+        xw::set_property_from_patch(stroke, patch, buffers);
+        xw::set_property_from_patch(values_format, patch, buffers);
+        xw::set_property_from_patch(x, patch, buffers);
+        xw::set_property_from_patch(y, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xpie<D>::get_state() const
+    inline void xpie<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(display_labels, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(display_values, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(end_angle, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(font_size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(font_weight, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(inner_radius, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(label_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(radius, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(sizes, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(sort, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(start_angle, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(values_format, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(display_labels, state, buffers);
+        xw::set_patch_from_property(display_values, state, buffers);
+        xw::set_patch_from_property(end_angle, state, buffers);
+        xw::set_patch_from_property(font_size, state, buffers);
+        xw::set_patch_from_property(font_weight, state, buffers);
+        xw::set_patch_from_property(inner_radius, state, buffers);
+        xw::set_patch_from_property(label_color, state, buffers);
+        xw::set_patch_from_property(opacities, state, buffers);
+        xw::set_patch_from_property(radius, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(sizes, state, buffers);
+        xw::set_patch_from_property(sort, state, buffers);
+        xw::set_patch_from_property(start_angle, state, buffers);
+        xw::set_patch_from_property(stroke, state, buffers);
+        xw::set_patch_from_property(values_format, state, buffers);
+        xw::set_patch_from_property(x, state, buffers);
+        xw::set_patch_from_property(y, state, buffers);
     }
 
     template <class D>
@@ -1102,37 +1093,35 @@ namespace xpl
      *************************/
 
     template <class D>
-    inline void xlabel<D>::apply_patch(const xeus::xjson& patch)
+    inline void xlabel<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(align, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(default_size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(drag_size, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(font_unit, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(font_weight, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(rotate_angle, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(text, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x_offset, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y_offset, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(align, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(default_size, patch, buffers);
+        xw::set_property_from_patch(drag_size, patch, buffers);
+        xw::set_property_from_patch(font_unit, patch, buffers);
+        xw::set_property_from_patch(font_weight, patch, buffers);
+        xw::set_property_from_patch(rotate_angle, patch, buffers);
+        xw::set_property_from_patch(text, patch, buffers);
+        xw::set_property_from_patch(x_offset, patch, buffers);
+        xw::set_property_from_patch(y_offset, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xlabel<D>::get_state() const
+    inline void xlabel<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(align, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(default_size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(drag_size, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(font_unit, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(font_weight, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(rotate_angle, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(text, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x_offset, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y_offset, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(align, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(default_size, state, buffers);
+        xw::set_patch_from_property(drag_size, state, buffers);
+        xw::set_patch_from_property(font_unit, state, buffers);
+        xw::set_patch_from_property(font_weight, state, buffers);
+        xw::set_patch_from_property(rotate_angle, state, buffers);
+        xw::set_patch_from_property(text, state, buffers);
+        xw::set_patch_from_property(x_offset, state, buffers);
+        xw::set_patch_from_property(y_offset, state, buffers);
     }
 
     template <class D>
@@ -1155,35 +1144,33 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xhist<D>::apply_patch(const xeus::xjson& patch)
+    inline void xhist<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(bins, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(count, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(midpoints, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(normalized, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(sample, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(bins, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(count, patch, buffers);
+        xw::set_property_from_patch(midpoints, patch, buffers);
+        xw::set_property_from_patch(normalized, patch, buffers);
+        xw::set_property_from_patch(opacities, patch, buffers);
+        xw::set_property_from_patch(sample, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(stroke, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xhist<D>::get_state() const
+    inline void xhist<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(bins, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(count, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(midpoints, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(normalized, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(sample, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(bins, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(count, state, buffers);
+        xw::set_patch_from_property(midpoints, state, buffers);
+        xw::set_patch_from_property(normalized, state, buffers);
+        xw::set_patch_from_property(opacities, state, buffers);
+        xw::set_patch_from_property(sample, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(stroke, state, buffers);
     }
 
     template <class D>
@@ -1212,31 +1199,29 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline void xboxplot<D>::apply_patch(const xeus::xjson& patch)
+    inline void xboxplot<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(box_fill_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(outlier_fill_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(box_fill_color, patch, buffers);
+        xw::set_property_from_patch(opacities, patch, buffers);
+        xw::set_property_from_patch(outlier_fill_color, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(stroke, patch, buffers);
+        xw::set_property_from_patch(x, patch, buffers);
+        xw::set_property_from_patch(y, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xboxplot<D>::get_state() const
+    inline void xboxplot<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(box_fill_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(outlier_fill_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(box_fill_color, state, buffers);
+        xw::set_patch_from_property(opacities, state, buffers);
+        xw::set_patch_from_property(outlier_fill_color, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(stroke, state, buffers);
+        xw::set_patch_from_property(x, state, buffers);
+        xw::set_patch_from_property(y, state, buffers);
     }
 
     template <class D>
@@ -1265,41 +1250,39 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xbars<D>::apply_patch(const xeus::xjson& patch)
+    inline void xbars<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(align, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color_mode, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacities, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(orientation, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(padding, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(type, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(align, patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(color_mode, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(opacities, patch, buffers);
+        xw::set_property_from_patch(orientation, patch, buffers);
+        xw::set_property_from_patch(padding, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(stroke, patch, buffers);
+        xw::set_property_from_patch(type, patch, buffers);
+        xw::set_property_from_patch(x, patch, buffers);
+        xw::set_property_from_patch(y, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xbars<D>::get_state() const
+    inline void xbars<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(align, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color_mode, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacities, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(orientation, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(padding, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(type, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(align, state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(color_mode, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(opacities, state, buffers);
+        xw::set_patch_from_property(orientation, state, buffers);
+        xw::set_patch_from_property(padding, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(stroke, state, buffers);
+        xw::set_patch_from_property(type, state, buffers);
+        xw::set_patch_from_property(x, state, buffers);
+        xw::set_patch_from_property(y, state, buffers);
     }
 
     template <class D>
@@ -1329,27 +1312,25 @@ namespace xpl
      ****************************/
 
     template <class D>
-    inline void xheat_map<D>::apply_patch(const xeus::xjson& patch)
+    inline void xheat_map<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(null_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(y, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(null_color, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(x, patch, buffers);
+        xw::set_property_from_patch(y, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xheat_map<D>::get_state() const
+    inline void xheat_map<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(null_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(y, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(null_color, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(x, state, buffers);
+        xw::set_patch_from_property(y, state, buffers);
     }
 
     template <class D>
@@ -1444,38 +1425,37 @@ namespace xpl
     }
 
     template <class D>
-    inline void xgrid_heat_map<D>::apply_patch(const xeus::xjson& patch)
+    inline void xgrid_heat_map<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(anchor_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(column, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(column_align, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(null_color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(opacity, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(row, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(row_align, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(anchor_style, patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(column, patch, buffers);
+        xw::set_property_from_patch(column_align, patch, buffers);
+        xw::set_property_from_patch(null_color, patch, buffers);
+        xw::set_property_from_patch(opacity, patch, buffers);
+        xw::set_property_from_patch(row, patch, buffers);
+        xw::set_property_from_patch(row_align, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(stroke, patch, buffers);
+        xw::set_property_from_patch(selected, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xgrid_heat_map<D>::get_state() const
+    inline void xgrid_heat_map<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(anchor_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(column, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(column_align, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(null_color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(opacity, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(row, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(row_align, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(anchor_style, state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(column, state, buffers);
+        xw::set_patch_from_property(column_align, state, buffers);
+        xw::set_patch_from_property(null_color, state, buffers);
+        xw::set_patch_from_property(opacity, state, buffers);
+        xw::set_patch_from_property(row, state, buffers);
+        xw::set_patch_from_property(row_align, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(stroke, state, buffers);
+        xw::set_patch_from_property(selected, state, buffers);
     }
 
     template <class D>
@@ -1546,35 +1526,33 @@ namespace xpl
     }
 
     template <class D>
-    inline void xmap<D>::apply_patch(const xeus::xjson& patch)
+    inline void xmap<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(color, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(colors, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(hover_highlight, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(hovered_styles, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(map_data, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scales_metadata, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(selected_styles, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(stroke_color, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(color, patch, buffers);
+        xw::set_property_from_patch(colors, patch, buffers);
+        xw::set_property_from_patch(hover_highlight, patch, buffers);
+        xw::set_property_from_patch(hovered_styles, patch, buffers);
+        xw::set_property_from_patch(map_data, patch, buffers);
+        xw::set_property_from_patch(scales_metadata, patch, buffers);
+        xw::set_property_from_patch(selected, patch, buffers);
+        xw::set_property_from_patch(selected_styles, patch, buffers);
+        xw::set_property_from_patch(stroke_color, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xmap<D>::get_state() const
+    inline void xmap<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(color, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(colors, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(hover_highlight, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(hovered_styles, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(map_data, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scales_metadata, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(selected_styles, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(stroke_color, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(color, state, buffers);
+        xw::set_patch_from_property(colors, state, buffers);
+        xw::set_patch_from_property(hover_highlight, state, buffers);
+        xw::set_patch_from_property(hovered_styles, state, buffers);
+        xw::set_patch_from_property(map_data, state, buffers);
+        xw::set_patch_from_property(scales_metadata, state, buffers);
+        xw::set_patch_from_property(selected, state, buffers);
+        xw::set_patch_from_property(selected_styles, state, buffers);
+        xw::set_patch_from_property(stroke_color, state, buffers);
     }
 
     template <class D>

@@ -3,7 +3,7 @@ channels:
   - QuantStack
   - conda-forge
 dependencies:
-  - xwidgets=0.9.0
+  - xwidgets=0.10.0
   - xplot=0.6.0
   - xeus-cling=0.4.2
   - bqplot=0.10.5

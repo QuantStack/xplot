@@ -32,8 +32,8 @@ namespace xpl
 
         using data_type = std::vector<xtl::xoptional<std::string>>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, fields);
         XPROPERTY(data_type, derived_type, formats);
@@ -60,25 +60,23 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline void xtooltip<D>::apply_patch(const xeus::xjson& patch)
+    inline void xtooltip<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(fields, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(formats, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(labels, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(show_labels, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(fields, patch, buffers);
+        xw::set_property_from_patch(formats, patch, buffers);
+        xw::set_property_from_patch(labels, patch, buffers);
+        xw::set_property_from_patch(show_labels, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xtooltip<D>::get_state() const
+    inline void xtooltip<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(fields, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(formats, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(labels, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(show_labels, state);
-
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(fields, state, buffers);
+        xw::set_patch_from_property(formats, state, buffers);
+        xw::set_patch_from_property(labels, state, buffers);
+        xw::set_patch_from_property(show_labels, state, buffers);
     }
 
     template <class D>

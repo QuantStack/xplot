@@ -40,8 +40,8 @@ namespace xpl
         using scales_type = xw::xholder<xscale>;
         using interaction_type = xw::xholder<xinteraction>;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::string, derived_type, title);
         XPROPERTY(axes_type, derived_type, axes);
@@ -103,49 +103,47 @@ namespace xpl
      **************************/
 
     template <class D>
-    inline void xfigure<D>::apply_patch(const xeus::xjson& patch)
+    inline void xfigure<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
 
-        XOBJECT_SET_PROPERTY_FROM_PATCH(title, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(axes, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(marks, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(interaction, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(scale_y, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(title_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(background_style, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(min_aspect_ratio, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(max_aspect_ratio, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(fig_margin, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(padding_x, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(padding_y, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(legend_location, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(animation_duration, patch);
+        xw::set_property_from_patch(title, patch, buffers);
+        xw::set_property_from_patch(axes, patch, buffers);
+        xw::set_property_from_patch(marks, patch, buffers);
+        xw::set_property_from_patch(interaction, patch, buffers);
+        xw::set_property_from_patch(scale_x, patch, buffers);
+        xw::set_property_from_patch(scale_y, patch, buffers);
+        xw::set_property_from_patch(title_style, patch, buffers);
+        xw::set_property_from_patch(background_style, patch, buffers);
+        xw::set_property_from_patch(min_aspect_ratio, patch, buffers);
+        xw::set_property_from_patch(max_aspect_ratio, patch, buffers);
+        xw::set_property_from_patch(fig_margin, patch, buffers);
+        xw::set_property_from_patch(padding_x, patch, buffers);
+        xw::set_property_from_patch(padding_y, patch, buffers);
+        xw::set_property_from_patch(legend_location, patch, buffers);
+        xw::set_property_from_patch(animation_duration, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xfigure<D>::get_state() const
+    inline void xfigure<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
+        base_type::serialize_state(state, buffers);
 
-        XOBJECT_SET_PATCH_FROM_PROPERTY(title, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(interaction, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(scale_y, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(title_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(background_style, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(min_aspect_ratio, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(max_aspect_ratio, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(fig_margin, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(padding_x, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(padding_y, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(legend_location, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(animation_duration, state);
-
-        return state;
+        xw::set_patch_from_property(title, state, buffers);
+        xw::set_patch_from_property(axes, state, buffers);
+        xw::set_patch_from_property(marks, state, buffers);
+        xw::set_patch_from_property(interaction, state, buffers);
+        xw::set_patch_from_property(scale_x, state, buffers);
+        xw::set_patch_from_property(scale_y, state, buffers);
+        xw::set_patch_from_property(title_style, state, buffers);
+        xw::set_patch_from_property(background_style, state, buffers);
+        xw::set_patch_from_property(min_aspect_ratio, state, buffers);
+        xw::set_patch_from_property(max_aspect_ratio, state, buffers);
+        xw::set_patch_from_property(fig_margin, state, buffers);
+        xw::set_patch_from_property(padding_x, state, buffers);
+        xw::set_patch_from_property(padding_y, state, buffers);
+        xw::set_patch_from_property(legend_location, state, buffers);
+        xw::set_patch_from_property(animation_duration, state, buffers);
     }
 
     template <class D>
@@ -154,8 +152,9 @@ namespace xpl
     {
         this->marks().emplace_back(xw::make_id_holder<xmark>(w.id()));
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(marks, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -164,8 +163,9 @@ namespace xpl
     {
         this->marks().emplace_back(xw::make_owning_holder(std::move(w)));
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(marks, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -182,8 +182,9 @@ namespace xpl
             this->marks().end()
         );
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(marks, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -191,8 +192,9 @@ namespace xpl
     {
         this->marks() = {};
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(marks, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(marks, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -201,8 +203,9 @@ namespace xpl
     {
         this->axes().emplace_back(xw::make_id_holder<xaxis>(w.id()));
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(axes, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -211,8 +214,9 @@ namespace xpl
     {
         this->axes().emplace_back(xw::make_owning_holder(std::move(w)));
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(axes, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -229,8 +233,9 @@ namespace xpl
             this->axes().end()
         );
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(axes, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
@@ -238,8 +243,9 @@ namespace xpl
     {
         this->axes() = {};
         xeus::xjson state;
-        XOBJECT_SET_PATCH_FROM_PROPERTY(axes, state);
-        this->send_patch(std::move(state));
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(axes, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>

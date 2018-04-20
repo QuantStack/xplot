@@ -36,8 +36,8 @@ namespace xpl
         using base_type = xw::xwidget<D>;
         using derived_type = D;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
         XPROPERTY(xw::xholder<xfigure>, derived_type, figure);
         XPROPERTY(bool, derived_type, panning);
@@ -69,22 +69,21 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline void xtoolbar<D>::apply_patch(const xeus::xjson& patch)
+    inline void xtoolbar<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(figure, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(panning, patch);
-        XOBJECT_SET_PROPERTY_FROM_PATCH(panzoom, patch);
+        base_type::apply_patch(patch, buffers);
+        xw::set_property_from_patch(figure, patch, buffers);
+        xw::set_property_from_patch(panning, patch, buffers);
+        xw::set_property_from_patch(panzoom, patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xtoolbar<D>::get_state() const
+    inline void xtoolbar<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        xeus::xjson state = base_type::get_state();
-        XOBJECT_SET_PATCH_FROM_PROPERTY(figure, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(panning, state);
-        XOBJECT_SET_PATCH_FROM_PROPERTY(panzoom, state);
-        return state;
+        base_type::serialize_state(state, buffers);
+        xw::set_patch_from_property(figure, state, buffers);
+        xw::set_patch_from_property(panning, state, buffers);
+        xw::set_patch_from_property(panzoom, state, buffers);
     }
 
     template <class D>

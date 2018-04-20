@@ -18,7 +18,6 @@
 
 namespace xpl
 {
-
     using color_type = std::string;
 
     /*********************
@@ -33,8 +32,8 @@ namespace xpl
         using base_type = xw::xobject<D>;
         using derived_type = D;
 
-        xeus::xjson get_state() const;
-        void apply_patch(const xeus::xjson& patch);
+        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
+        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
 
     protected:
 
@@ -52,15 +51,15 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xplot<D>::apply_patch(const xeus::xjson& patch)
+    inline void xplot<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
-        base_type::apply_patch(patch);
+        base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
-    inline xeus::xjson xplot<D>::get_state() const
+    inline void xplot<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
-        return base_type::get_state();
+        return base_type::serialize_state(state, buffers);
     }
 
     template <class D>
