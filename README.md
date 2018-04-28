@@ -57,6 +57,13 @@ dependencies already installed:
 cmake -D CMAKE_INSTALL_PREFIX=your_install_prefix
 make install
 ```
+
+## Documentation
+
+To get started with using `xplot`, check out the full documentation
+
+http://xplot.readthedocs.io/
+
 ## Usage
 
 ![xplot](xplot-screencast.gif)
