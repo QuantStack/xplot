@@ -14,6 +14,7 @@
 #include "xtl/xoptional.hpp"
 
 #include "xwidgets/xmaterialize.hpp"
+#include "xwidgets/xmaker.hpp"
 #include "xwidgets/xwidget.hpp"
 
 #include "xfigure.hpp"
