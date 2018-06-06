@@ -1,4 +1,4 @@
-# ![xplot](http://quantstack.net/assets/images/xplot.svg)
+# ![xplot](docs/source/xplot.svg)
 
 [![Travis](https://travis-ci.org/QuantStack/xplot.svg?branch=master)](https://travis-ci.org/QuantStack/xplot)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/733j3qm6kn3sh0b4?svg=true)](https://ci.appveyor.com/project/QuantStack/xplot)
