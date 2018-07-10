@@ -63,7 +63,10 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 set(XPLOT_TESTS
     main.cpp
+    test_xaxes.cpp
+    test_xfigure.cpp
     test_xmarks.cpp
+    test_xtoolbar.cpp
 )
 
 # Output

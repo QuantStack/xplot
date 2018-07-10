@@ -43,6 +43,15 @@ namespace xpl
 
     using interaction_generator = xw::xgenerator<xinteraction>;
 
+    template <class T, class R = void>
+    struct enable_xinteraction
+    {
+        using type = std::enable_if_t<std::is_base_of<xinteraction<T>, T>::value, R>;
+    };
+
+    template <class T, class R = void>
+    using enable_xinteraction_t = typename enable_xinteraction<T, R>::type;
+
     /*************************
      * xpan_zoom declaration *
      *************************/

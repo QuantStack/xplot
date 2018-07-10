@@ -68,6 +68,9 @@ namespace xpl
         void add_mark(xmark<T>&& w);
 
         template <class T>
+        enable_xmark_t<T> add_mark(std::shared_ptr<T> w);
+
+        template <class T>
         void remove_mark(const xmark<T>& w);
 
         void clear_marks();
@@ -77,6 +80,9 @@ namespace xpl
 
         template <class T>
         void add_axis(xaxis<T>&& w);
+
+        template <class T>
+        enable_xaxis_t<T> add_axis(std::shared_ptr<T> w);
 
         template <class T>
         void remove_axis(const xaxis<T>& w);
@@ -92,11 +98,22 @@ namespace xpl
     private:
 
         void set_defaults();
+        void send_marks_patch() const;
+        void send_axes_patch() const;
     };
 
     using figure = xw::xmaterialize<xfigure>;
 
     using figure_generator = xw::xgenerator<xfigure>;
+
+    template <class T, class R = void>
+    struct enable_xfigure
+    {
+        using type = std::enable_if_t<std::is_base_of<xfigure<T>, T>::value, R>;
+    };
+
+    template <class T, class R = void>
+    using enable_xfigure_t = typename enable_xfigure<T, R>::type;
 
     /**************************
      * xfigure implementation *
@@ -151,10 +168,7 @@ namespace xpl
     inline void xfigure<D>::add_mark(const xmark<T>& w)
     {
         this->marks().emplace_back(xw::make_id_holder<xmark>(w.id()));
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(marks, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_marks_patch();
     }
 
     template <class D>
@@ -162,10 +176,15 @@ namespace xpl
     inline void xfigure<D>::add_mark(xmark<T>&& w)
     {
         this->marks().emplace_back(xw::make_owning_holder(std::move(w)));
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(marks, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_marks_patch();
+    }
+
+    template <class D>
+    template <class T>
+    inline enable_xmark_t<T> xfigure<D>::add_mark(std::shared_ptr<T> w)
+    {
+        this->marks().emplace_back(xw::make_shared_holder<xmark, T>(w));
+        send_marks_patch();
     }
 
     template <class D>
@@ -181,20 +200,14 @@ namespace xpl
             ),
             this->marks().end()
         );
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(marks, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_marks_patch();
     }
 
     template <class D>
     inline void xfigure<D>::clear_marks()
     {
         this->marks() = {};
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(marks, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_marks_patch();
     }
 
     template <class D>
@@ -202,10 +215,7 @@ namespace xpl
     inline void xfigure<D>::add_axis(const xaxis<T>& w)
     {
         this->axes().emplace_back(xw::make_id_holder<xaxis>(w.id()));
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(axes, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_axes_patch();
     }
 
     template <class D>
@@ -213,10 +223,15 @@ namespace xpl
     inline void xfigure<D>::add_axis(xaxis<T>&& w)
     {
         this->axes().emplace_back(xw::make_owning_holder(std::move(w)));
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(axes, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_axes_patch();
+    }
+
+    template <class D>
+    template <class T>
+    inline enable_xaxis_t<T> xfigure<D>::add_axis(std::shared_ptr<T> w)
+    {
+        this->axes().emplace_back(xw::make_shared_holder<xaxis, T>(w));
+        send_axes_patch();
     }
 
     template <class D>
@@ -232,20 +247,14 @@ namespace xpl
             ),
             this->axes().end()
         );
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(axes, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_axes_patch();
     }
 
     template <class D>
     inline void xfigure<D>::clear_axes()
     {
         this->axes() = {};
-        xeus::xjson state;
-        xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(axes, state, buffers);
-        this->send_patch(std::move(state), std::move(buffers));
+        send_axes_patch();
     }
 
     template <class D>
@@ -277,6 +286,24 @@ namespace xpl
 
         this->scale_x() = std::move(sx);
         this->scale_y() = std::move(sy);
+    }
+
+    template <class D>
+    inline void xfigure<D>::send_marks_patch() const
+    {
+        xeus::xjson state;
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(marks, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
+    }
+
+    template <class D>
+    inline void xfigure<D>::send_axes_patch() const
+    {
+        xeus::xjson state;
+        xeus::buffer_sequence buffers;
+        xw::set_patch_from_property(axes, state, buffers);
+        this->send_patch(std::move(state), std::move(buffers));
     }
 }
 

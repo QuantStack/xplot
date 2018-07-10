@@ -47,6 +47,15 @@ namespace xpl
         void set_defaults();
     };
 
+    template <class T, class R = void>
+    struct enable_xscale
+    {
+        using type = std::enable_if_t<std::is_base_of<xscale<T>, T>::value, R>;
+    };
+
+    template <class T, class R = void>
+    using enable_xscale_t = typename enable_xscale<T, R>::type;
+
     /****************************
      * linear_scale declaration *
      ****************************/
