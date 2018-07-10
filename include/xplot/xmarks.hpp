@@ -102,6 +102,15 @@ namespace xpl
         void set_defaults();
     };
 
+    template <class T, class R = void>
+    struct enable_xmark
+    {
+        using type = std::enable_if_t<std::is_base_of<xmark<T>, T>::value, R>;
+    };
+
+    template <class T, class R = void>
+    using enable_xmark_t = typename enable_xmark<T, R>::type;
+
     /**********************
      * xlines declaration *
      **********************/

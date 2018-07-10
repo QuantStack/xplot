@@ -12,6 +12,28 @@
 
 namespace xpl
 {
+    TEST(xmarks, constructor)
+    {
+        linear_scale sx1, sy1;
+        sx1.mid_range = 0.9;
+        sy1.mid_range = 0.87;
+        lines l1(sx1, sy1);
+        EXPECT_EQ(l1.scales()["x"].get<linear_scale>().mid_range(), 0.9);
+        EXPECT_EQ(l1.scales()["y"].get<linear_scale>().mid_range(), 0.87);
+
+        linear_scale sx2, sy2;
+        sx2.mid_range = 0.9;
+        sy2.mid_range = 0.87;
+        lines l2(std::move(sx2), std::move(sy2));
+        EXPECT_EQ(l2.scales()["x"].get<linear_scale>().mid_range(), 0.9);
+        EXPECT_EQ(l2.scales()["y"].get<linear_scale>().mid_range(), 0.87);
+
+        auto sx3 = std::make_shared<linear_scale>();
+        sx3->mid_range = 0.9;
+        lines l3(sx3, sx3);
+        EXPECT_EQ(l3.scales()["x"].id(), l3.scales()["y"].id());
+    }
+
     TEST(xmarks, lines)
     {
         linear_scale sx, sy;

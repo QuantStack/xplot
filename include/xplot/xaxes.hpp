@@ -65,6 +65,9 @@ namespace xpl
         template <class S>
         xaxis(xscale<S>&&);
 
+        template <class S, class = enable_xscale_t<S>>
+        xaxis(std::shared_ptr<S> ptr);
+
         using base_type::base_type;
 
     private:
@@ -75,6 +78,15 @@ namespace xpl
     using axis = xw::xmaterialize<xaxis>;
 
     using axis_generator = xw::xgenerator<xaxis>;
+
+    template <class T, class R = void>
+    struct enable_xaxis
+    {
+        using type = std::enable_if_t<std::is_base_of<xaxis<T>, T>::value, R>;
+    };
+
+    template <class T, class R = void>
+    using enable_xaxis_t = typename enable_xaxis<T, R>::type;
 
     /***************************
      * xcolor_axis declaration *
@@ -98,6 +110,9 @@ namespace xpl
 
         template <class S>
         xcolor_axis(xcolor_scale<S>&&);
+
+        template <class S, class = enable_xscale_t<S>>
+        xcolor_axis(std::shared_ptr<S> ptr);
 
         using base_type::base_type;
 
@@ -179,6 +194,16 @@ namespace xpl
     }
 
     template <class D>
+    template <class S, class>
+    inline xaxis<D>::xaxis(std::shared_ptr<S> s)
+        : base_type()
+    {
+        set_defaults();
+
+        this->scale() = s;
+    }
+
+    template <class D>
     inline void xaxis<D>::set_defaults()
     {
         this->_model_name() = "AxisModel";
@@ -217,6 +242,14 @@ namespace xpl
         set_defaults();
     }
 
+    template <class D>
+    template <class S, class>
+    inline xcolor_axis<D>::xcolor_axis(std::shared_ptr<S> s)
+        : base_type(s)
+    {
+        set_defaults();
+
+    }
     template <class D>
     inline void xcolor_axis<D>::set_defaults()
     {

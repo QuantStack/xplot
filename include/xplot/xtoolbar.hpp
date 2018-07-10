@@ -52,6 +52,9 @@ namespace xpl
         template <class S>
         xtoolbar(xfigure<S>&&);
 
+        template <class S, class = enable_xfigure_t<S>>
+        xtoolbar(std::shared_ptr<S>);
+
         using base_type::base_type;
 
     private:
@@ -104,6 +107,15 @@ namespace xpl
     {
         set_defaults();
         this->figure() = std::move(fig);
+    }
+
+    template <class D>
+    template <class S, class>
+    inline xtoolbar<D>::xtoolbar(std::shared_ptr<S> fig)
+        : base_type()
+    {
+        set_defaults();
+        this->figure() = fig;
     }
 
     template <class D>
