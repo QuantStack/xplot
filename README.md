@@ -3,7 +3,7 @@
 [![Travis](https://travis-ci.org/QuantStack/xplot.svg?branch=master)](https://travis-ci.org/QuantStack/xplot)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/733j3qm6kn3sh0b4?svg=true)](https://ci.appveyor.com/project/QuantStack/xplot)
 [![Documentation](http://readthedocs.org/projects/xplot/badge/?version=latest)](https://xplot.readthedocs.io/en/latest/?badge=latest)
-[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/QuantStack/xplot/0.8.0?filepath=notebooks)
+[![Binder](https://img.shields.io/badge/launch-binder-brightgreen.svg)](https://mybinder.org/v2/gh/QuantStack/xplot/stable?filepath=notebooks)
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 C++ backend for the bqplot 2-D plotting library.
@@ -61,7 +61,7 @@ make install
 To try out xtensor interactively in your web browser, just click on the binder
 link:
 
-[![Binder](docs/source/binder-logo.svg)](https://mybinder.org/v2/gh/QuantStack/xplot/0.8.0?filepath=notebooks)
+[![Binder](docs/source/binder-logo.svg)](https://mybinder.org/v2/gh/QuantStack/xplot/stable?filepath=notebooks)
 
 ## Documentation
 
@@ -80,6 +80,7 @@ All the dependencies of xplot are available for the conda package manager.
 | `xplot` | `xwidgets`  |  `xeus`         |
 |---------|-------------|-----------------|
 |  master |   ~0.13.0   |  >=0.13.0,<0.14 |
+|  0.9.0  |   ~0.13.0   |  >=0.13.0,<0.14 |
 |  0.8.0  |   ~0.12.2   |  >=0.13.0,<0.14 |
 |  0.7.0  |   ~0.10.0   |  >=0.12.0,<0.13 |
 |  0.6.0  |   ~0.9.0    |  >=0.12.0,<0.13 |
