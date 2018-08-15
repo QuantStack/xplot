@@ -132,45 +132,47 @@ namespace xpl
     template <class D>
     inline void xaxis<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
+        using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
 
-        xw::set_property_from_patch(orientation, patch, buffers);
-        xw::set_property_from_patch(side, patch, buffers);
-        xw::set_property_from_patch(label, patch, buffers);
-        xw::set_property_from_patch(tick_format, patch, buffers);
-        xw::set_property_from_patch(scale, patch, buffers);
-        xw::set_property_from_patch(num_ticks, patch, buffers);
-        xw::set_property_from_patch(tick_values, patch, buffers);
-        xw::set_property_from_patch(offset, patch, buffers);
-        xw::set_property_from_patch(label_location, patch, buffers);
-        xw::set_property_from_patch(label_color, patch, buffers);
-        xw::set_property_from_patch(grid_lines, patch, buffers);
-        xw::set_property_from_patch(grid_color, patch, buffers);
-        xw::set_property_from_patch(color, patch, buffers);
-        xw::set_property_from_patch(label_offset, patch, buffers);
-        xw::set_property_from_patch(visible, patch, buffers);
+        set_property_from_patch(orientation, patch, buffers);
+        set_property_from_patch(side, patch, buffers);
+        set_property_from_patch(label, patch, buffers);
+        set_property_from_patch(tick_format, patch, buffers);
+        set_property_from_patch(scale, patch, buffers);
+        set_property_from_patch(num_ticks, patch, buffers);
+        set_property_from_patch(tick_values, patch, buffers);
+        set_property_from_patch(offset, patch, buffers);
+        set_property_from_patch(label_location, patch, buffers);
+        set_property_from_patch(label_color, patch, buffers);
+        set_property_from_patch(grid_lines, patch, buffers);
+        set_property_from_patch(grid_color, patch, buffers);
+        set_property_from_patch(color, patch, buffers);
+        set_property_from_patch(label_offset, patch, buffers);
+        set_property_from_patch(visible, patch, buffers);
     }
 
     template <class D>
     inline void xaxis<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
+        using xw::set_patch_from_property;
         base_type::serialize_state(state, buffers);
 
-        xw::set_patch_from_property(orientation, state, buffers);
-        xw::set_patch_from_property(side, state, buffers);
-        xw::set_patch_from_property(label, state, buffers);
-        xw::set_patch_from_property(tick_format, state, buffers);
-        xw::set_patch_from_property(scale, state, buffers);
-        xw::set_patch_from_property(num_ticks, state, buffers);
-        xw::set_patch_from_property(tick_values, state, buffers);
-        xw::set_patch_from_property(offset, state, buffers);
-        xw::set_patch_from_property(label_location, state, buffers);
-        xw::set_patch_from_property(label_color, state, buffers);
-        xw::set_patch_from_property(grid_lines, state, buffers);
-        xw::set_patch_from_property(grid_color, state, buffers);
-        xw::set_patch_from_property(color, state, buffers);
-        xw::set_patch_from_property(label_offset, state, buffers);
-        xw::set_patch_from_property(visible, state, buffers);
+        set_patch_from_property(orientation, state, buffers);
+        set_patch_from_property(side, state, buffers);
+        set_patch_from_property(label, state, buffers);
+        set_patch_from_property(tick_format, state, buffers);
+        set_patch_from_property(scale, state, buffers);
+        set_patch_from_property(num_ticks, state, buffers);
+        set_patch_from_property(tick_values, state, buffers);
+        set_patch_from_property(offset, state, buffers);
+        set_patch_from_property(label_location, state, buffers);
+        set_patch_from_property(label_color, state, buffers);
+        set_patch_from_property(grid_lines, state, buffers);
+        set_patch_from_property(grid_color, state, buffers);
+        set_patch_from_property(color, state, buffers);
+        set_patch_from_property(label_offset, state, buffers);
+        set_patch_from_property(visible, state, buffers);
     }
 
     template <class D>
@@ -217,12 +219,14 @@ namespace xpl
     template <class D>
     inline void xcolor_axis<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
+        using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
     inline void xcolor_axis<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
+        using xw::set_patch_from_property;
         base_type::serialize_state(state, buffers);
     }
 

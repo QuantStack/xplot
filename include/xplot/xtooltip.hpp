@@ -62,21 +62,23 @@ namespace xpl
     template <class D>
     inline void xtooltip<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
+        using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
-        xw::set_property_from_patch(fields, patch, buffers);
-        xw::set_property_from_patch(formats, patch, buffers);
-        xw::set_property_from_patch(labels, patch, buffers);
-        xw::set_property_from_patch(show_labels, patch, buffers);
+        set_property_from_patch(fields, patch, buffers);
+        set_property_from_patch(formats, patch, buffers);
+        set_property_from_patch(labels, patch, buffers);
+        set_property_from_patch(show_labels, patch, buffers);
     }
 
     template <class D>
     inline void xtooltip<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
+        using xw::set_patch_from_property;
         base_type::serialize_state(state, buffers);
-        xw::set_patch_from_property(fields, state, buffers);
-        xw::set_patch_from_property(formats, state, buffers);
-        xw::set_patch_from_property(labels, state, buffers);
-        xw::set_patch_from_property(show_labels, state, buffers);
+        set_patch_from_property(fields, state, buffers);
+        set_patch_from_property(formats, state, buffers);
+        set_patch_from_property(labels, state, buffers);
+        set_patch_from_property(show_labels, state, buffers);
     }
 
     template <class D>
