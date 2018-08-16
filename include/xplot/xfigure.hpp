@@ -122,45 +122,47 @@ namespace xpl
     template <class D>
     inline void xfigure<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
+        using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
 
-        xw::set_property_from_patch(title, patch, buffers);
-        xw::set_property_from_patch(axes, patch, buffers);
-        xw::set_property_from_patch(marks, patch, buffers);
-        xw::set_property_from_patch(interaction, patch, buffers);
-        xw::set_property_from_patch(scale_x, patch, buffers);
-        xw::set_property_from_patch(scale_y, patch, buffers);
-        xw::set_property_from_patch(title_style, patch, buffers);
-        xw::set_property_from_patch(background_style, patch, buffers);
-        xw::set_property_from_patch(min_aspect_ratio, patch, buffers);
-        xw::set_property_from_patch(max_aspect_ratio, patch, buffers);
-        xw::set_property_from_patch(fig_margin, patch, buffers);
-        xw::set_property_from_patch(padding_x, patch, buffers);
-        xw::set_property_from_patch(padding_y, patch, buffers);
-        xw::set_property_from_patch(legend_location, patch, buffers);
-        xw::set_property_from_patch(animation_duration, patch, buffers);
+        set_property_from_patch(title, patch, buffers);
+        set_property_from_patch(axes, patch, buffers);
+        set_property_from_patch(marks, patch, buffers);
+        set_property_from_patch(interaction, patch, buffers);
+        set_property_from_patch(scale_x, patch, buffers);
+        set_property_from_patch(scale_y, patch, buffers);
+        set_property_from_patch(title_style, patch, buffers);
+        set_property_from_patch(background_style, patch, buffers);
+        set_property_from_patch(min_aspect_ratio, patch, buffers);
+        set_property_from_patch(max_aspect_ratio, patch, buffers);
+        set_property_from_patch(fig_margin, patch, buffers);
+        set_property_from_patch(padding_x, patch, buffers);
+        set_property_from_patch(padding_y, patch, buffers);
+        set_property_from_patch(legend_location, patch, buffers);
+        set_property_from_patch(animation_duration, patch, buffers);
     }
 
     template <class D>
     inline void xfigure<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
+        using xw::set_patch_from_property;
         base_type::serialize_state(state, buffers);
 
-        xw::set_patch_from_property(title, state, buffers);
-        xw::set_patch_from_property(axes, state, buffers);
-        xw::set_patch_from_property(marks, state, buffers);
-        xw::set_patch_from_property(interaction, state, buffers);
-        xw::set_patch_from_property(scale_x, state, buffers);
-        xw::set_patch_from_property(scale_y, state, buffers);
-        xw::set_patch_from_property(title_style, state, buffers);
-        xw::set_patch_from_property(background_style, state, buffers);
-        xw::set_patch_from_property(min_aspect_ratio, state, buffers);
-        xw::set_patch_from_property(max_aspect_ratio, state, buffers);
-        xw::set_patch_from_property(fig_margin, state, buffers);
-        xw::set_patch_from_property(padding_x, state, buffers);
-        xw::set_patch_from_property(padding_y, state, buffers);
-        xw::set_patch_from_property(legend_location, state, buffers);
-        xw::set_patch_from_property(animation_duration, state, buffers);
+        set_patch_from_property(title, state, buffers);
+        set_patch_from_property(axes, state, buffers);
+        set_patch_from_property(marks, state, buffers);
+        set_patch_from_property(interaction, state, buffers);
+        set_patch_from_property(scale_x, state, buffers);
+        set_patch_from_property(scale_y, state, buffers);
+        set_patch_from_property(title_style, state, buffers);
+        set_patch_from_property(background_style, state, buffers);
+        set_patch_from_property(min_aspect_ratio, state, buffers);
+        set_patch_from_property(max_aspect_ratio, state, buffers);
+        set_patch_from_property(fig_margin, state, buffers);
+        set_patch_from_property(padding_x, state, buffers);
+        set_patch_from_property(padding_y, state, buffers);
+        set_patch_from_property(legend_location, state, buffers);
+        set_patch_from_property(animation_duration, state, buffers);
     }
 
     template <class D>
@@ -291,18 +293,20 @@ namespace xpl
     template <class D>
     inline void xfigure<D>::send_marks_patch() const
     {
+        using xw::set_patch_from_property;
         xeus::xjson state;
         xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(marks, state, buffers);
+        set_patch_from_property(marks, state, buffers);
         this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
     inline void xfigure<D>::send_axes_patch() const
     {
+        using xw::set_patch_from_property;
         xeus::xjson state;
         xeus::buffer_sequence buffers;
-        xw::set_patch_from_property(axes, state, buffers);
+        set_patch_from_property(axes, state, buffers);
         this->send_patch(std::move(state), std::move(buffers));
     }
 }

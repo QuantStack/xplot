@@ -93,12 +93,14 @@ namespace xpl
     template <class D>
     inline void xinteraction<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
+        using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
     inline void xinteraction<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
+        using xw::set_patch_from_property;
         base_type::serialize_state(state, buffers);
     }
 
@@ -123,19 +125,21 @@ namespace xpl
     template <class D>
     inline void xpan_zoom<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
     {
+        using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
-        xw::set_property_from_patch(allow_pan, patch, buffers);
-        xw::set_property_from_patch(allow_zoom, patch, buffers);
-        xw::set_property_from_patch(scales, patch, buffers);
+        set_property_from_patch(allow_pan, patch, buffers);
+        set_property_from_patch(allow_zoom, patch, buffers);
+        set_property_from_patch(scales, patch, buffers);
     }
 
     template <class D>
     inline void xpan_zoom<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
     {
+        using xw::set_patch_from_property;
         base_type::serialize_state(state, buffers);
-        xw::set_patch_from_property(allow_pan, state, buffers);
-        xw::set_patch_from_property(allow_zoom, state, buffers);
-        xw::set_patch_from_property(scales, state, buffers);
+        set_patch_from_property(allow_pan, state, buffers);
+        set_patch_from_property(allow_zoom, state, buffers);
+        set_patch_from_property(scales, state, buffers);
     }
 
     template <class D>
