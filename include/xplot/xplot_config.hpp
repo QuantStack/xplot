@@ -23,7 +23,7 @@
 // Project version
 #define XPLOT_VERSION_MAJOR 0
 #define XPLOT_VERSION_MINOR 9
-#define XPLOT_VERSION_PATCH 0
+#define XPLOT_VERSION_PATCH 1
 
 // Binary version
 #define XPLOT_BINARY_CURRENT 1
@@ -32,8 +32,8 @@
 
 // Semver requirement for bqplot
 #define XBQPLOT_VERSION_MAJOR 0
-#define XBQPLOT_VERSION_MINOR 3
-#define XBQPLOT_VERSION_PATCH 6
+#define XBQPLOT_VERSION_MINOR 4
+#define XBQPLOT_VERSION_PATCH 0
 
 // Composing the version strings from major, minor and patch
 #define XPLOT_CONCATENATE(A, B) XPLOT_CONCATENATE_IMPL(A, B)
