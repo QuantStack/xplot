@@ -125,10 +125,10 @@ namespace xpl
     {
         this->_view_name() = "Toolbar";
         this->_model_module() = "bqplot";
-        this->_model_module_version() = "^0.3.0";
+        this->_model_module_version() = XBQPLOT_VERSION;
         this->_model_name() = "ToolbarModel";
         this->_view_module() = "bqplot";
-        this->_view_module_version() = "^0.3.0";
+        this->_view_module_version() = XBQPLOT_VERSION;
     }
 
     template <class D>
