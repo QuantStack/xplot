@@ -38,10 +38,14 @@ namespace xpl
         xboxed_container& operator=(xboxed_container&&) = default;
 
         xboxed_container(const_reference c);
+        template <class T>
+        xboxed_container(const T& c);
         xboxed_container(container_type&& c);
 
         xboxed_container& operator=(const_reference c);
         xboxed_container& operator=(container_type&& c);
+        template <class T>
+        xboxed_container& operator=(const T& c);
 
         operator reference() noexcept;
         operator const_reference() const noexcept;
@@ -70,6 +74,13 @@ namespace xpl
     }
 
     template <class C>
+    template <class T>
+    inline xboxed_container<C>::xboxed_container(const T& c)
+        : m_container(c.begin(), c.end())
+    {
+    }
+
+    template <class C>
     inline xboxed_container<C>::xboxed_container(container_type&& c)
         : m_container(std::move(c))
     {
@@ -86,6 +97,15 @@ namespace xpl
     inline xboxed_container<C>& xboxed_container<C>::operator=(container_type&& c)
     {
         m_container = std::move(c);
+        return *this;
+    }
+
+    template <class C>
+    template <class T>
+    inline xboxed_container<C>& xboxed_container<C>::operator=(const T& c)
+    {
+        m_container.resize(c.size());
+        std::copy(c.begin(), c.end(), m_container.begin());
         return *this;
     }
 
