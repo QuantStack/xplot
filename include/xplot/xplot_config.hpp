@@ -33,7 +33,7 @@
 // Semver requirement for bqplot
 #define XBQPLOT_VERSION_MAJOR 0
 #define XBQPLOT_VERSION_MINOR 4
-#define XBQPLOT_VERSION_PATCH 1
+#define XBQPLOT_VERSION_PATCH 2
 
 // Composing the version strings from major, minor and patch
 #define XPLOT_CONCATENATE(A, B) XPLOT_CONCATENATE_IMPL(A, B)
