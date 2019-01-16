@@ -9,6 +9,8 @@
 #ifndef XPLOT_CONFIG_HPP
 #define XPLOT_CONFIG_HPP
 
+#include <string>
+
 // Visual C++ declspec macros
 #ifdef _WIN32
     #ifdef XPLOT_EXPORTS
@@ -33,7 +35,7 @@
 // Semver requirement for bqplot
 #define XBQPLOT_VERSION_MAJOR 0
 #define XBQPLOT_VERSION_MINOR 4
-#define XBQPLOT_VERSION_PATCH 2
+#define XBQPLOT_VERSION_PATCH 3
 
 // Composing the version strings from major, minor and patch
 #define XPLOT_CONCATENATE(A, B) XPLOT_CONCATENATE_IMPL(A, B)
@@ -44,6 +46,11 @@
 #define XBQPLOT_VERSION XPLOT_STRINGIFY(XPLOT_CONCATENATE(XBQPLOT_VERSION_MAJOR,   \
                     XPLOT_CONCATENATE(.,XPLOT_CONCATENATE(XBQPLOT_VERSION_MINOR,   \
                                       XPLOT_CONCATENATE(.,XBQPLOT_VERSION_PATCH)))))
+
+inline std::string bqplot_semver()
+{
+    return std::string("^") + XBQPLOT_VERSION;
+}
 
 #ifdef __CLING__
 #include "xplot_config_cling.hpp"

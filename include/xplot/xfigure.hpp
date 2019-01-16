@@ -273,8 +273,8 @@ namespace xpl
         this->_model_module() = "bqplot";
         this->_view_name() = "Figure";
         this->_view_module() = "bqplot";
-        this->_model_module_version() = XBQPLOT_VERSION;
-        this->_view_module_version() = XBQPLOT_VERSION;
+        this->_model_module_version() = bqplot_semver();
+        this->_view_module_version() = bqplot_semver();
 
         linear_scale sx;
         sx.min = 0.0;
