@@ -24,7 +24,7 @@
 
 // Project version
 #define XPLOT_VERSION_MAJOR 0
-#define XPLOT_VERSION_MINOR 10
+#define XPLOT_VERSION_MINOR 11
 #define XPLOT_VERSION_PATCH 0
 
 // Binary version

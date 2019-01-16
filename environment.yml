@@ -4,7 +4,7 @@ channels:
   - conda-forge
 dependencies:
   - xwidgets=0.16.0
-  - xplot=0.10.0
+  - xplot=0.11.0
   - xeus-cling=0.4.10
   - bqplot=0.11.3
   - notebook >=5.4
