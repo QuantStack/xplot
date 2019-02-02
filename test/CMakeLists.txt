@@ -12,10 +12,10 @@ message(STATUS "Forcing tests build type to Release")
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
 
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    project(xwidgets-test)
+    project(xplot-test)
 
-    find_package(xwidgets REQUIRED CONFIG)
-    set(XWIDGETS_INCLUDE_DIR ${xwidgets_INCLUDE_DIRS})
+    find_package(xplot REQUIRED CONFIG)
+    set(XPLOT_INCLUDE_DIR ${xplot_INCLUDE_DIRS})
 endif ()
 
 # Dependencies
@@ -45,10 +45,10 @@ if(DOWNLOAD_GTEST OR GTEST_SRC_DIR)
     # Add googletest directly to our build. This defines
     # the gtest and gtest_main targets.
     add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
-                     ${CMAKE_CURRENT_BINARY_DIR}/googletest-build)
+                     ${CMAKE_CURRENT_BINARY_DIR}/googletest-build EXCLUDE_FROM_ALL)
 
     set(GTEST_INCLUDE_DIRS "${gtest_SOURCE_DIR}/include")
-    set(GTEST_BOTH_LIBRARIES  gtest_main gtest)
+    set(GTEST_BOTH_LIBRARIES gtest_main gtest)
 else()
     find_package(GTest REQUIRED)
 endif()
@@ -81,20 +81,18 @@ if("${isSystemDir}" STREQUAL "-1")
     set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif("${isSystemDir}" STREQUAL "-1")
 
-set(XPLOT_TEST_TARGET test_xplot)
-
-add_executable(${XPLOT_TEST_TARGET} ${XPLOT_TESTS} ${XPLOT_HEADERS})
+add_executable(test_xplot ${XPLOT_TESTS} ${XPLOT_HEADERS})
 if(DOWNLOAD_GTEST OR GTEST_SRC_DIR)
-    add_dependencies(${XPLOT_TEST_TARGET} gtest_main)
+    add_dependencies(test_xplot gtest_main)
 endif()
 
-target_compile_features(${XPLOT_TEST_TARGET} PRIVATE cxx_std_14)
+target_compile_features(test_xplot PRIVATE cxx_std_14)
 
-target_link_libraries(${XPLOT_TEST_TARGET}
-                        PUBLIC xtl
-                        PUBLIC xeus
-                        PUBLIC xwidgets
-                        PUBLIC xplot
-                        PRIVATE ${GTEST_BOTH_LIBRARIES}
-                        PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(test_xplot
+                      PUBLIC xtl
+                      PUBLIC xeus
+                      PUBLIC xwidgets
+                      PUBLIC xplot
+                      PRIVATE ${GTEST_BOTH_LIBRARIES}
+                      PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
