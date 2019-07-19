@@ -74,8 +74,8 @@ message(STATUS "xplot binary version: v${XPLOT_BINARY_VERSION}")
 
 find_package(cppzmq 4.3.0 REQUIRED)
 find_package(xtl 0.6.5 REQUIRED)
-find_package(xeus 0.20.0 REQUIRED)
-find_package(xwidgets 0.18.0 REQUIRED)
+find_package(xeus 0.21.1 REQUIRED)
+find_package(xwidgets 0.19.0 REQUIRED)
 
 # Source files
 # ============
