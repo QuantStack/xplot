@@ -13,6 +13,8 @@
 #include <utility>
 #include <vector>
 
+#include "nlohmann/json.hpp"
+
 #include "xtl/xoptional.hpp"
 
 #include "xwidgets/xeither.hpp"
@@ -20,6 +22,8 @@
 #include "xplot.hpp"
 #include "xscales.hpp"
 #include "xinteracts.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -38,8 +42,8 @@ namespace xpl
         using scale_type = xw::xholder<xscale>;
         using tick_values_type = std::vector<double>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::string, derived_type, orientation, "horizontal", XEITHER("horizontal", "vertical"));
         XPROPERTY(xtl::xoptional<std::string>, derived_type, side, xtl::missing<std::string>(), XEITHER_OPTIONAL("bottom", "top", "left", "right"));
@@ -48,8 +52,8 @@ namespace xpl
         XPROPERTY(xtl::xoptional<std::string>, derived_type, tick_format);
         XPROPERTY(scale_type, derived_type, scale);
         XPROPERTY(xtl::xoptional<int>, derived_type, num_ticks);
-        XPROPERTY(::xeus::xjson, derived_type, tick_values, xeus::xjson::array());
-        XPROPERTY(::xeus::xjson, derived_type, offset, ::xeus::xjson::object());
+        XPROPERTY(::nl::json, derived_type, tick_values, nl::json::array());
+        XPROPERTY(::nl::json, derived_type, offset, ::nl::json::object());
         XPROPERTY(std::string, derived_type, label_location, "middle", XEITHER("middle", "start", "end"));
         XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, grid_color);
@@ -77,8 +81,6 @@ namespace xpl
 
     using axis = xw::xmaterialize<xaxis>;
 
-    using axis_generator = xw::xgenerator<xaxis>;
-
     template <class T, class R = void>
     struct enable_xaxis
     {
@@ -100,8 +102,8 @@ namespace xpl
         using base_type = xaxis<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
     protected:
 
@@ -123,14 +125,12 @@ namespace xpl
 
     using color_axis = xw::xmaterialize<xcolor_axis>;
 
-    using color_axis_generator = xw::xgenerator<xcolor_axis>;
-
     /***********************
      * axis implementation *
      ***********************/
 
     template <class D>
-    inline void xaxis<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xaxis<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -153,26 +153,26 @@ namespace xpl
     }
 
     template <class D>
-    inline void xaxis<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xaxis<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(orientation, state, buffers);
-        set_patch_from_property(side, state, buffers);
-        set_patch_from_property(label, state, buffers);
-        set_patch_from_property(tick_format, state, buffers);
-        set_patch_from_property(scale, state, buffers);
-        set_patch_from_property(num_ticks, state, buffers);
-        set_patch_from_property(tick_values, state, buffers);
-        set_patch_from_property(offset, state, buffers);
-        set_patch_from_property(label_location, state, buffers);
-        set_patch_from_property(label_color, state, buffers);
-        set_patch_from_property(grid_lines, state, buffers);
-        set_patch_from_property(grid_color, state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(label_offset, state, buffers);
-        set_patch_from_property(visible, state, buffers);
+        xwidgets_serialize(orientation, state["orientation"], buffers);
+        xwidgets_serialize(side, state["side"], buffers);
+        xwidgets_serialize(label, state["label"], buffers);
+        xwidgets_serialize(tick_format, state["tick_format"], buffers);
+        // xwidgets_serialize(scale, state["scale"], buffers);
+        xwidgets_serialize(num_ticks, state["num_ticks"], buffers);
+        xwidgets_serialize(tick_values, state["tick_values"], buffers);
+        xwidgets_serialize(offset, state["offset"], buffers);
+        xwidgets_serialize(label_location, state["label_location"], buffers);
+        xwidgets_serialize(label_color, state["label_color"], buffers);
+        xwidgets_serialize(grid_lines, state["grid_lines"], buffers);
+        xwidgets_serialize(grid_color, state["grid_color"], buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(label_offset, state["label_offset"], buffers);
+        xwidgets_serialize(visible, state["visible"], buffers);
     }
 
     template <class D>
@@ -217,16 +217,16 @@ namespace xpl
      ******************************/
 
     template <class D>
-    inline void xcolor_axis<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xcolor_axis<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
-    inline void xcolor_axis<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xcolor_axis<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
     }
 
@@ -269,13 +269,9 @@ namespace xpl
 #ifndef _WIN32
     extern template class xw::xmaterialize<xpl::xaxis>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xaxis>>;
-    extern template class xw::xgenerator<xpl::xaxis>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xaxis>>;
 
     extern template class xw::xmaterialize<xpl::xcolor_axis>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xcolor_axis>>;
-    extern template class xw::xgenerator<xpl::xcolor_axis>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xcolor_axis>>;
 #endif
 
 #endif

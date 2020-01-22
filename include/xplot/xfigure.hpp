@@ -13,6 +13,10 @@
 #include <vector>
 #include <utility>
 
+#include "nlohmann/json.hpp"
+
+#include "xproperty/xjson.hpp" 
+
 #include "xwidgets/xeither.hpp"
 #include "xwidgets/xwidget.hpp"
 
@@ -20,6 +24,8 @@
 #include "xmarks.hpp"
 #include "xplot_config.hpp"
 #include "xscales.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -40,8 +46,8 @@ namespace xpl
         using scales_type = xw::xholder<xscale>;
         using interaction_type = xw::xholder<xinteraction>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::string, derived_type, title);
         XPROPERTY(axes_type, derived_type, axes);
@@ -49,11 +55,11 @@ namespace xpl
         XPROPERTY(xtl::xoptional<interaction_type>, derived_type, interaction);
         XPROPERTY(scales_type, derived_type, scale_x);
         XPROPERTY(scales_type, derived_type, scale_y);
-        XPROPERTY(::xeus::xjson, derived_type, title_style);
-        XPROPERTY(::xeus::xjson, derived_type, background_style);
+        XPROPERTY(::nl::json, derived_type, title_style);
+        XPROPERTY(::nl::json, derived_type, background_style);
         XPROPERTY(double, derived_type, min_aspect_ratio, 1.);
         XPROPERTY(double, derived_type, max_aspect_ratio, 6.);
-        XPROPERTY(::xeus::xjson, derived_type, fig_margin, xeus::xjson({
+        XPROPERTY(::nl::json, derived_type, fig_margin, nl::json({
            {"top", 60}, {"bottom", 60}, {"left", 60}, {"right", 60}
         }));
         XPROPERTY(double, derived_type, padding_x, 0.);
@@ -104,8 +110,6 @@ namespace xpl
 
     using figure = xw::xmaterialize<xfigure>;
 
-    using figure_generator = xw::xgenerator<xfigure>;
-
     template <class T, class R = void>
     struct enable_xfigure
     {
@@ -120,7 +124,7 @@ namespace xpl
      **************************/
 
     template <class D>
-    inline void xfigure<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xfigure<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -143,26 +147,26 @@ namespace xpl
     }
 
     template <class D>
-    inline void xfigure<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xfigure<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(title, state, buffers);
-        set_patch_from_property(axes, state, buffers);
-        set_patch_from_property(marks, state, buffers);
-        set_patch_from_property(interaction, state, buffers);
-        set_patch_from_property(scale_x, state, buffers);
-        set_patch_from_property(scale_y, state, buffers);
-        set_patch_from_property(title_style, state, buffers);
-        set_patch_from_property(background_style, state, buffers);
-        set_patch_from_property(min_aspect_ratio, state, buffers);
-        set_patch_from_property(max_aspect_ratio, state, buffers);
-        set_patch_from_property(fig_margin, state, buffers);
-        set_patch_from_property(padding_x, state, buffers);
-        set_patch_from_property(padding_y, state, buffers);
-        set_patch_from_property(legend_location, state, buffers);
-        set_patch_from_property(animation_duration, state, buffers);
+        xwidgets_serialize(title, state["title"], buffers);
+        xwidgets_serialize(axes, state["axes"], buffers);
+        xwidgets_serialize(marks, state["marks"], buffers);
+        xwidgets_serialize(interaction, state["interaction"], buffers);
+        xwidgets_serialize(scale_x, state["scale_x"], buffers);
+        xwidgets_serialize(scale_y, state["scale_y"], buffers);
+        xwidgets_serialize(title_style, state["title_style"], buffers);
+        xwidgets_serialize(background_style, state["background_style"], buffers);
+        xwidgets_serialize(min_aspect_ratio, state["min_aspect_ratio"], buffers);
+        xwidgets_serialize(max_aspect_ratio, state["max_aspect_ratio"], buffers);
+        xwidgets_serialize(fig_margin, state["fig_margin"], buffers);
+        xwidgets_serialize(padding_x, state["padding_x"], buffers);
+        xwidgets_serialize(padding_y, state["padding_y"], buffers);
+        xwidgets_serialize(legend_location, state["legend_location"], buffers);
+        xwidgets_serialize(animation_duration, state["animation_duration"], buffers);
     }
 
     template <class D>
@@ -293,20 +297,20 @@ namespace xpl
     template <class D>
     inline void xfigure<D>::send_marks_patch() const
     {
-        using xw::set_patch_from_property;
-        xeus::xjson state;
+        using xw::xwidgets_serialize;
+        nl::json state;
         xeus::buffer_sequence buffers;
-        set_patch_from_property(marks, state, buffers);
+        xwidgets_serialize(marks, state["marks"], buffers);
         this->send_patch(std::move(state), std::move(buffers));
     }
 
     template <class D>
     inline void xfigure<D>::send_axes_patch() const
     {
-        using xw::set_patch_from_property;
-        xeus::xjson state;
+        using xw::xwidgets_serialize;
+        nl::json state;
         xeus::buffer_sequence buffers;
-        set_patch_from_property(axes, state, buffers);
+        xwidgets_serialize(axes, state["axes"], buffers);
         this->send_patch(std::move(state), std::move(buffers));
     }
 }
@@ -319,9 +323,6 @@ namespace xpl
     extern template class xw::xmaterialize<xpl::xfigure>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xfigure>>;
     extern template xw::xmaterialize<xpl::xfigure>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xfigure>;
-    extern template xw::xgenerator<xpl::xfigure>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xfigure>>;
 #endif
 
 #endif

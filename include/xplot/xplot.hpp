@@ -11,10 +11,14 @@
 
 #include <string>
 
+#include "nlohmann/json.hpp"
+
 #include "xwidgets/xmaterialize.hpp"
 #include "xwidgets/xobject.hpp"
 
 #include "xplot_config.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -32,8 +36,8 @@ namespace xpl
         using base_type = xw::xobject<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
     protected:
 
@@ -51,16 +55,16 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xplot<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xplot<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
-    inline void xplot<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xplot<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
     }
 
