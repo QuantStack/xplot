@@ -12,9 +12,15 @@
 #include <string>
 #include <vector>
 
+#include "nlohmann/json.hpp"
+
+#include "xproperty/xjson.hpp" 
+
 #include "xwidgets/xwidget.hpp"
 
 #include "xplot_config.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -32,8 +38,8 @@ namespace xpl
 
         using data_type = std::vector<xtl::xoptional<std::string>>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, fields);
         XPROPERTY(data_type, derived_type, formats);
@@ -53,14 +59,12 @@ namespace xpl
 
     using tooltip = xw::xmaterialize<xtooltip>;
 
-    using tooltip_generator = xw::xgenerator<xtooltip>;
-
     /***************************
      * xtooltip implementation *
      ***************************/
 
     template <class D>
-    inline void xtooltip<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xtooltip<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -71,14 +75,14 @@ namespace xpl
     }
 
     template <class D>
-    inline void xtooltip<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xtooltip<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(fields, state, buffers);
-        set_patch_from_property(formats, state, buffers);
-        set_patch_from_property(labels, state, buffers);
-        set_patch_from_property(show_labels, state, buffers);
+        xwidgets_serialize(fields, state["fields"], buffers);
+        xwidgets_serialize(formats, state["formats"], buffers);
+        xwidgets_serialize(labels, state["labels"], buffers);
+        xwidgets_serialize(show_labels, state["show_labels"], buffers);
     }
 
     template <class D>
@@ -108,9 +112,6 @@ namespace xpl
     extern template class xw::xmaterialize<xpl::xtooltip>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xtooltip>>;
     extern template xw::xmaterialize<xpl::xtooltip>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xtooltip>;
-    extern template xw::xgenerator<xpl::xtooltip>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xtooltip>>;
 #endif
 
 #endif

@@ -11,6 +11,8 @@
 
 #include <utility>
 
+#include "nlohmann/json.hpp"
+
 #include "xtl/xoptional.hpp"
 
 #include "xwidgets/xmaterialize.hpp"
@@ -19,6 +21,8 @@
 
 #include "xfigure.hpp"
 #include "xinteracts.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -37,8 +41,8 @@ namespace xpl
         using base_type = xw::xwidget<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(xw::xholder<xfigure>, derived_type, figure);
         XPROPERTY(bool, derived_type, panning);
@@ -66,14 +70,12 @@ namespace xpl
 
     using toolbar = xw::xmaterialize<xtoolbar>;
 
-    using toolbar_generator = xw::xgenerator<xtoolbar>;
-
     /***************************
      * xtoolbar implementation *
      ***************************/
 
     template <class D>
-    inline void xtoolbar<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xtoolbar<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -83,13 +85,13 @@ namespace xpl
     }
 
     template <class D>
-    inline void xtoolbar<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xtoolbar<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(figure, state, buffers);
-        set_patch_from_property(panning, state, buffers);
-        set_patch_from_property(panzoom, state, buffers);
+        xwidgets_serialize(figure, state["figure"], buffers);
+        xwidgets_serialize(panning, state["panning"], buffers);
+        xwidgets_serialize(panzoom, state["panzoom"], buffers);
     }
 
     template <class D>
@@ -150,8 +152,6 @@ namespace xpl
 #ifndef _WIN32
     extern template class xw::xmaterialize<xpl::xtoolbar>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xtoolbar>>;
-    extern template class xw::xgenerator<xpl::xtoolbar>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xtoolbar>>;
 #endif
 
 #endif

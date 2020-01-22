@@ -16,6 +16,10 @@
 #include <string>
 #include <vector>
 
+#include "nlohmann/json.hpp"
+
+#include "xproperty/xjson.hpp"
+
 #include "xtl/xoptional.hpp"
 
 #include "xwidgets/xeither.hpp"
@@ -25,6 +29,8 @@
 #include "xmaps_config.hpp"
 #include "xplot.hpp"
 #include "xscales.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -72,23 +78,23 @@ namespace xpl
         using selected_type = xtl::xoptional<std::vector<int>>;
         using tooltip_type = xtl::xoptional<xmark_tooltip_type>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(scales_type, derived_type, scales);
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(preserve_domain_type, derived_type, preserve_domain);
         XPROPERTY(bool, derived_type, display_legend);
         XPROPERTY(labels_type, derived_type, labels);
         XPROPERTY(bool, derived_type, apply_clip, true);
         XPROPERTY(bool, derived_type, visible, true);
-        XPROPERTY(::xeus::xjson, derived_type, selected_style, ::xeus::xjson::object());
-        XPROPERTY(::xeus::xjson, derived_type, unselected_style, ::xeus::xjson::object());
+        XPROPERTY(::nl::json, derived_type, selected_style, ::nl::json::object());
+        XPROPERTY(::nl::json, derived_type, unselected_style, ::nl::json::object());
         XPROPERTY(selected_type, derived_type, selected);
         XPROPERTY(tooltip_type, derived_type, tooltip);
-        XPROPERTY(::xeus::xjson, derived_type, tooltip_style, ::xeus::xjson::parse(R"({"opacity": "0.9"})"));
+        XPROPERTY(::nl::json, derived_type, tooltip_style, ::nl::json::parse(R"({"opacity": "0.9"})"));
         XPROPERTY(bool, derived_type, enable_hover, true);
-        XPROPERTY(::xeus::xjson, derived_type, interactions, ::xeus::xjson::parse(R"({"hover": "tooltip"})"));
+        XPROPERTY(::nl::json, derived_type, interactions, ::nl::json::parse(R"({"hover": "tooltip"})"));
         XPROPERTY(std::string, derived_type, tooltip_location, "mouse", XEITHER("mouse", "center"));
 
     protected:
@@ -128,8 +134,8 @@ namespace xpl
         using opacities_type = std::vector<double>;
         using curves_subset_type = std::vector<int>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
@@ -162,8 +168,6 @@ namespace xpl
 
     using lines = xw::xmaterialize<xlines>;
 
-    using lines_generator = xw::xgenerator<xlines>;
-
     /*****************************
      * xscatter_base declaration *
      *****************************/
@@ -180,15 +184,15 @@ namespace xpl
         using colors_type = std::vector<xtl::xoptional<color_type>>;
         using selected_type = std::vector<int>;
 
-        using callback_type = std::function<void(const xeus::xjson&)>;
+        using callback_type = std::function<void(const nl::json&)>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         void on_drag_start(callback_type);
         void on_drag(callback_type);
         void on_drag_end(callback_type);
-        void handle_custom_message(const xeus::xjson&);
+        void handle_custom_message(const nl::json&);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
@@ -197,8 +201,8 @@ namespace xpl
         XPROPERTY(data_type, derived_type, size);
         XPROPERTY(data_type, derived_type, rotation);
         XPROPERTY(std::vector<double>, derived_type, default_opacities);
-        XPROPERTY(::xeus::xjson, derived_type, hovered_style);
-        XPROPERTY(::xeus::xjson, derived_type, unhovered_style);
+        XPROPERTY(::nl::json, derived_type, hovered_style);
+        XPROPERTY(::nl::json, derived_type, unhovered_style);
         XPROPERTY(xtl::xoptional<int>, derived_type, hovered_point);
         XPROPERTY(bool, derived_type, enable_move);
         XPROPERTY(bool, derived_type, enable_delete);
@@ -245,8 +249,8 @@ namespace xpl
         using colors_type = typename base_type::colors_type;
         using names_type = xboxed_container<std::vector<std::string>>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, skew);
         XPROPERTY(std::string, derived_type, marker, "circle", XEITHER("circle", "cross", "diamond", "square", "triangle-down", "triangle-up", "arrow", "rectangle", "ellipse"));
@@ -286,8 +290,6 @@ namespace xpl
 
     using scatter = xw::xmaterialize<xscatter>;
 
-    using scatter_generator = xw::xgenerator<xscatter>;
-
     /********************
      * xpie declaration *
      ********************/
@@ -304,8 +306,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using xboxed_color_type = xboxed_container<std::vector<std::string>>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, color);
         XPROPERTY(colors_type, derived_type, colors, category10());
@@ -318,7 +320,7 @@ namespace xpl
         XPROPERTY(xtl::xoptional<color_type>, derived_type, label_color);
         XPROPERTY(std::vector<double>, derived_type, opacities);
         XPROPERTY(double, derived_type, radius, 180.0);
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(data_type, derived_type, sizes);
         XPROPERTY(bool, derived_type, sort);
         XPROPERTY(double, derived_type, start_angle);
@@ -341,8 +343,6 @@ namespace xpl
 
     using pie = xw::xmaterialize<xpie>;
 
-    using pie_generator = xw::xgenerator<xpie>;
-
     /**********************
      * xlabel declaration *
      **********************/
@@ -357,8 +357,8 @@ namespace xpl
 
         using data_type = xboxed_container<std::vector<std::string>>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::string, derived_type, align, "start", XEITHER("start", "middle", "end"));
         XPROPERTY(std::vector<color_type>, derived_type, colors);
@@ -385,8 +385,6 @@ namespace xpl
 
     using label = xw::xmaterialize<xlabel>;
 
-    using label_generator = xw::xgenerator<xlabel>;
-
     /*********************
      * xhist declaration *
      *********************/
@@ -403,8 +401,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(int, derived_type, bins, 10);
         XPROPERTY(colors_type, derived_type, colors);
@@ -413,7 +411,7 @@ namespace xpl
         XPROPERTY(bool, derived_type, normalized);
         XPROPERTY(std::vector<double>, derived_type, opacities);
         XPROPERTY(data_type, derived_type, sample);
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
 
     protected:
@@ -430,8 +428,6 @@ namespace xpl
 
     using hist = xw::xmaterialize<xhist>;
 
-    using hist_generator = xw::xgenerator<xhist>;
-
     /************************
      * xboxplot declaration *
      ************************/
@@ -447,13 +443,13 @@ namespace xpl
         using data_type_x = xboxed_container<std::vector<double>>;
         using data_type_y = xboxed_container<std::vector<std::vector<double>>>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(color_type, derived_type, box_fill_color, "dodgerblue");
         XPROPERTY(std::vector<double>, derived_type, opacities);
         XPROPERTY(color_type, derived_type, outlier_fill_color, "gray");
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
         XPROPERTY(data_type_x, derived_type, x);
         XPROPERTY(data_type_y, derived_type, y);
@@ -472,8 +468,6 @@ namespace xpl
 
     using boxplot = xw::xmaterialize<xboxplot>;
 
-    using boxplot_generator = xw::xgenerator<xboxplot>;
-
     /*********************
      * xbars declaration *
      *********************/
@@ -490,8 +484,8 @@ namespace xpl
         using colors_type = std::vector<color_type>;
         using opacity_type = std::vector<double>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(data_type, derived_type, x);
         XPROPERTY(data_type, derived_type, y);
@@ -499,7 +493,7 @@ namespace xpl
         XPROPERTY(opacity_type, derived_type, opacities);
         XPROPERTY(colors_type, derived_type, color);
         XPROPERTY(colors_type, derived_type, colors, category10());
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke);
         XPROPERTY(std::string, derived_type, align, "center", XEITHER("center", "left", "right"));
         XPROPERTY(std::string, derived_type, color_mode, "auto", XEITHER("auto", "group", "element"));
@@ -520,8 +514,6 @@ namespace xpl
 
     using bars = xw::xmaterialize<xbars>;
 
-    using bars_generator = xw::xgenerator<xbars>;
-
     /*************************
      * xheat_map declaration *
      *************************/
@@ -538,12 +530,12 @@ namespace xpl
         using array = std::vector<std::vector<double>>;
         using data_type = xboxed_container<array>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(xtl::xoptional<data_type>, derived_type, color);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, null_color, "black");
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<coord_type>, derived_type, x);
         XPROPERTY(xtl::xoptional<coord_type>, derived_type, y);
 
@@ -568,8 +560,6 @@ namespace xpl
 
     using heat_map = xw::xmaterialize<xheat_map>;
 
-    using heat_map_generator = xw::xgenerator<xheat_map>;
-
     /******************************
      * xgrid_heat_map declaration *
      ******************************/
@@ -586,10 +576,10 @@ namespace xpl
         using data1d_type = xboxed_container<std::vector<double>>;
         using data2d_type = xboxed_container<std::vector<std::vector<double>>>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
-        XPROPERTY(::xeus::xjson, derived_type, anchor_style, ::xeus::xjson::object());
+        XPROPERTY(::nl::json, derived_type, anchor_style, ::nl::json::object());
         XPROPERTY(data2d_type, derived_type, color);
         XPROPERTY(data1d_type, derived_type, column);
         XPROPERTY(std::string, derived_type, column_align, "start", XEITHER("start", "end"));
@@ -597,7 +587,7 @@ namespace xpl
         XPROPERTY(double, derived_type, opacity, 1.0);
         XPROPERTY(data1d_type, derived_type, row);
         XPROPERTY(std::string, derived_type, row_align, "start", XEITHER("start", "end"));
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke, "black");
         XPROPERTY(selected_type, derived_type, selected);
 
@@ -622,8 +612,6 @@ namespace xpl
 
     using grid_heat_map = xw::xmaterialize<xgrid_heat_map>;
 
-    using grid_heat_map_generator = xw::xgenerator<xgrid_heat_map>;
-
     /********************
      * xmap declaration *
      ********************/
@@ -636,17 +624,17 @@ namespace xpl
         using base_type = xmark<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
-        XPROPERTY(xtl::xoptional<::xeus::xjson>, derived_type, color, ::xeus::xjson::object());
-        XPROPERTY(::xeus::xjson, derived_type, colors, ::xeus::xjson::object());
+        XPROPERTY(xtl::xoptional<::nl::json>, derived_type, color, ::nl::json::object());
+        XPROPERTY(::nl::json, derived_type, colors, ::nl::json::object());
         XPROPERTY(bool, derived_type, hover_highlight, true);
-        XPROPERTY(xtl::xoptional<::xeus::xjson>, derived_type, hovered_styles);
-        XPROPERTY(::xeus::xjson, derived_type, map_data);
-        XPROPERTY(::xeus::xjson, derived_type, scales_metadata);
+        XPROPERTY(xtl::xoptional<::nl::json>, derived_type, hovered_styles);
+        XPROPERTY(::nl::json, derived_type, map_data);
+        XPROPERTY(::nl::json, derived_type, scales_metadata);
         XPROPERTY(xtl::xoptional<std::vector<color_type>>, derived_type, selected);
-        XPROPERTY(::xeus::xjson, derived_type, selected_styles);
+        XPROPERTY(::nl::json, derived_type, selected_styles);
         XPROPERTY(xtl::xoptional<color_type>, derived_type, stroke_color);
 
     protected:
@@ -671,19 +659,17 @@ namespace xpl
     private:
 
         void set_defaults();
-        xeus::xjson read_map(std::string filename);
+        nl::json read_map(std::string filename);
     };
 
     using map = xw::xmaterialize<xmap>;
-
-    using map_generator = xw::xgenerator<xmap>;
 
     /************************
      * xmark implementation *
      ************************/
 
     template <class D>
-    inline void xmark<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xmark<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -706,26 +692,26 @@ namespace xpl
     }
 
     template <class D>
-    inline void xmark<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xmark<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(scales, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(preserve_domain, state, buffers);
-        set_patch_from_property(display_legend, state, buffers);
-        set_patch_from_property(labels, state, buffers);
-        set_patch_from_property(apply_clip, state, buffers);
-        set_patch_from_property(visible, state, buffers);
-        set_patch_from_property(selected_style, state, buffers);
-        set_patch_from_property(unselected_style, state, buffers);
-        set_patch_from_property(selected, state, buffers);
-        set_patch_from_property(tooltip, state, buffers);
-        set_patch_from_property(tooltip_style, state, buffers);
-        set_patch_from_property(enable_hover, state, buffers);
-        set_patch_from_property(interactions, state, buffers);
-        set_patch_from_property(tooltip_location, state, buffers);
+        xwidgets_serialize(scales, state["scales"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(preserve_domain, state["preserve_domain"], buffers);
+        xwidgets_serialize(display_legend, state["display_legend"], buffers);
+        xwidgets_serialize(labels, state["labels"], buffers);
+        xwidgets_serialize(apply_clip, state["apply_clip"], buffers);
+        xwidgets_serialize(visible, state["visible"], buffers);
+        xwidgets_serialize(selected_style, state["selected_style"], buffers);
+        xwidgets_serialize(unselected_style, state["unselected_style"], buffers);
+        xwidgets_serialize(selected, state["selected"], buffers);
+        xwidgets_serialize(tooltip, state["tooltip"], buffers);
+        xwidgets_serialize(tooltip_style, state["tooltip_style"], buffers);
+        xwidgets_serialize(enable_hover, state["enable_hover"], buffers);
+        xwidgets_serialize(interactions, state["interactions"], buffers);
+        xwidgets_serialize(tooltip_location, state["tooltip_location"], buffers);
     }
 
     template <class D>
@@ -746,7 +732,7 @@ namespace xpl
      *************************/
 
     template <class D>
-    inline void xlines<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xlines<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -770,27 +756,27 @@ namespace xpl
     }
 
     template <class D>
-    inline void xlines<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xlines<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(x, state, buffers);
-        set_patch_from_property(y, state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(fill_colors, state, buffers);
-        set_patch_from_property(stroke_width, state, buffers);
-        set_patch_from_property(labels_visibility, state, buffers);
-        set_patch_from_property(curves_subset, state, buffers);
-        set_patch_from_property(line_style, state, buffers);
-        set_patch_from_property(interpolation, state, buffers);
-        set_patch_from_property(close_path, state, buffers);
-        set_patch_from_property(fill, state, buffers);
-        set_patch_from_property(marker, state, buffers);
-        set_patch_from_property(marker_size, state, buffers);
-        set_patch_from_property(opacities, state, buffers);
-        set_patch_from_property(fill_opacities, state, buffers);
+        xwidgets_serialize(x, state["x"], buffers);
+        xwidgets_serialize(y, state["y"], buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(fill_colors, state["fill_colors"], buffers);
+        xwidgets_serialize(stroke_width, state["stroke_width"], buffers);
+        xwidgets_serialize(labels_visibility, state["labels_visibility"], buffers);
+        xwidgets_serialize(curves_subset, state["curves_subset"], buffers);
+        xwidgets_serialize(line_style, state["line_style"], buffers);
+        xwidgets_serialize(interpolation, state["interpolation"], buffers);
+        xwidgets_serialize(close_path, state["close_path"], buffers);
+        xwidgets_serialize(fill, state["fill"], buffers);
+        xwidgets_serialize(marker, state["marker"], buffers);
+        xwidgets_serialize(marker_size, state["marker_size"], buffers);
+        xwidgets_serialize(opacities, state["opacities"], buffers);
+        xwidgets_serialize(fill_opacities, state["fill_opacities"], buffers);
     }
 
     template <class D>
@@ -820,7 +806,7 @@ namespace xpl
      ********************************/
 
     template <class D>
-    inline void xscatter_base<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xscatter_base<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -844,27 +830,27 @@ namespace xpl
     }
 
     template <class D>
-    inline void xscatter_base<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xscatter_base<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(x, state, buffers);
-        set_patch_from_property(y, state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(opacity, state, buffers);
-        set_patch_from_property(size, state, buffers);
-        set_patch_from_property(rotation, state, buffers);
-        set_patch_from_property(default_opacities, state, buffers);
-        set_patch_from_property(hovered_style, state, buffers);
-        set_patch_from_property(unhovered_style, state, buffers);
-        set_patch_from_property(hovered_point, state, buffers);
-        set_patch_from_property(enable_move, state, buffers);
-        set_patch_from_property(enable_delete, state, buffers);
-        set_patch_from_property(restrict_x, state, buffers);
-        set_patch_from_property(restrict_y, state, buffers);
-        set_patch_from_property(update_on_move, state, buffers);
-        set_patch_from_property(selected, state, buffers);
+        xwidgets_serialize(x, state["x"], buffers);
+        xwidgets_serialize(y, state["y"], buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(opacity, state["opacity"], buffers);
+        xwidgets_serialize(size, state["size"], buffers);
+        xwidgets_serialize(rotation, state["rotation"], buffers);
+        xwidgets_serialize(default_opacities, state["default_opacities"], buffers);
+        xwidgets_serialize(hovered_style, state["hovered_style"], buffers);
+        xwidgets_serialize(unhovered_style, state["unhovered_style"], buffers);
+        xwidgets_serialize(hovered_point, state["hovered_point"], buffers);
+        xwidgets_serialize(enable_move, state["enable_move"], buffers);
+        xwidgets_serialize(enable_delete, state["enable_delete"], buffers);
+        xwidgets_serialize(restrict_x, state["restrict_x"], buffers);
+        xwidgets_serialize(restrict_y, state["restrict_y"], buffers);
+        xwidgets_serialize(update_on_move, state["update_on_move"], buffers);
+        xwidgets_serialize(selected, state["selected"], buffers);
     }
 
     template <class D>
@@ -934,7 +920,7 @@ namespace xpl
     }
 
     template <class D>
-    inline void xscatter_base<D>::handle_custom_message(const xeus::xjson& content)
+    inline void xscatter_base<D>::handle_custom_message(const nl::json& content)
     {
         auto it = content.find("event");
         if (it != content.end() && it.value() == "drag")
@@ -965,7 +951,7 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline void xscatter<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xscatter<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -986,24 +972,24 @@ namespace xpl
     }
 
     template <class D>
-    inline void xscatter<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xscatter<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(skew, state, buffers);
-        set_patch_from_property(marker, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(stroke, state, buffers);
-        set_patch_from_property(stroke_width, state, buffers);
-        set_patch_from_property(default_skew, state, buffers);
-        set_patch_from_property(default_size, state, buffers);
-        set_patch_from_property(names, state, buffers);
-        set_patch_from_property(display_names, state, buffers);
-        set_patch_from_property(fill, state, buffers);
-        set_patch_from_property(drag_color, state, buffers);
-        set_patch_from_property(drag_size, state, buffers);
-        set_patch_from_property(names_unique, state, buffers);
+        xwidgets_serialize(skew, state["skew"], buffers);
+        xwidgets_serialize(marker, state["marker"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(stroke, state["stroke"], buffers);
+        xwidgets_serialize(stroke_width, state["stroke_width"], buffers);
+        xwidgets_serialize(default_skew, state["default_skew"], buffers);
+        xwidgets_serialize(default_size, state["default_size"], buffers);
+        xwidgets_serialize(names, state["names"], buffers);
+        xwidgets_serialize(display_names, state["display_names"], buffers);
+        xwidgets_serialize(fill, state["fill"], buffers);
+        xwidgets_serialize(drag_color, state["drag_color"], buffers);
+        xwidgets_serialize(drag_size, state["drag_size"], buffers);
+        xwidgets_serialize(names_unique, state["names_unique"], buffers);
     }
 
     template <class D>
@@ -1042,7 +1028,7 @@ namespace xpl
      ***********************/
 
     template <class D>
-    inline void xpie<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xpie<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1068,29 +1054,29 @@ namespace xpl
     }
 
     template <class D>
-    inline void xpie<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xpie<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(display_labels, state, buffers);
-        set_patch_from_property(display_values, state, buffers);
-        set_patch_from_property(end_angle, state, buffers);
-        set_patch_from_property(font_size, state, buffers);
-        set_patch_from_property(font_weight, state, buffers);
-        set_patch_from_property(inner_radius, state, buffers);
-        set_patch_from_property(label_color, state, buffers);
-        set_patch_from_property(opacities, state, buffers);
-        set_patch_from_property(radius, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(sizes, state, buffers);
-        set_patch_from_property(sort, state, buffers);
-        set_patch_from_property(start_angle, state, buffers);
-        set_patch_from_property(stroke, state, buffers);
-        set_patch_from_property(values_format, state, buffers);
-        set_patch_from_property(x, state, buffers);
-        set_patch_from_property(y, state, buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(display_labels, state["display_labels"], buffers);
+        xwidgets_serialize(display_values, state["display_values"], buffers);
+        xwidgets_serialize(end_angle, state["end_angle"], buffers);
+        xwidgets_serialize(font_size, state["font_size"], buffers);
+        xwidgets_serialize(font_weight, state["font_weight"], buffers);
+        xwidgets_serialize(inner_radius, state["inner_radius"], buffers);
+        xwidgets_serialize(label_color, state["label_color"], buffers);
+        xwidgets_serialize(opacities, state["opacities"], buffers);
+        xwidgets_serialize(radius, state["radius"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(sizes, state["sizes"], buffers);
+        xwidgets_serialize(sort, state["sort"], buffers);
+        xwidgets_serialize(start_angle, state["start_angle"], buffers);
+        xwidgets_serialize(stroke, state["stroke"], buffers);
+        xwidgets_serialize(values_format, state["values_format"], buffers);
+        xwidgets_serialize(x, state["x"], buffers);
+        xwidgets_serialize(y, state["y"], buffers);
     }
 
     template <class D>
@@ -1112,7 +1098,7 @@ namespace xpl
      *************************/
 
     template <class D>
-    inline void xlabel<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xlabel<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1129,20 +1115,20 @@ namespace xpl
     }
 
     template <class D>
-    inline void xlabel<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xlabel<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(align, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(default_size, state, buffers);
-        set_patch_from_property(drag_size, state, buffers);
-        set_patch_from_property(font_unit, state, buffers);
-        set_patch_from_property(font_weight, state, buffers);
-        set_patch_from_property(rotate_angle, state, buffers);
-        set_patch_from_property(text, state, buffers);
-        set_patch_from_property(x_offset, state, buffers);
-        set_patch_from_property(y_offset, state, buffers);
+        xwidgets_serialize(align, state["align"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(default_size, state["default_size"], buffers);
+        xwidgets_serialize(drag_size, state["drag_size"], buffers);
+        xwidgets_serialize(font_unit, state["font_unit"], buffers);
+        xwidgets_serialize(font_weight, state["font_weight"], buffers);
+        xwidgets_serialize(rotate_angle, state["rotate_angle"], buffers);
+        xwidgets_serialize(text, state["text"], buffers);
+        xwidgets_serialize(x_offset, state["x_offset"], buffers);
+        xwidgets_serialize(y_offset, state["y_offset"], buffers);
     }
 
     template <class D>
@@ -1165,7 +1151,7 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xhist<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xhist<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1181,19 +1167,19 @@ namespace xpl
     }
 
     template <class D>
-    inline void xhist<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xhist<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(bins, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(count, state, buffers);
-        set_patch_from_property(midpoints, state, buffers);
-        set_patch_from_property(normalized, state, buffers);
-        set_patch_from_property(opacities, state, buffers);
-        set_patch_from_property(sample, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(stroke, state, buffers);
+        xwidgets_serialize(bins, state["bins"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(count, state["count"], buffers);
+        xwidgets_serialize(midpoints, state["midpoints"], buffers);
+        xwidgets_serialize(normalized, state["normalized"], buffers);
+        xwidgets_serialize(opacities, state["opacities"], buffers);
+        xwidgets_serialize(sample, state["sample"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(stroke, state["stroke"], buffers);
     }
 
     template <class D>
@@ -1222,7 +1208,7 @@ namespace xpl
      ***************************/
 
     template <class D>
-    inline void xboxplot<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xboxplot<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1236,17 +1222,17 @@ namespace xpl
     }
 
     template <class D>
-    inline void xboxplot<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xboxplot<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(box_fill_color, state, buffers);
-        set_patch_from_property(opacities, state, buffers);
-        set_patch_from_property(outlier_fill_color, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(stroke, state, buffers);
-        set_patch_from_property(x, state, buffers);
-        set_patch_from_property(y, state, buffers);
+        xwidgets_serialize(box_fill_color, state["box_fill_color"], buffers);
+        xwidgets_serialize(opacities, state["opacities"], buffers);
+        xwidgets_serialize(outlier_fill_color, state["outlier_fill_color"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(stroke, state["stroke"], buffers);
+        xwidgets_serialize(x, state["x"], buffers);
+        xwidgets_serialize(y, state["y"], buffers);
     }
 
     template <class D>
@@ -1275,7 +1261,7 @@ namespace xpl
      ************************/
 
     template <class D>
-    inline void xbars<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xbars<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1294,22 +1280,22 @@ namespace xpl
     }
 
     template <class D>
-    inline void xbars<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xbars<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(align, state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(color_mode, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(opacities, state, buffers);
-        set_patch_from_property(orientation, state, buffers);
-        set_patch_from_property(padding, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(stroke, state, buffers);
-        set_patch_from_property(type, state, buffers);
-        set_patch_from_property(x, state, buffers);
-        set_patch_from_property(y, state, buffers);
+        xwidgets_serialize(align, state["align"], buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(color_mode, state["color_mode"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(opacities, state["opacities"], buffers);
+        xwidgets_serialize(orientation, state["orientation"], buffers);
+        xwidgets_serialize(padding, state["padding"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(stroke, state["stroke"], buffers);
+        xwidgets_serialize(type, state["type"], buffers);
+        xwidgets_serialize(x, state["x"], buffers);
+        xwidgets_serialize(y, state["y"], buffers);
     }
 
     template <class D>
@@ -1339,7 +1325,7 @@ namespace xpl
      ****************************/
 
     template <class D>
-    inline void xheat_map<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xheat_map<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1351,15 +1337,15 @@ namespace xpl
     }
 
     template <class D>
-    inline void xheat_map<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xheat_map<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(null_color, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(x, state, buffers);
-        set_patch_from_property(y, state, buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(null_color, state["null_color"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(x, state["x"], buffers);
+        xwidgets_serialize(y, state["y"], buffers);
     }
 
     template <class D>
@@ -1454,7 +1440,7 @@ namespace xpl
     }
 
     template <class D>
-    inline void xgrid_heat_map<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xgrid_heat_map<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1472,21 +1458,21 @@ namespace xpl
     }
 
     template <class D>
-    inline void xgrid_heat_map<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xgrid_heat_map<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(anchor_style, state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(column, state, buffers);
-        set_patch_from_property(column_align, state, buffers);
-        set_patch_from_property(null_color, state, buffers);
-        set_patch_from_property(opacity, state, buffers);
-        set_patch_from_property(row, state, buffers);
-        set_patch_from_property(row_align, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(stroke, state, buffers);
-        set_patch_from_property(selected, state, buffers);
+        xwidgets_serialize(anchor_style, state["anchor_style"], buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(column, state["column"], buffers);
+        xwidgets_serialize(column_align, state["column"], buffers);
+        xwidgets_serialize(null_color, state["column_align"], buffers);
+        xwidgets_serialize(opacity, state["opacity"], buffers);
+        xwidgets_serialize(row, state["row"], buffers);
+        xwidgets_serialize(row_align, state["row_align"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(stroke, state["stroke"], buffers);
+        xwidgets_serialize(selected, state["selected"], buffers);
     }
 
     template <class D>
@@ -1557,7 +1543,7 @@ namespace xpl
     }
 
     template <class D>
-    inline void xmap<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xmap<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -1573,19 +1559,19 @@ namespace xpl
     }
 
     template <class D>
-    inline void xmap<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xmap<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(color, state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(hover_highlight, state, buffers);
-        set_patch_from_property(hovered_styles, state, buffers);
-        set_patch_from_property(map_data, state, buffers);
-        set_patch_from_property(scales_metadata, state, buffers);
-        set_patch_from_property(selected, state, buffers);
-        set_patch_from_property(selected_styles, state, buffers);
-        set_patch_from_property(stroke_color, state, buffers);
+        xwidgets_serialize(color, state["color"], buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(hover_highlight, state["hover_highlight"], buffers);
+        xwidgets_serialize(hovered_styles, state["hovered_styles"], buffers);
+        xwidgets_serialize(map_data, state["map_data"], buffers);
+        xwidgets_serialize(scales_metadata, state["scales_metadata"], buffers);
+        xwidgets_serialize(selected, state["selected"], buffers);
+        xwidgets_serialize(selected_styles, state["selected_styles"], buffers);
+        xwidgets_serialize(stroke_color, state["stroke_color"], buffers);
     }
 
     template <class D>
@@ -1599,12 +1585,12 @@ namespace xpl
     }
 
     template <class D>
-    inline xeus::xjson xmap<D>::read_map(std::string filename)
+    inline nl::json xmap<D>::read_map(std::string filename)
     {
         std::ifstream jsonfile(filename);
 
         // TODO: we should do:
-        // return xeus::xjson::parse(jsonfile);
+        // return nl::json::parse(jsonfile);
 
         std::string str((std::istreambuf_iterator<char>(jsonfile)),
                         std::istreambuf_iterator<char>());
@@ -1619,55 +1605,34 @@ namespace xpl
 #ifndef _WIN32
     extern template class xw::xmaterialize<xpl::xlines>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xlines>>;
-    extern template class xw::xgenerator<xpl::xlines>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xlines>>;
 
     extern template class xw::xmaterialize<xpl::xscatter>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xscatter>>;
-    extern template class xw::xgenerator<xpl::xscatter>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xscatter>>;
 
     extern template class xw::xmaterialize<xpl::xpie>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xpie>>;
     extern template xw::xmaterialize<xpl::xpie>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xpie>;
-    extern template xw::xgenerator<xpl::xpie>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xpie>>;
 
     extern template class xw::xmaterialize<xpl::xlabel>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xlabel>>;
-    extern template class xw::xgenerator<xpl::xlabel>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xlabel>>;
 
     extern template class xw::xmaterialize<xpl::xhist>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xhist>>;
-    extern template class xw::xgenerator<xpl::xhist>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xhist>>;
 
     extern template class xw::xmaterialize<xpl::xboxplot>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xboxplot>>;
-    extern template class xw::xgenerator<xpl::xboxplot>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xboxplot>>;
 
     extern template class xw::xmaterialize<xpl::xbars>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xbars>>;
-    extern template class xw::xgenerator<xpl::xbars>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xbars>>;
 
     extern template class xw::xmaterialize<xpl::xheat_map>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xheat_map>>;
-    extern template class xw::xgenerator<xpl::xheat_map>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xheat_map>>;
 
     extern template class xw::xmaterialize<xpl::xgrid_heat_map>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xgrid_heat_map>>;
-    extern template class xw::xgenerator<xpl::xgrid_heat_map>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xgrid_heat_map>>;
 
     extern template class xw::xmaterialize<xpl::xmap>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xmap>>;
-    extern template class xw::xgenerator<xpl::xmap>;
-    extern template class xw::xtransport<xw::xgenerator<xpl::xmap>>;
 #endif
 
 #endif

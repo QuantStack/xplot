@@ -12,9 +12,15 @@
 #include <string>
 #include <vector>
 
+#include "nlohmann/json.hpp"
+
 #include "xtl/xoptional.hpp"
 
+#include "xproperty/xjson.hpp" 
+
 #include "xplot.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -30,8 +36,8 @@ namespace xpl
         using base_type = xplot<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(bool, derived_type, reverse);
         XPROPERTY(bool, derived_type, allow_padding, true);
@@ -68,8 +74,8 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(xtl::xoptional<double>, derived_type, min);
         XPROPERTY(xtl::xoptional<double>, derived_type, max);
@@ -90,8 +96,6 @@ namespace xpl
 
     using linear_scale = xw::xmaterialize<xlinear_scale>;
 
-    using linear_scale_generator = xw::xgenerator<xlinear_scale>;
-
     /*************************
      * log_scale declaration *
      *************************/
@@ -104,8 +108,8 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(xtl::xoptional<double>, derived_type, min);
         XPROPERTY(xtl::xoptional<double>, derived_type, max);
@@ -123,8 +127,6 @@ namespace xpl
 
     using log_scale = xw::xmaterialize<xlog_scale>;
 
-    using log_scale_generator = xw::xgenerator<xlog_scale>;
-
     /******************************
      * xordinal_scale declaration *
      ******************************/
@@ -137,8 +139,8 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::vector<double>, derived_type, domain);
 
@@ -155,8 +157,6 @@ namespace xpl
 
     using ordinal_scale = xw::xmaterialize<xordinal_scale>;
 
-    using ordinal_scale_generator = xw::xgenerator<xordinal_scale>;
-
     /****************************
      * xcolor_scale declaration *
      ****************************/
@@ -169,8 +169,8 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(std::vector<color_type>, derived_type, colors);
         XPROPERTY(xtl::xoptional<double>, derived_type, max);
@@ -192,8 +192,6 @@ namespace xpl
 
     using color_scale = xw::xmaterialize<xcolor_scale>;
 
-    using color_scale_generator = xw::xgenerator<xcolor_scale>;
-
     /************************************
      * xordinal_color_scale declaration *
      ************************************/
@@ -206,8 +204,8 @@ namespace xpl
         using base_type = xcolor_scale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
         XPROPERTY(std::vector<double>, derived_type, domain);
 
     protected:
@@ -223,8 +221,6 @@ namespace xpl
 
     using ordinal_color_scale = xw::xmaterialize<xordinal_color_scale>;
 
-    using ordinal_color_scale_generator = xw::xgenerator<xordinal_color_scale>;
-
     /**************************
      * xgeo_scale declaration *
      **************************/
@@ -237,8 +233,8 @@ namespace xpl
         using base_type = xscale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
     protected:
 
@@ -266,8 +262,8 @@ namespace xpl
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(pair_type, derived_type, center, pair_type({0, 60}));
         XPROPERTY(pair_type, derived_type, rotate, pair_type({0, 0}));
@@ -286,8 +282,6 @@ namespace xpl
 
     using mercator = xw::xmaterialize<xmercator>;
 
-    using mercator_generator = xw::xgenerator<xmercator>;
-
     /*****************************
      * xorthographic declaration *
      *****************************/
@@ -302,8 +296,8 @@ namespace xpl
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(pair_type, derived_type, center, pair_type({0, 60}));
         XPROPERTY(double, derived_type, clip_angle, 90.0);
@@ -322,8 +316,6 @@ namespace xpl
 
     using orthographic = xw::xmaterialize<xorthographic>;
 
-    using orthographic_generator = xw::xgenerator<xorthographic>;
-
     /***************************
      * xalbers_usa declaration *
      ***************************/
@@ -336,8 +328,8 @@ namespace xpl
         using base_type = xgeo_scale<D>;
         using derived_type = D;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(double, derived_type, scale_factor, 1200);
 
@@ -354,8 +346,6 @@ namespace xpl
 
     using albers_usa = xw::xmaterialize<xalbers_usa>;
 
-    using albers_usa_generator = xw::xgenerator<xalbers_usa>;
-
     /***********************
      * xalbers declaration *
      ***********************/
@@ -371,8 +361,8 @@ namespace xpl
         //using pair_type = std::pair<double, double>;
         using pair_type = std::vector<double>;
 
-        void serialize_state(xeus::xjson&, xeus::buffer_sequence&) const;
-        void apply_patch(const xeus::xjson&, const xeus::buffer_sequence&);
+        void serialize_state(nl::json&, xeus::buffer_sequence&) const;
+        void apply_patch(const nl::json&, const xeus::buffer_sequence&);
 
         XPROPERTY(pair_type, derived_type, center, pair_type({0, 60}));
         XPROPERTY(pair_type, derived_type, parallels, pair_type({29.5, 45.5}));
@@ -393,14 +383,12 @@ namespace xpl
 
     using albers = xw::xmaterialize<xalbers>;
 
-    using albers_generator = xw::xgenerator<xalbers>;
-
     /************************
      * scale implementation *
      ************************/
 
     template <class D>
-    inline void xscale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xscale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -410,13 +398,13 @@ namespace xpl
     }
 
     template <class D>
-    inline void xscale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xscale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(reverse, state, buffers);
-        set_patch_from_property(allow_padding, state, buffers);
+        xwidgets_serialize(reverse, state["buffers"], buffers);
+        xwidgets_serialize(allow_padding, state["allow_padding"], buffers);
     }
 
     template <class D>
@@ -438,7 +426,7 @@ namespace xpl
      *******************************/
 
     template <class D>
-    inline void xlinear_scale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xlinear_scale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -451,16 +439,16 @@ namespace xpl
     }
 
     template <class D>
-    inline void xlinear_scale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xlinear_scale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(min, state, buffers);
-        set_patch_from_property(max, state, buffers);
-        set_patch_from_property(stabilized, state, buffers);
-        set_patch_from_property(mid_range, state, buffers);
-        set_patch_from_property(min_range, state, buffers);
+        xwidgets_serialize(min, state["min"], buffers);
+        xwidgets_serialize(max, state["max"], buffers);
+        xwidgets_serialize(stabilized, state["stabilized"], buffers);
+        xwidgets_serialize(mid_range, state["mid_range"], buffers);
+        xwidgets_serialize(min_range, state["min_range"], buffers);
     }
 
     template <class D>
@@ -482,7 +470,7 @@ namespace xpl
      ****************************/
 
     template <class D>
-    inline void xlog_scale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xlog_scale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -492,13 +480,13 @@ namespace xpl
     }
 
     template <class D>
-    inline void xlog_scale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xlog_scale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
 
-        set_patch_from_property(min, state, buffers);
-        set_patch_from_property(max, state, buffers);
+        xwidgets_serialize(min, state["min"], buffers);
+        xwidgets_serialize(max, state["max"], buffers);
     }
 
     template <class D>
@@ -520,7 +508,7 @@ namespace xpl
      *********************************/
 
     template <class D>
-    inline void xordinal_scale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xordinal_scale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -528,11 +516,11 @@ namespace xpl
     }
 
     template <class D>
-    inline void xordinal_scale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xordinal_scale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(domain, state, buffers);
+        xwidgets_serialize(domain, state["domain"], buffers);
     }
 
     template <class D>
@@ -554,7 +542,7 @@ namespace xpl
      *******************************/
 
     template <class D>
-    inline void xcolor_scale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xcolor_scale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -567,16 +555,16 @@ namespace xpl
     }
 
     template <class D>
-    inline void xcolor_scale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xcolor_scale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(colors, state, buffers);
-        set_patch_from_property(max, state, buffers);
-        set_patch_from_property(mid, state, buffers);
-        set_patch_from_property(min, state, buffers);
-        set_patch_from_property(scale_type, state, buffers);
-        set_patch_from_property(scheme, state, buffers);
+        xwidgets_serialize(colors, state["colors"], buffers);
+        xwidgets_serialize(max, state["max"], buffers);
+        xwidgets_serialize(mid, state["mid"], buffers);
+        xwidgets_serialize(min, state["min"], buffers);
+        xwidgets_serialize(scale_type, state["scale_type"], buffers);
+        xwidgets_serialize(scheme, state["scheme"], buffers);
     }
 
     template <class D>
@@ -598,7 +586,7 @@ namespace xpl
      ***************************************/
 
     template <class D>
-    inline void xordinal_color_scale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xordinal_color_scale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -606,11 +594,11 @@ namespace xpl
     }
 
     template <class D>
-    inline void xordinal_color_scale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xordinal_color_scale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(domain, state, buffers);
+        xwidgets_serialize(domain, state["domain"], buffers);
     }
 
     template <class D>
@@ -632,16 +620,16 @@ namespace xpl
      *****************************/
 
     template <class D>
-    inline void xgeo_scale<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xgeo_scale<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
     }
 
     template <class D>
-    inline void xgeo_scale<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xgeo_scale<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
     }
 
@@ -664,7 +652,7 @@ namespace xpl
      ****************************/
 
     template <class D>
-    inline void xmercator<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xmercator<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -674,13 +662,13 @@ namespace xpl
     }
 
     template <class D>
-    inline void xmercator<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xmercator<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(center, state, buffers);
-        set_patch_from_property(rotate, state, buffers);
-        set_patch_from_property(scale_factor, state, buffers);
+        xwidgets_serialize(center, state["center"], buffers);
+        xwidgets_serialize(rotate, state["rotate"], buffers);
+        xwidgets_serialize(scale_factor, state["scale_factor"], buffers);
     }
 
     template <class D>
@@ -702,7 +690,7 @@ namespace xpl
      ********************************/
 
     template <class D>
-    inline void xorthographic<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xorthographic<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -714,15 +702,15 @@ namespace xpl
     }
 
     template <class D>
-    inline void xorthographic<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xorthographic<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(center, state, buffers);
-        set_patch_from_property(clip_angle, state, buffers);
-        set_patch_from_property(precision, state, buffers);
-        set_patch_from_property(rotate, state, buffers);
-        set_patch_from_property(scale_factor, state, buffers);
+        xwidgets_serialize(center, state["center"], buffers);
+        xwidgets_serialize(clip_angle, state["clip_angle"], buffers);
+        xwidgets_serialize(precision, state["precision"], buffers);
+        xwidgets_serialize(rotate, state["rotate"], buffers);
+        xwidgets_serialize(scale_factor, state["scale_factor"], buffers);
     }
 
     template <class D>
@@ -744,7 +732,7 @@ namespace xpl
      ******************************/
 
     template <class D>
-    inline void xalbers_usa<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xalbers_usa<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -752,11 +740,11 @@ namespace xpl
     }
 
     template <class D>
-    inline void xalbers_usa<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xalbers_usa<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(scale_factor, state, buffers);
+        xwidgets_serialize(scale_factor, state["scale_factor"], buffers);
     }
 
     template <class D>
@@ -778,7 +766,7 @@ namespace xpl
      **************************/
 
     template <class D>
-    inline void xalbers<D>::apply_patch(const xeus::xjson& patch, const xeus::buffer_sequence& buffers)
+    inline void xalbers<D>::apply_patch(const nl::json& patch, const xeus::buffer_sequence& buffers)
     {
         using xw::set_property_from_patch;
         base_type::apply_patch(patch, buffers);
@@ -790,15 +778,15 @@ namespace xpl
     }
 
     template <class D>
-    inline void xalbers<D>::serialize_state(xeus::xjson& state, xeus::buffer_sequence& buffers) const
+    inline void xalbers<D>::serialize_state(nl::json& state, xeus::buffer_sequence& buffers) const
     {
-        using xw::set_patch_from_property;
+        using xw::xwidgets_serialize;
         base_type::serialize_state(state, buffers);
-        set_patch_from_property(center, state, buffers);
-        set_patch_from_property(parallels, state, buffers);
-        set_patch_from_property(precision, state, buffers);
-        set_patch_from_property(rotate, state, buffers);
-        set_patch_from_property(scale_factor, state, buffers);
+        xwidgets_serialize(center, state["center"], buffers);
+        xwidgets_serialize(parallels, state["parallels"], buffers);
+        xwidgets_serialize(precision, state["precision"], buffers);
+        xwidgets_serialize(rotate, state["rotate"], buffers);
+        xwidgets_serialize(scale_factor, state["scale_factor"], buffers);
     }
 
     template <class D>
@@ -824,65 +812,38 @@ namespace xpl
     extern template class xw::xmaterialize<xpl::xlinear_scale>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xlinear_scale>>;
     extern template xw::xmaterialize<xpl::xlinear_scale>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xlinear_scale>;
-    extern template xw::xgenerator<xpl::xlinear_scale>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xlinear_scale>>;
 
     extern template class xw::xmaterialize<xpl::xlog_scale>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xlog_scale>>;
     extern template xw::xmaterialize<xpl::xlog_scale>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xlog_scale>;
-    extern template xw::xgenerator<xpl::xlog_scale>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xlog_scale>>;
 
     extern template class xw::xmaterialize<xpl::xcolor_scale>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xcolor_scale>>;
     extern template xw::xmaterialize<xpl::xcolor_scale>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xcolor_scale>;
-    extern template xw::xgenerator<xpl::xcolor_scale>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xcolor_scale>>;
 
     extern template class xw::xmaterialize<xpl::xordinal_scale>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xordinal_scale>>;
     extern template xw::xmaterialize<xpl::xordinal_scale>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xordinal_scale>;
-    extern template xw::xgenerator<xpl::xordinal_scale>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xordinal_scale>>;
 
     extern template class xw::xmaterialize<xpl::xordinal_color_scale>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xordinal_color_scale>>;
     extern template xw::xmaterialize<xpl::xordinal_color_scale>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xordinal_color_scale>;
-    extern template xw::xgenerator<xpl::xordinal_color_scale>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xordinal_color_scale>>;
 
     extern template class xw::xmaterialize<xpl::xmercator>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xmercator>>;
     extern template xw::xmaterialize<xpl::xmercator>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xmercator>;
-    extern template xw::xgenerator<xpl::xmercator>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xmercator>>;
 
     extern template class xw::xmaterialize<xpl::xorthographic>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xorthographic>>;
     extern template xw::xmaterialize<xpl::xorthographic>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xorthographic>;
-    extern template xw::xgenerator<xpl::xorthographic>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xorthographic>>;
 
     extern template class xw::xmaterialize<xpl::xalbers>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xalbers>>;
     extern template xw::xmaterialize<xpl::xalbers>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xalbers>;
-    extern template xw::xgenerator<xpl::xalbers>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xalbers>>;
 
     extern template class xw::xmaterialize<xpl::xalbers_usa>;
     extern template class xw::xtransport<xw::xmaterialize<xpl::xalbers_usa>>;
     extern template xw::xmaterialize<xpl::xalbers_usa>::xmaterialize();
-    extern template class xw::xgenerator<xpl::xalbers_usa>;
-    extern template xw::xgenerator<xpl::xalbers_usa>::xgenerator();
-    extern template class xw::xtransport<xw::xgenerator<xpl::xalbers_usa>>;
 #endif
 
 #endif

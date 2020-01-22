@@ -9,9 +9,16 @@
 #ifndef XBOXED_CONTAINER_HPP
 #define XBOXED_CONTAINER_HPP
 
+#include <algorithm>
 #include <string>
+#include <utility>
+#include <vector>
+
+#include "nlohmann/json.hpp"
 
 #include "xeus/xjson.hpp"
+
+namespace nl = nlohmann;
 
 namespace xpl
 {
@@ -56,9 +63,9 @@ namespace xpl
     };
 
     template <class C>
-    void to_json(xeus::xjson& j, const xboxed_container<C>& o);
+    void to_json(nl::json& j, const xboxed_container<C>& o);
     template <class C>
-    void from_json(const xeus::xjson& j, xboxed_container<C>& o);
+    void from_json(const nl::json& j, xboxed_container<C>& o);
 
     template <class T>
     std::string type_to_string() noexcept;
@@ -122,7 +129,7 @@ namespace xpl
     }
 
     template <class C>
-    inline void to_json(xeus::xjson& j, const xboxed_container<C>& o)
+    inline void to_json(nl::json& j, const xboxed_container<C>& o)
     {
         using container_type = typename xboxed_container<C>::container_type;
         j["values"] = container_type(o);
@@ -130,7 +137,7 @@ namespace xpl
     }
 
     template <class C>
-    inline void from_json(const xeus::xjson& j, xboxed_container<C>& o)
+    inline void from_json(const nl::json& j, xboxed_container<C>& o)
     {
         using container_type = typename xboxed_container<C>::container_type;
         container_type& values = o;
