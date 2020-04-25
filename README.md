@@ -94,7 +94,7 @@ All the dependencies of xplot are available for the conda package manager.
 
 | `xplot` | `bqplot npm package (bqplot python package)` |
 |---------|----------------------------------------------|
-|  master |                             ^0.4.3 (^0.11.4) |
+|  master |                             ^0.5.6 (^0.12.6) |
 |  0.15.0 |                             ^0.4.3 (^0.11.4) |
 
 ## License
