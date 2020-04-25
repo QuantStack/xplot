@@ -38,14 +38,14 @@ or JupyterLab.
 
 ```
 conda install widgetsnbextension -c conda-forge
-conda install bqplot -c conda-forge
+conda install bqplot>=0.11.4,<0.12 -c conda-forge
 ```
 
 - Installing the JupyterLab extension
 
 ```
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
-jupyter labextension install bqplot
+jupyter labextension install bqplot@^0.4.3
 ```
 
 Or you can directly install it from the sources if you have all the
@@ -89,6 +89,13 @@ All the dependencies of xplot are available for the conda package manager.
 |  0.10.0 |   ~0.15.0   |  >=0.17.0,<0.18 |
 |  0.9.2  |   ~0.13.1   |  >=0.14.1,<0.15 |
 |  0.9.1  |   ~0.13.1   |  >=0.14.1,<0.15 |
+
+## Front-end dependency on the bqplot npm package
+
+| `xplot` | `bqplot npm package (bqplot python package)` |
+|---------|----------------------------------------------|
+|  master |                             ^0.4.3 (^0.11.4) |
+|  0.15.0 |                             ^0.4.3 (^0.11.4) |
 
 ## License
 
